@@ -2,15 +2,22 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import { GetCategoriesDto, CategoriesPaginator } from './dto/get-categories.dto';
+import {
+  GetCategoriesDto,
+  CategoriesPaginator,
+} from './dto/get-categories.dto';
 import { paginate } from '../common/pagination/paginate';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 import { CategoryNotFoundException } from './exceptions/category-not-found.exception';
+import { generateSlug } from 'src/utils/generate-slug';
+import { Type } from '../types/entities/type.entity';
 
 @Injectable()
 export class CategoriesService {
   constructor(
+    @InjectRepository(Type)
+    private readonly typeRepository: Repository<Type>,
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
   ) {}
@@ -23,12 +30,12 @@ export class CategoriesService {
     const take = limit;
     const skip = (page - 1) * take;
 
-    const where = search
-      ? [{ name: Like(`%${search}%`) }, { slug: Like(`%${search}%`) }]
-      : {};
+    // const where = search
+    //   ? [{ name: Like(`%${search}%`) }, { slug: Like(`%${search}%`) }]
+    //   : {};
 
     const [results, total] = await this.categoryRepository.findAndCount({
-      where,
+      // where,
       take,
       skip,
       order: { createdAt: 'DESC' },
@@ -44,9 +51,10 @@ export class CategoriesService {
   }
 
   async getCategoryBySlug(slug: string): Promise<Category> {
+    console.log('getCatbySlug')
     const category = await this.categoryRepository.findOne({
       where: { slug },
-      relations: ['image', 'banners', 'promotional_sliders'], // optional
+      // relations: ['image', 'banners', 'promotional_sliders'], // optional
     });
     if (!category) {
       throw new NotFoundException(`Type with slug ${slug} not found`);
@@ -54,19 +62,34 @@ export class CategoriesService {
     return category;
   }
 
-  async create(createTypeDto: CreateCategoryDto) {
-    const type = this.categoryRepository.create({
-      name: createTypeDto.name,
-      slug: createTypeDto.slug,
-      icon: createTypeDto.icon,
-      language: createTypeDto.language,
+  async create(createCategoryDto: CreateCategoryDto) {
+    const slug = createCategoryDto.slug || generateSlug(createCategoryDto.name);
+
+    const type = await this.typeRepository.findOneBy({
+      id: createCategoryDto.type_id,
+    });
+    if (!type) {
+      throw new NotFoundException(
+        `Type with id ${createCategoryDto.type_id} not found`,
+      );
+    }
+
+    const category = this.categoryRepository.create({
+      name: createCategoryDto.name,
+      slug: slug,
+      icon: createCategoryDto.icon,
+      language: createCategoryDto.language,
       // translated_languages: createTypeDto.translated_languages,
+      type: type,
     });
 
-    await this.categoryRepository.save(type);
+    await this.categoryRepository.save(category);
   }
 
-  async update(id: string, updateTypeDto: UpdateCategoryDto): Promise<Category> {
+  async update(
+    id: string,
+    updateTypeDto: UpdateCategoryDto,
+  ): Promise<Category> {
     const category = await this.categoryRepository.findOneBy({ id });
 
     if (!category) {

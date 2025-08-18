@@ -1,3 +1,4 @@
+import { Category } from 'src/modules/categories/entities/category.entity';
 import { Attachment } from 'src/modules/common/entities/attachment.entity';
 import { BaseEntity } from 'src/modules/common/entities/base.entity';
 import { CoreEntity } from 'src/modules/common/entities/core.entity';
@@ -13,20 +14,20 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity()
-export class TypeSettings {
-  @PrimaryGeneratedColumn()
-  id: number;
+// @Entity()
+// export class TypeSettings {
+//   @PrimaryGeneratedColumn()
+//   id: number;
 
-  @Column({ default: false })
-  isHome: boolean;
+//   @Column({ default: false })
+//   isHome: boolean;
 
-  @Column({ default: 'default-layout' })
-  layoutType: string;
+//   @Column({ default: 'default-layout' })
+//   layoutType: string;
 
-  @Column({ default: 'default-card' })
-  productCard: string;
-}
+//   @Column({ default: 'default-card' })
+//   productCard: string;
+// }
 
 @Entity()
 export class Type extends BaseEntity {
@@ -40,47 +41,45 @@ export class Type extends BaseEntity {
   @JoinColumn()
   image: Attachment;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, default: 'default_icon' })
   icon: string;
 
-  // Todo -> fix later
-  // @OneToMany(() => Banner, (banner) => banner.type, {
-  //   cascade: true,
-  //   eager: true,
-  // })
-  // banners?: Banner[];
+  @Column({ type: 'json', nullable: true })
+  banners: any[];
 
-  // Todo -> fix later
-  // @ManyToMany(() => Attachment, { cascade: true, eager: true })
-  // @JoinTable()
-  // promotional_sliders?: Attachment[];
+  @Column({ type: 'json', nullable: true })
+  promotional_sliders: any[];
 
-  @OneToOne(() => TypeSettings, { cascade: true, eager: true, nullable: true })
-  @JoinColumn()
-  settings?: TypeSettings;
+  @Column({ type: 'json', nullable: true })
+  settings: Record<string, any>;
 
-  @Column()
+  @Column({ nullable: true, default: 'en' })
   language: string;
 
-  @Column('simple-array', { nullable: true })
+  @Column({ type: 'json', nullable: true })
   translated_languages: string[];
+
+  @OneToMany(() => Category, (category) => category.type, {
+    cascade: true,
+  })
+  categories: Category[];
 }
 
-@Entity()
-export class Banner {
-  @PrimaryGeneratedColumn()
-  id: number;
+// @Entity()
+// export class Banner {
+//   @PrimaryGeneratedColumn()
+//   id: number;
 
-  @Column({ nullable: true })
-  title?: string;
+//   @Column({ nullable: true })
+//   title?: string;
 
-  @Column({ nullable: true, type: 'text' })
-  description?: string;
+//   @Column({ nullable: true, type: 'text' })
+//   description?: string;
 
-  @OneToOne(() => Attachment, { cascade: true, eager: true })
-  @JoinColumn()
-  image: Attachment;
+//   @OneToOne(() => Attachment, { cascade: true, eager: true })
+//   @JoinColumn()
+//   image: Attachment;
 
-  // @ManyToOne(() => Type, (type) => type.banners, { onDelete: 'CASCADE' })
-  // type: Type;
-}
+//   // @ManyToOne(() => Type, (type) => type.banners, { onDelete: 'CASCADE' })
+//   // type: Type;
+// }

@@ -1,3 +1,4 @@
+import { Type } from 'class-transformer';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class PaginationArgs {
@@ -7,10 +8,12 @@ export class PaginationArgs {
   first?: number = 15;
 
   @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   limit?: number = 15;
 
   @IsOptional()
+  @Type(() => Number)
   @IsNumber()
   page?: number = 1;
 
@@ -21,4 +24,8 @@ export class PaginationArgs {
   @IsOptional()
   @IsString()
   sortedBy?: string;
+
+  @IsOptional()
+  @IsString()
+  with?: string;
 }

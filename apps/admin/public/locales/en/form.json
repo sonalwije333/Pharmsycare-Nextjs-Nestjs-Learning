@@ -663,5 +663,11 @@
   "text-review-system": "Review mechanism",
   "input-tooltip-review-system": "In this feature Super admin can control review system. Either each product can be reviewed by one customer only one time, or customer can reviewed the same product on each order. Incase of Digital Product if customer gave review already then he/she can update it.",
   "input-tooltip-enable-review-popup": "When a customer's order is completed, then a pop-up box will appear in the shop end to inform customer about giving a review",
-  "text-video-tooltip": "Please enter your Iframe embed code here."
+  "text-video-tooltip": "Please enter your Iframe embed code here.",
+  "input-label-role" : "Select Your Role",
+  "error-role-required" : "Role is Required!",
+  "role-super_admin" : "Super Admin",
+  "role-store_owner" : "Store Owner",
+  "role-staff" : "Staff",
+  "role-customer" : "Customer"
 }

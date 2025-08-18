@@ -6,6 +6,7 @@ import { Like, Repository } from 'typeorm';
 import { GetTypesDto, TypesPaginator } from './dto/get-types.dto';
 import { paginate } from '../common/pagination/paginate';
 import { UpdateTypeDto } from './dto/update-type.dto';
+import { generateSlug } from 'src/utils/generate-slug';
 
 @Injectable()
 export class TypesService {
@@ -43,10 +44,11 @@ export class TypesService {
   }
 
   async getAllTypes(language?: string): Promise<Type[]> {
+    console.log('getAllTypes');
     const where = language ? { language } : {};
     return this.typeRepository.find({
       where,
-      relations: ['image', 'banners', 'promotional_sliders'],
+      relations: ['image'],
       order: { createdAt: 'DESC' }, // optional
     });
   }
@@ -54,7 +56,7 @@ export class TypesService {
   async getTypeBySlug(slug: string): Promise<Type> {
     const type = await this.typeRepository.findOne({
       where: { slug },
-      relations: ['image', 'banners', 'promotional_sliders'], // optional
+      // relations: ['image', 'banners'], // optional
     });
     if (!type) {
       throw new NotFoundException(`Type with slug ${slug} not found`);
@@ -63,11 +65,14 @@ export class TypesService {
   }
 
   async create(createTypeDto: CreateTypeDto) {
+    const slug = createTypeDto.slug || generateSlug(createTypeDto.name);
+
     const type = this.typeRepository.create({
       name: createTypeDto.name,
-      slug: createTypeDto.slug,
+      slug: slug,
       icon: createTypeDto.icon,
       language: createTypeDto.language,
+      settings: createTypeDto.settings || {},
       // translated_languages: createTypeDto.translated_languages,
     });
 

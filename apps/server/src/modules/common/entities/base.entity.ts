@@ -10,7 +10,7 @@ import {
   Column,
 } from 'typeorm';
 import { User } from 'src/modules/users/entities/user.entity';
-import { getRequestContext } from 'src/middleware/request-context.middleware';
+import { getRequestContext } from 'src/common/middleware/request-context.middleware';
 
 export abstract class BaseEntity {
   @PrimaryGeneratedColumn('uuid')

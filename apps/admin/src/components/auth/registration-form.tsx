@@ -4,7 +4,7 @@ import Input from '@/components/ui/input';
 import PasswordInput from '@/components/ui/password-input';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Routes } from '@/config/routes';
 import { useTranslation } from 'next-i18next';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,6 +17,7 @@ import {
 } from '@/utils/auth-utils';
 import { Permission } from '@/types';
 import { useRegisterMutation } from '@/data/user';
+import Select from '../ui/select/select';
 
 type FormValues = {
   name: string;
@@ -24,6 +25,15 @@ type FormValues = {
   password: string;
   permission: Permission;
 };
+
+// Define available roles for selection
+const availableRoles = [
+  { value: Permission.SuperAdmin, label: 'Super Admin' },
+  { value: Permission.StoreOwner, label: 'Store Owner' },
+  { value: Permission.Staff, label: 'Staff' },
+  { value: Permission.Customer, label: 'Customer' },
+];
+
 const registrationFormSchema = yup.object().shape({
   name: yup.string().required('form:error-name-required'),
   email: yup
@@ -31,8 +41,12 @@ const registrationFormSchema = yup.object().shape({
     .email('form:error-email-format')
     .required('form:error-email-required'),
   password: yup.string().required('form:error-password-required'),
-  permission: yup.string().default('store_owner').oneOf(['store_owner']),
+  permission: yup
+    .string()
+    .required('form:error-role-required')
+    .oneOf(Object.values(Permission)),
 });
+
 const RegistrationForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { mutate: registerUser, isLoading: loading } = useRegisterMutation();
@@ -40,14 +54,16 @@ const RegistrationForm = () => {
   const {
     register,
     handleSubmit,
+    control, // Add control for Select
     formState: { errors },
     setError,
-  } = useForm({
+  } = useForm<FormValues>({
     resolver: yupResolver(registrationFormSchema),
     defaultValues: {
-      permission: Permission.StoreOwner,
+      permission: undefined,
     },
   });
+
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -57,10 +73,8 @@ const RegistrationForm = () => {
         name,
         email,
         password,
-        //@ts-ignore
         permission,
       },
-
       {
         onSuccess: (data) => {
           if (data?.token) {
@@ -82,19 +96,13 @@ const RegistrationForm = () => {
             });
           });
         },
-      },
+      }
     );
   }
 
   return (
     <>
-      <form
-        onSubmit={handleSubmit(
-          //@ts-ignore
-          onSubmit,
-        )}
-        noValidate
-      >
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <Input
           label={t('form:input-label-name')}
           {...register('name')}
@@ -117,6 +125,34 @@ const RegistrationForm = () => {
           variant="outline"
           className="mb-4"
         />
+
+        {/* Role Selection Dropdown */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-black-900 mb-1">
+            {t('form:input-label-role')}
+          </label>
+          <Controller
+            name="permission"
+            control={control}
+            render={({ field }) => (
+              <Select
+                {...field}
+                options={availableRoles.map(role => ({
+                  ...role,
+                  label: t(`form:role-${role.value}`),
+                }))}
+                value={availableRoles.find(option => option.value === field.value)}
+                onChange={(option) => field.onChange(option?.value)}
+              />
+            )}
+          />
+          {errors.permission && (
+            <p className="mt-1 text-xs text-red-500">
+              {t(errors.permission.message!)}
+            </p>
+          )}
+        </div>
+
         <Button className="w-full" loading={loading} disabled={loading}>
           {t('form:text-register')}
         </Button>

@@ -162,11 +162,11 @@ export const siteSettings = {
                 label: 'text-all-products',
                 icon: 'ProductsIcon',
               },
-              // {
-              //   href: Routes.product.create,
-              //   label: 'Add new product',
-              //   icon: 'ProductsIcon',
-              // },
+              {
+                href: Routes.product.create,
+                label: 'Add new product',
+                icon: 'ProductsIcon',
+              },
               {
                 href: Routes.draftProducts,
                 label: 'text-my-draft-products',

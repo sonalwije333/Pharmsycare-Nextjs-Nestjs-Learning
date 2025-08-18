@@ -6,6 +6,7 @@
 # Database files (except the directory structure)
 /data
 !/data/.gitkeep
+pharmsycaredb
 
 # Logs
 logs

@@ -29,6 +29,9 @@ export const useCreateCategoryMutation = () => {
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.CATEGORIES);
     },
+    onError: (error: any) => {
+      toast.error(t(`common:${error?.response?.data.message}`));
+    },
   });
 };
 

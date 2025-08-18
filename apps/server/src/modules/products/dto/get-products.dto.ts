@@ -2,11 +2,11 @@ import { SortOrder } from 'src/modules/common/dto/generic-conditions.dto';
 import { PaginationArgs } from 'src/modules/common/dto/pagination-args.dto';
 import { Paginator } from 'src/modules/common/dto/paginator.dto';
 import { IsOptional, IsString } from 'class-validator';
-import { Category } from '../entities/category.entity';
+import { Product } from '../entities/product.entity';
 
-export class CategoriesPaginator extends Paginator<Category> {}
+export class ProductsPaginator extends Paginator<Product> {}
 
-export class GetCategoriesDto extends PaginationArgs {
+export class GetProductsDto extends PaginationArgs {
   @IsOptional()
   // @IsArray()
   // @ValidateNested({ each: true })
@@ -24,10 +24,6 @@ export class GetCategoriesDto extends PaginationArgs {
   @IsOptional()
   @IsString()
   search?: string;
-
-  @IsOptional()
-  @IsString()
-  parent?: string;
 }
 
 export class QueryCategoriesOrderByOrderByClause {

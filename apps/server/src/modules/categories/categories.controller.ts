@@ -28,7 +28,7 @@ export class CategoriesController {
   }
 
   @Get(':slug')
-  getTypeBySlug(@Param('slug') slug: string) {
+  getCategoryBySlug(@Param('slug') slug: string) {
     return this.categoriesService.getCategoryBySlug(slug);
   }
 
