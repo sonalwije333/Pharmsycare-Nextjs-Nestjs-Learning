@@ -1,32 +1,49 @@
-import { useSession } from 'next-auth/react';
-import { useEffect } from 'react';
-import { useSocialLogin } from '@/framework/user';
+import { signIn } from 'next-auth/react';
+import { GoogleIcon, FacebookIcon } from '@/components/icons';
+import { useTranslation } from 'next-i18next';
+import Button from '@/components/ui/button';
 
-const SocialLogin = () => {
-  const { data: session, status } = useSession();
-  // const loading = status === 'loading';
-  const { mutate: socialLogin, error } = useSocialLogin();
-  useEffect(() => {
-    // is true when valid social login access token and provider is available in the session
-    // but not authorize/logged in
-    //@ts-ignore
-    if (session?.access_token && session?.provider) {
-      socialLogin({
-        //@ts-ignore
-        provider: session.provider as string,
-        //@ts-ignore
-        access_token: session.access_token as string,
+interface SocialLoginProps {
+  isLoading: boolean;
+  variant?: 'default' | 'checkout';
+}
+
+export default function SocialLogin({ isLoading, variant = 'default' }: SocialLoginProps) {
+  const { t } = useTranslation('common');
+
+  const handleSocialLogin = async (provider: string) => {
+    try {
+      await signIn(provider, {
+        callbackUrl: window.location.href
       });
+    } catch (error) {
+      console.error('Social login error:', error);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
+  };
 
-  // When rendering client side don't display anything until loading is complete
-  // if (typeof window !== 'undefined' && loading) return null;
-  if (error) {
-    return <div>{`${error}`}</div>;
-  }
-  return null;
-};
+  return (
+    <div className="grid grid-cols-1 gap-4 mt-2">
+      <Button
+        className={`!bg-social-google !text-light hover:!bg-social-google-hover ${
+          variant === 'checkout' ? 'h-11 sm:h-12' : ''
+        }`}
+        disabled={isLoading}
+        onClick={() => handleSocialLogin('google')}
+      >
+        <GoogleIcon className="w-4 h-4 ltr:mr-3 rtl:ml-3" />
+        {t('text-login-google')}
+      </Button>
 
-export default SocialLogin;
+      <Button
+        className={`!bg-social-facebook !text-light hover:!bg-social-facebook-hover ${
+          variant === 'checkout' ? 'h-11 sm:h-12' : ''
+        }`}
+        disabled={isLoading}
+        onClick={() => handleSocialLogin('facebook')}
+      >
+        <FacebookIcon className="w-4 h-4 ltr:mr-3 rtl:ml-3" />
+        {t('text-login-facebook')}
+      </Button>
+    </div>
+  );
+}
