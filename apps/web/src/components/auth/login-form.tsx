@@ -6,7 +6,7 @@ import PasswordInput from '@/components/ui/forms/password-input';
 import Button from '@/components/ui/button';
 import { useTranslation } from 'next-i18next';
 import * as yup from 'yup';
-import { GoogleIcon } from '@/components/icons/google';
+import  GoogleIcon  from '@/components/icons/google';
 import { useModalAction } from '@/components/ui/modal/modal.context';
 import { MobileIcon } from '@/components/icons/mobile-icon';
 import { Form } from '@/components/ui/forms/form';

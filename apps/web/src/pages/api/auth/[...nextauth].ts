@@ -1,13 +1,31 @@
+import { getEnv } from '@/config/get-env';
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-
+import FacebookProvider from 'next-auth/providers/facebook';
 export default NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      clientId: getEnv('GOOGLE_CLIENT_ID'),
+      clientSecret: getEnv('GOOGLE_CLIENT_SECRET'),
+      authorization: {
+        params: {
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code'
+        }
+      }
     }),
+    FacebookProvider({
+      clientId: getEnv('FACEBOOK_CLIENT_ID'),
+      clientSecret: getEnv('FACEBOOK_CLIENT_SECRET'),
+      authorization: {
+        params: {
+          scope: 'email,public_profile'
+        }
+      }
+    })
   ],
+  
 
   secret: process.env.NEXTAUTH_SECRET,
 
@@ -32,6 +50,8 @@ export default NextAuth({
       };
     },
   },
-
   debug: process.env.NODE_ENV === 'development',
+  pages: {
+    signIn: '/login', // Custom login page path
+  },
 });

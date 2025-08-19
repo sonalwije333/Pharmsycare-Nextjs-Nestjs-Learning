@@ -1,15 +1,19 @@
-export const FacebookIcon: React.FC<React.SVGAttributes<{}>> = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="12"
-    height="12"
-    viewBox="0 0 12 12"
-    {...props}
-  >
-    <path
-      data-name="_ionicons_svg_logo-facebook (6)"
-      d="M11.338 0H.662A.663.663 0 000 .663v10.674a.663.663 0 00.662.662H6V7.25H4.566V5.5H6V4.206a2.28 2.28 0 012.459-2.394c.662 0 1.375.05 1.541.072V3.5H8.9c-.753 0-.9.356-.9.881V5.5h1.794L9.56 7.25H8V12h3.338a.663.663 0 00.662-.663V.662A.663.663 0 0011.338 0z"
-      fill="currentColor"
-    />
-  </svg>
-);
+import * as React from 'react';
+
+export default function FacebookIcon({
+  className,
+  ...rest
+}: React.SVGAttributes<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className={className}
+      {...rest}
+    >
+      <path
+        d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
