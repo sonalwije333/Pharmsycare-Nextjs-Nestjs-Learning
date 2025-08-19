@@ -1,15 +1,12 @@
-type NameToType = {
-  readonly ENV: 'production' | 'staging' | 'development' | 'test';
-  readonly NODE_ENV: 'production' | 'development';
-  readonly PORT: number;
-};
-
-export function getEnv(name: keyof NameToType): NameToType[keyof NameToType] {
+// src/config/get-env.ts
+export function getEnv(name: string): string {
   const val = process.env[name];
-
   if (!val) {
-    throw new Error(`Cannot find environmental variable: ${name}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(`Missing environment variable: ${name}`);
+      return ''; // Return empty string in development
+    }
+    throw new Error(`Cannot find environment variable: ${name}`);
   }
-
-  return val as NameToType[keyof NameToType];
+  return val;
 }
