@@ -2,8 +2,37 @@ import { getEnv } from '@/config/get-env';
 import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import FacebookProvider from 'next-auth/providers/facebook';
+import CredentialsProvider from 'next-auth/providers/credentials';
 export default NextAuth({
   providers: [
+        CredentialsProvider({
+      name: 'Credentials',
+      credentials: {
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' }
+      },
+      async authorize(credentials) {
+        try {
+          const response = await fetch(`${process.env.API_URL}/auth/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(credentials),
+          });
+          
+          const user = await response.json();
+          
+          if (response.ok && user) {
+            return user;
+          }
+          
+          return null;
+        } catch (error) {
+          return null;
+        }
+      }
+    }),
     GoogleProvider({
       clientId: getEnv('GOOGLE_CLIENT_ID'),
       clientSecret: getEnv('GOOGLE_CLIENT_SECRET'),
@@ -11,7 +40,8 @@ export default NextAuth({
         params: {
           prompt: 'consent',
           access_type: 'offline',
-          response_type: 'code'
+          response_type: 'code',
+           scope: 'openid email profile', // Add proper scopes
         }
       }
     }),
@@ -53,5 +83,6 @@ export default NextAuth({
   debug: process.env.NODE_ENV === 'development',
   pages: {
     signIn: '/login', // Custom login page path
+    error: '/auth/error',
   },
 });
