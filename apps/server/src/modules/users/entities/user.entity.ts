@@ -10,6 +10,7 @@ import {
   JoinColumn,
   Unique,
 } from 'typeorm';
+import { Shop } from '../../shops/entites/shop.entity';
 
 @Entity()
 export class User extends CoreEntity {
@@ -26,12 +27,12 @@ export class User extends CoreEntity {
   @JoinColumn()
   profile?: Profile;
 
-  // @OneToMany(() => Shop, (shop) => shop.owner, { cascade: true })
-  // shops?: Shop[];
+  @OneToMany(() => Shop, (shop) => shop.owner, { cascade: true })
+  shops?: Shop[];
 
-  // @ManyToOne(() => Shop, { nullable: true, eager: true })
-  // @JoinColumn()
-  // managed_shop?: Shop;
+  @ManyToOne(() => Shop, { nullable: true, eager: true })
+  @JoinColumn()
+  managed_shop?: Shop;
 
   @Column({ default: true })
   is_active?: boolean;

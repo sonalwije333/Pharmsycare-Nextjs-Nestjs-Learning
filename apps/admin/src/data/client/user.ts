@@ -22,6 +22,20 @@ import {
 import { API_ENDPOINTS } from './api-endpoints';
 import { HttpClient } from './http-client';
 
+// Helper function to convert orderBy to uppercase enum values
+const formatOrderBy = (orderBy: string | undefined) => {
+  if (!orderBy) return undefined;
+
+  const orderByMap: Record<string, string> = {
+    'name': 'NAME',
+    'created_at': 'CREATED_AT',
+    'updated_at': 'UPDATED_AT',
+    'is_active': 'IS_ACTIVE'
+  };
+
+  return orderByMap[orderBy.toLowerCase()] || orderBy.toUpperCase();
+};
+
 export const userClient = {
   me: () => {
     return HttpClient.get<User>(API_ENDPOINTS.ME);
@@ -70,58 +84,103 @@ export const userClient = {
   },
 
   fetchUsers: ({ name, ...params }: Partial<UserQueryOptions>) => {
+    const { orderBy, sortedBy, ...restParams } = params;
+    const searchParams = name ? { search: HttpClient.formatSearchParams({ name }) } : {};
+
     return HttpClient.get<UserPaginator>(API_ENDPOINTS.USERS, {
       searchJoin: 'and',
       with: 'wallet',
-      ...params,
-      search: HttpClient.formatSearchParams({ name }),
+      ...restParams,
+      orderBy: formatOrderBy(orderBy),
+      sortedBy,
+      ...searchParams,
     });
   },
-  fetchAdmins: ({ ...params }: Partial<UserQueryOptions>) => {
+
+  fetchAdmins: ({ name, ...params }: Partial<UserQueryOptions>) => {
+    const { orderBy, sortedBy, ...restParams } = params;
+    const searchParams = name ? { search: HttpClient.formatSearchParams({ name }) } : {};
+
     return HttpClient.get<UserPaginator>(API_ENDPOINTS.ADMIN_LIST, {
       searchJoin: 'and',
       with: 'wallet;permissions;profile',
-      ...params,
+      ...restParams,
+      orderBy: formatOrderBy(orderBy),
+      sortedBy,
+      ...searchParams,
     });
   },
+
   fetchUser: ({ id }: { id: string }) => {
     return HttpClient.get<User>(`${API_ENDPOINTS.USERS}/${id}`);
   },
+
   resendVerificationEmail: () => {
     return HttpClient.post<any>(API_ENDPOINTS.SEND_VERIFICATION_EMAIL, {});
   },
+
   updateEmail: ({ email }: { email: string }) => {
     return HttpClient.post<any>(API_ENDPOINTS.UPDATE_EMAIL, { email });
   },
-  fetchVendors: ({ is_active, ...params }: Partial<UserQueryOptions>) => {
+
+  fetchVendors: ({ name, is_active, ...params }: Partial<UserQueryOptions>) => {
+    const { orderBy, sortedBy, ...restParams } = params;
+    const searchParams = (name || is_active !== undefined) ? {
+      search: HttpClient.formatSearchParams({ name, is_active })
+    } : {};
+
     return HttpClient.get<UserPaginator>(API_ENDPOINTS.VENDORS_LIST, {
       searchJoin: 'and',
       with: 'wallet;permissions;profile',
-      is_active,
-      ...params,
+      ...restParams,
+      orderBy: formatOrderBy(orderBy),
+      sortedBy,
+      ...searchParams,
     });
   },
-  fetchCustomers: ({ ...params }: Partial<UserQueryOptions>) => {
+
+  fetchCustomers: ({ name, ...params }: Partial<UserQueryOptions>) => {
+    const { orderBy, sortedBy, ...restParams } = params;
+    const searchParams = name ? { search: HttpClient.formatSearchParams({ name }) } : {};
+
     return HttpClient.get<UserPaginator>(API_ENDPOINTS.CUSTOMERS, {
       searchJoin: 'and',
       with: 'wallet',
-      ...params,
+      ...restParams,
+      orderBy: formatOrderBy(orderBy),
+      sortedBy,
+      ...searchParams,
     });
   },
+
   getMyStaffs: ({ is_active, shop_id, name, ...params }: Partial<UserQueryOptions & { shop_id: string }>) => {
+    const { orderBy, sortedBy, ...restParams } = params;
+    const searchParams = (name || is_active !== undefined) ? {
+      search: HttpClient.formatSearchParams({ name, is_active })
+    } : {};
+
     return HttpClient.get<UserPaginator>(API_ENDPOINTS.MY_STAFFS, {
       searchJoin: 'and',
       shop_id,
-      ...params,
-      search: HttpClient.formatSearchParams({ name, is_active })
+      ...restParams,
+      orderBy: formatOrderBy(orderBy),
+      sortedBy,
+      ...searchParams,
     });
   },
+
   getAllStaffs: ({ is_active, name, ...params }: Partial<UserQueryOptions>) => {
+    const { orderBy, sortedBy, ...restParams } = params;
+    const searchParams = (name || is_active !== undefined) ? {
+      search: HttpClient.formatSearchParams({ name, is_active })
+    } : {};
+
     return HttpClient.get<UserPaginator>(API_ENDPOINTS.ALL_STAFFS, {
       searchJoin: 'and',
-      ...params,
-      search: HttpClient.formatSearchParams({ name, is_active }),
+      ...restParams,
+      orderBy: formatOrderBy(orderBy),
+      sortedBy,
+      ...searchParams,
     });
   },
-  
 };

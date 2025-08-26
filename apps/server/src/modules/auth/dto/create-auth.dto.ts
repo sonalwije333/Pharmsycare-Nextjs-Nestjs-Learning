@@ -1,12 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsNotEmpty } from 'class-validator';
-
-export enum PermissionType {
-  SUPER_ADMIN = 'super_admin',
-  STORE_OWNER = 'store_owner',
-  STAFF = 'staff',
-  CUSTOMER = 'customer',
-}
+import { PermissionType } from '../../../common/enums/enums';
 
 // Define UserProfileResponse first
 export class UserProfileResponse {
@@ -38,10 +32,10 @@ export class RegisterDto {
   })
   @ApiProperty({
     enum: PermissionType,
-    default: PermissionType.SUPER_ADMIN,
-    description: 'User role permission'
+    default: PermissionType.CUSTOMER,
+    description: 'User role permission',
   })
-  permission: PermissionType = PermissionType.SUPER_ADMIN;
+  permission: PermissionType = PermissionType.CUSTOMER;
 }
 
 export class AuthResponse {
@@ -51,13 +45,13 @@ export class AuthResponse {
   @ApiProperty({
     type: [String],
     description: 'List of user permissions',
-    example: ['super_admin']
+    example: ['super_admin'],
   })
   permissions: string[];
 
   @ApiPropertyOptional({
     description: 'Primary user role',
-    example: 'super_admin'
+    example: 'super_admin',
   })
   role?: string;
 

@@ -25,7 +25,9 @@ export class AuthService {
   async register(createUserInput: RegisterDto): Promise<AuthResponse> {
     const { email, password, name, permission } = createUserInput;
 
-    const existingUser = await this.userRepository.findOne({ where: { email } });
+    const existingUser = await this.userRepository.findOne({
+      where: { email },
+    });
     if (existingUser) {
       throw new ConflictException('Email already in use');
     }
@@ -89,7 +91,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+    const isPasswordValid = await bcrypt.compare(
+      password,
+      existingUser.password,
+    );
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }

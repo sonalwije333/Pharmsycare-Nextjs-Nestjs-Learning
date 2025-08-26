@@ -1,28 +1,9 @@
+// src/modules/users/entities/profile.entity.ts
 import { CoreEntity } from 'src/modules/common/entities/core.entity';
-import { User } from './user.entity';
 import { Attachment } from 'src/modules/common/entities/attachment.entity';
-import {
-  Entity,
-  Column,
-  OneToOne,
-  OneToMany,
-  JoinColumn,
-  ManyToOne,
-} from 'typeorm';
-
-@Entity()
-export class Social extends CoreEntity {
-  @Column()
-  type: string;
-
-  @Column()
-  link: string;
-
-  // @ManyToOne(() => Profile, (profile) => profile.socials, {
-  //   onDelete: 'CASCADE',
-  // })
-  profile: Profile;
-}
+import { Entity, Column, OneToOne, OneToMany, JoinColumn } from 'typeorm';
+import { User } from './user.entity';
+import { Social } from '../../social/entities/social.entity';
 
 @Entity()
 export class Profile extends CoreEntity {
@@ -33,12 +14,13 @@ export class Profile extends CoreEntity {
   @Column({ nullable: true })
   bio?: string;
 
-  // @OneToMany(() => Social, (social) => social.profile, { cascade: true })
-  // socials?: Social[];
+  @OneToMany(() => Social, (social) => social.profile, { cascade: true })
+  socials?: Social[];
 
   @Column({ nullable: true })
   contact?: string;
 
   @OneToOne(() => User, (user) => user.profile)
+  @JoinColumn()
   customer?: User;
 }
