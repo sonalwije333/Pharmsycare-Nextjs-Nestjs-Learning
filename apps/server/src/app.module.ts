@@ -14,6 +14,40 @@ import { TypesModule } from './modules/types/types.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
 import { ManufacturersModule } from './modules/manufacturers/manufacturers.module';
+import { AddressesModule } from './modules/addresses/addresses.module';
+import { AiModule } from './modules/ai/ai.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
+import { AuthorsModule } from './modules/authors/authors.module';
+import { CommonModule } from './modules/common/common.module';
+import { ConversationsModule } from './modules/conversations/conversations.module';
+import { CouponsModule } from './modules/coupons/coupons.module';
+import { FaqsModule } from './modules/faqs/faqs.module';
+import { FeedbackModule } from './modules/feedbacks/feedbacks.module';
+import { FlashSaleModule } from './modules/flash-sale/flash-sale.module';
+import { ImportsModule } from './modules/imports/imports.module';
+import { MessagesModule } from './modules/messages/messages.module';
+import { NewslettersModule } from './modules/newsletters/newsletters.module';
+import { NotifyLogsModule } from './modules/notify-logs/notify-logs.module';
+import { WithdrawsModule } from './modules/withdraws/withdraws.module';
+import { WishlistsModule } from './modules/wishlists/wishlists.module';
+import { PaymentModule } from './modules/payment/payment.module';
+import { PaymentMethodModule } from './modules/payment-method/payment-method.module';
+import { QuestionModule } from './modules/questions/questions.module';
+import { RefundPoliciesModule } from './modules/refund-policies/refund-policies.module';
+import { RefundReasonModule } from './modules/refund-reasons/refund-reasons.module';
+import { RefundsModule } from './modules/refunds/refunds.module';
+import { ReportsModule } from './modules/reports/reports.module';
+import { ReviewModule } from './modules/reviews/reviews.module';
+import { ShippingsModule } from './modules/shippings/shippings.module';
+import { StoreNoticesModule } from './modules/store-notices/store-notices.module';
+import { TagsModule } from './modules/tags/tags.module';
+import { TaxesModule } from './modules/taxes/taxes.module';
+import { TermsAndConditionsModule } from './modules/terms-and-conditions/terms-and-conditions.module';
+import { UploadsModule } from './modules/uploads/uploads.module';
+import { WebHookModule } from './modules/web-hook/web-hook.module';
+import { PaymentIntentModule } from './modules/payment-intent/payment-intent.module';
+
+
 
 @Module({
   imports: [
@@ -34,14 +68,47 @@ import { ManufacturersModule } from './modules/manufacturers/manufacturers.modul
     DatabaseModule,
     CoreModule,
     SharedModule,
-    UsersModule,
-    SettingsModule,
+    AddressesModule,
+    AiModule,
+    AnalyticsModule,
     AuthModule,
-    // ... other modules
-    TypesModule,
+    AuthorsModule,
     CategoriesModule,
+    CommonModule,
+    ConversationsModule,
+    CouponsModule,
+    FaqsModule,
+    FeedbackModule,
+    FlashSaleModule,
+    ImportsModule,
+    ManufacturersModule,
+    MessagesModule,
+    NewslettersModule,
+    NotifyLogsModule,
+   // OrdersModule,
+    PaymentModule,
+    PaymentIntentModule,
+    PaymentMethodModule,
     ProductsModule,
-    ManufacturersModule
+    QuestionModule,
+    RefundPoliciesModule,
+    RefundReasonModule,
+    RefundsModule,
+    ReportsModule,
+    ReviewModule,
+    SettingsModule,
+    ShippingsModule,
+    //ShopsModule,
+    StoreNoticesModule,
+    TagsModule,
+    TaxesModule,
+    TermsAndConditionsModule,
+    TypesModule,
+    UploadsModule,
+    UsersModule,
+    WebHookModule,
+    WishlistsModule,
+    WithdrawsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
