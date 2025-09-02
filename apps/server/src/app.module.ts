@@ -47,8 +47,6 @@ import { UploadsModule } from './modules/uploads/uploads.module';
 import { WebHookModule } from './modules/web-hook/web-hook.module';
 import { PaymentIntentModule } from './modules/payment-intent/payment-intent.module';
 
-
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -85,7 +83,7 @@ import { PaymentIntentModule } from './modules/payment-intent/payment-intent.mod
     MessagesModule,
     NewslettersModule,
     NotifyLogsModule,
-   // OrdersModule,
+    // OrdersModule,
     PaymentModule,
     PaymentIntentModule,
     PaymentMethodModule,
