@@ -1,5 +1,4 @@
-import {CoreEntity} from "../../common/entities/core.entity";
-
+import { CoreEntity } from '../../common/entities/core.entity';
 export class Analytics extends CoreEntity {
   totalRevenue?: number;
   totalShops?: number;
