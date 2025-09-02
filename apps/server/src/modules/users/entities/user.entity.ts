@@ -11,6 +11,7 @@ import {
   Unique,
 } from 'typeorm';
 import { Shop } from '../../shops/entites/shop.entity';
+import { AiTask } from '../../ai/entities/ai.entity';
 
 @Entity()
 export class User extends CoreEntity {
@@ -44,7 +45,8 @@ export class User extends CoreEntity {
     cascade: true,
   })
   permissions?: Permission[];
-
+  @OneToMany(() => AiTask, (aiTask) => aiTask.user, { cascade: true })
+  ai_tasks?: AiTask[];
   @Column({ type: 'json', nullable: true })
   wallet?: any;
 }
