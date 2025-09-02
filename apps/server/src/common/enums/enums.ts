@@ -30,3 +30,9 @@ export enum AiTaskType {
   CONTENT_SUMMARY = 'content_summary',
   TRANSLATION = 'translation',
 }
+export enum AnalyticsPeriod {
+  DAY = 'day',
+  WEEK = 'week',
+  MONTH = 'month',
+  YEAR = 'year',
+}
