@@ -36,3 +36,10 @@ export enum AnalyticsPeriod {
   MONTH = 'month',
   YEAR = 'year',
 }
+
+export enum QueryAuthorsOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    NAME = 'NAME',
+    UPDATED_AT = 'UPDATED_AT',
+    PRODUCTS_COUNT = 'PRODUCTS_COUNT',
+}
