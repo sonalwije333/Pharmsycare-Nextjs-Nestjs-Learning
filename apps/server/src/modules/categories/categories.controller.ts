@@ -84,7 +84,7 @@ export class CategoriesController {
     @ApiResponse({ status: 200, description: 'Category retrieved successfully', type: Category })
     @ApiResponse({ status: 404, description: 'Category not found' })
     @ApiResponse({ status: 403, description: 'Forbidden - insufficient permissions' })
-    async getCategoryById(@Param('id') id: string): Promise<Category> {
+    async getCategoryById(@Param('id') id: number): Promise<Category> {
         return this.categoriesService.getCategoryById(id);
     }
 
@@ -97,7 +97,7 @@ export class CategoriesController {
     @ApiResponse({ status: 403, description: 'Forbidden - insufficient permissions' })
     @ApiResponse({ status: 404, description: 'Category not found' })
     update(
-        @Param('id') id: string,
+        @Param('id') id: number,
         @Body() updateCategoryDto: UpdateCategoryDto,
     ) {
         return this.categoriesService.update(id, updateCategoryDto);
@@ -111,7 +111,7 @@ export class CategoriesController {
     @ApiResponse({ status: 204, description: 'Category deleted successfully' })
     @ApiResponse({ status: 403, description: 'Forbidden - insufficient permissions' })
     @ApiResponse({ status: 404, description: 'Category not found' })
-    async remove(@Param('id') id: string) {
+    async remove(@Param('id') id: number) {
         return this.categoriesService.remove(id);
     }
 }
