@@ -15,6 +15,9 @@ import {
 
 @Entity()
 export class Category extends CoreEntity {
+    // Remove the duplicate id property since it's already in CoreEntity
+    // Make sure CoreEntity has the correct ID type for your database
+
     @Column()
     name: string;
 
