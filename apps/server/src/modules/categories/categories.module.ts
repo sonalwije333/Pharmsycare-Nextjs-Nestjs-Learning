@@ -1,14 +1,15 @@
+// src/modules/categories/categories.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Category } from './entities/category.entity';
-import { CategoriesController } from './categories.controller';
+import { CategoriesController, TopCategoriesController } from './categories.controller';
 import { CategoriesService } from './categories.service';
+import { Category } from './entities/category.entity';
 import { Type } from '../types/entities/type.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Category, Type])], // 👈 register entity here
-  controllers: [CategoriesController],
-  providers: [CategoriesService],
-  exports: [CategoriesService], // if other modules need this service
+    imports: [TypeOrmModule.forFeature([Category, Type])],
+    controllers: [CategoriesController, TopCategoriesController],
+    providers: [CategoriesService],
+    exports: [CategoriesService],
 })
 export class CategoriesModule {}

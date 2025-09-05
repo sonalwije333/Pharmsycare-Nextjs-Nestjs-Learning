@@ -1,45 +1,74 @@
-import { Attachment } from 'src/modules/common/entities/attachment.entity';
-import { BaseEntity } from 'src/modules/common/entities/base.entity';
-import { CoreEntity } from 'src/modules/common/entities/core.entity';
-import { Type } from 'src/modules/types/entities/type.entity';
+// src/modules/categories/entities/category.entity.ts
+import { CoreEntity } from '../../common/entities/core.entity';
+import { Attachment } from '../../common/entities/attachment.entity';
+import { Type } from '../../types/entities/type.entity';
 import {
-  Column,
-  Entity,
-  JoinColumn,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
+    Column,
+    Entity,
+    ManyToOne,
+    OneToOne,
+    JoinColumn,
+    ManyToMany,
+    JoinTable,
+    OneToMany,
 } from 'typeorm';
 
 @Entity()
-export class Category extends BaseEntity {
-  @Column()
-  name: string;
+export class Category extends CoreEntity {
+    @Column()
+    name: string;
 
-  @Column({ unique: true })
-  slug: string;
+    @Column({ unique: true })
+    slug: string;
 
-  @OneToOne(() => Attachment, { cascade: true, eager: true, nullable: true })
-  @JoinColumn()
-  image: Attachment;
+    @Column({ type: 'text', nullable: true })
+    details?: string;
 
-  @Column({ nullable: true })
-  icon: string;
+    @Column({ nullable: true })
+    icon?: string;
 
-  @Column()
-  language: string;
+    @Column({ default: 'en' })
+    language: string;
 
-  @Column('simple-array', { nullable: true })
-  translated_languages: string[];
+    @Column({ type: 'json', nullable: true })
+    translated_languages?: string[];
 
-  @ManyToOne(() => Type, (type) => type.categories, {
-    nullable: false,
-    eager: true, // optional: automatically load the type
-    onDelete: 'CASCADE', // optional: deletes categories if type is deleted
-  })
-  @JoinColumn({ name: 'type_id' })
-  type: Type;
+    @Column({ default: 0 })
+    products_count?: number;
+
+    @Column({ default: false })
+    is_approved?: boolean;
+
+    // Self-referencing relationship for parent category
+    @ManyToOne(() => Category, category => category.children, {
+        nullable: true,
+        onDelete: 'SET NULL',
+    })
+    @JoinColumn({ name: 'parent_id' })
+    parent?: Category;
+
+    @OneToMany(() => Category, category => category.parent)
+    children?: Category[];
+
+    // Relationship with Type
+    @ManyToOne(() => Type, type => type.categories, {
+        nullable: true,
+        eager: true,
+        onDelete: 'SET NULL',
+    })
+    @JoinColumn({ name: 'type_id' })
+    type?: Type;
+
+    // Image relationships
+    @OneToOne(() => Attachment, { cascade: true, eager: true, nullable: true })
+    @JoinColumn()
+    image?: Attachment;
+
+    @ManyToMany(() => Attachment, { cascade: true, eager: true, nullable: true })
+    @JoinTable()
+    banners?: Attachment[];
+
+    @ManyToMany(() => Attachment, { cascade: true, eager: true, nullable: true })
+    @JoinTable()
+    promotional_sliders?: Attachment[];
 }
