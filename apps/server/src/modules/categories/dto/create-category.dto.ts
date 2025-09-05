@@ -1,40 +1,59 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+// src/modules/categories/dto/create-category.dto.ts
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional, IsString, IsArray } from 'class-validator';
+import { Attachment } from '../../common/entities/attachment.entity';
 
 export class CreateCategoryDto {
-  @IsNotEmpty()
-  @ApiProperty({ description: 'Category name', example: 'Baby Care' })
-  name: string;
+    @ApiProperty({ description: 'Category name', example: 'Baby Care' })
+    @IsNotEmpty()
+    @IsString()
+    name: string;
 
-  @IsOptional()
-  @ApiProperty({ description: 'Category slug', example: 'baby-care' })
-  slug: string;
+    @ApiPropertyOptional({ description: 'Category slug', example: 'baby-care' })
+    @IsOptional()
+    @IsString()
+    slug?: string;
 
-  @IsOptional()
-  @ApiProperty({ description: 'Type image' })
-  image: object;
+    @ApiPropertyOptional({ description: 'Category details', example: 'All baby care products' })
+    @IsOptional()
+    @IsString()
+    details?: string;
 
-  @IsOptional()
-  @ApiProperty({ description: 'Category details ' })
-  details : string;
+    @ApiPropertyOptional({ description: 'Parent category ID', example: 'parent-category-id' })
+    @IsOptional()
+    @IsString()
+    parent_id?: string;
 
-  @IsOptional()
-  @ApiProperty({ description: 'Category details ' })
-  parent : string;
+    @ApiPropertyOptional({ description: 'Category type ID', example: 'type-id' })
+    @IsOptional()
+    @IsString()
+    type_id?: string;
 
-  @IsOptional()
-  @ApiProperty({ description: 'Category Type id ' })
-  type_id : string;
+    @ApiPropertyOptional({ description: 'Category icon', example: 'icon-name' })
+    @IsOptional()
+    @IsString()
+    icon?: string;
 
-  @IsNotEmpty()
-  @ApiProperty({ description: 'Category icon', example: 'icon' })
-  icon: string;
+    @ApiProperty({ description: 'Category language', example: 'en', default: 'en' })
+    @IsNotEmpty()
+    @IsString()
+    language: string;
 
-  @IsNotEmpty()
-  @ApiProperty({ description: 'Category language', example: 'en' })
-  language: string;
+    @ApiPropertyOptional({ description: 'Category image', type: Attachment })
+    @IsOptional()
+    image?: Attachment;
 
-  @IsOptional()
-  @ApiProperty({ description: 'Category translated languages', example: '[en]' })
-  translated_languages: string[];
+    @ApiPropertyOptional({ description: 'Banner images', type: [Attachment] })
+    @IsOptional()
+    banners?: Attachment[];
+
+    @ApiPropertyOptional({ description: 'Promotional sliders', type: [Attachment] })
+    @IsOptional()
+    promotional_sliders?: Attachment[];
+
+    @ApiPropertyOptional({ description: 'Translated languages', example: ['en', 'es'] })
+    @IsOptional()
+    @IsArray()
+    @IsString({ each: true })
+    translated_languages?: string[];
 }
