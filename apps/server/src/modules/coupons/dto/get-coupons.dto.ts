@@ -1,29 +1,38 @@
+// src/modules/coupons/dto/get-coupons.dto.ts
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsOptional, IsString, IsNumber, IsEnum } from 'class-validator';
+import { PaginationArgs } from '../../common/dto/pagination-args.dto';
+import { Paginator } from '../../common/dto/paginator.dto';
 import { Coupon } from '../entities/coupon.entity';
-import {Paginator} from "../../common/dto/paginator.dto";
-import {PaginationArgs} from "../../common/dto/pagination-args.dto";
-import {SortOrder} from "../../common/dto/generic-conditions.dto";
+import { SortOrder } from '../../common/dto/generic-conditions.dto';
+import {QueryCouponsOrderByColumn} from "../../../common/enums/enums";
 
-export class CouponPaginator extends Paginator<Coupon> {
-  // data: Coupon[];
-}
+export class CouponPaginator extends Paginator<Coupon> {}
 
 export class GetCouponsDto extends PaginationArgs {
-  orderBy?: QueryCouponsOrderByColumn;
-  // sortedBy?: SortOrder;
-  search?: string;
-  shop_id?: number;
-  language?: string;
+    @ApiPropertyOptional({ description: 'Order by column', enum: QueryCouponsOrderByColumn })
+    @IsOptional()
+    @IsEnum(QueryCouponsOrderByColumn)
+    orderBy?: QueryCouponsOrderByColumn;
+
+    @ApiPropertyOptional({ description: 'Search query', example: 'discount' })
+    @IsOptional()
+    @IsString()
+    search?: string;
+
+    @ApiPropertyOptional({ description: 'Shop ID filter', example: 1 })
+    @IsOptional()
+    @IsNumber()
+    shop_id?: number;
+
+    @ApiPropertyOptional({ description: 'Language filter', example: 'en' })
+    @IsOptional()
+    @IsString()
+    language?: string;
+
+    @ApiPropertyOptional({ description: 'Is approved filter', example: true })
+    @IsOptional()
+    @IsString()
+    is_approve?: string;
 }
 
-export enum QueryCouponsOrderByColumn {
-  CREATED_AT = 'created_at',
-  EXPIRE_AT = 'expire_at',
-  ID = 'id',
-  CODE = 'code',
-  AMOUNT = 'amount',
-  NAME = 'title',
-  DESCRIPTION = 'description',
-  MINIMUM_CART_AMOUNT = 'minimum_cart_amount',
-  IS_APPROVE = 'is_approve',
-  TYPE = 'type',
-}

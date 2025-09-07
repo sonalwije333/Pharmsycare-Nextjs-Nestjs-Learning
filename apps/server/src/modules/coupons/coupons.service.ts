@@ -1,116 +1,178 @@
-// import { Injectable } from '@nestjs/common';
-// import { plainToClass } from 'class-transformer';
-// import { CreateCouponDto } from './dto/create-coupon.dto';
-// import { UpdateCouponDto } from './dto/update-coupon.dto';
-// import { Coupon } from './entities/coupon.entity';
-// import couponsJson from '@db/coupons.json';
-// import Fuse from 'fuse.js';
-// import { GetCouponsDto } from './dto/get-coupons.dto';
-// import { paginate } from 'src/common/pagination/paginate';
-//
-// const coupons = plainToClass(Coupon, couponsJson);
-// const options = {
-//   keys: ['code'],
-//   threshold: 0.1,
-// };
-// const fuse = new Fuse(coupons, options);
-//
-// @Injectable()
-// export class CouponsService {
-//   private coupons: Coupon[] = coupons;
-//
-//   create(createCouponDto: CreateCouponDto) {
-//     return this.coupons[0];
-//   }
-//
-//   getCoupons({ search, limit, page, shop_id }: GetCouponsDto) {
-//     if (!page) page = 1;
-//     if (!limit) limit = 12;
-//     const startIndex = (page - 1) * limit;
-//     const endIndex = page * limit;
-//     let data: Coupon[] = this.coupons;
-//     // if (text?.replace(/%/g, '')) {
-//     //   data = fuse.search(text)?.map(({ item }) => item);
-//     // }
-//
-//     if (shop_id) {
-//       data = this.coupons.filter((p) => p.shop_id === Number(shop_id));
-//     }
-//
-//     if (search) {
-//       const parseSearchParams = search.split(';');
-//       const searchText: any = [];
-//       for (const searchParam of parseSearchParams) {
-//         const [key, value] = searchParam.split(':');
-//         // TODO: Temp Solution
-//         if (key !== 'slug') {
-//           searchText.push({
-//             [key]: value,
-//           });
-//         }
-//       }
-//
-//       data = fuse
-//         .search({
-//           $and: searchText,
-//         })
-//         ?.map(({ item }) => item);
-//     }
-//
-//     const results = data.slice(startIndex, endIndex);
-//     const url = `/coupons?search=${search}&limit=${limit}`;
-//     return {
-//       data: results,
-//       ...paginate(data.length, page, limit, results.length, url),
-//     };
-//   }
-//
-//   getCoupon(param: string, language: string): Coupon {
-//     return this.coupons.find((p) => p.code === param);
-//   }
-//
-//   update(id: number, updateCouponDto: UpdateCouponDto) {
-//     return this.coupons[0];
-//   }
-//
-//   remove(id: number) {
-//     return `This action removes a #${id} coupon`;
-//   }
-//
-//   verifyCoupon(code: string) {
-//     return {
-//       is_valid: true,
-//       coupon: {
-//         id: 9,
-//         code: code,
-//         description: null,
-//         image: {
-//           id: 925,
-//           original:
-//             'https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/925/5x2x.png',
-//           thumbnail:
-//             'https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/925/conversions/5x2x-thumbnail.jpg',
-//         },
-//         type: 'percentage',
-//         amount: 5,
-//         active_from: '2021-03-28T05:46:42.000Z',
-//         expire_at: '2024-06-23T05:46:42.000Z',
-//         created_at: '2021-03-28T05:48:16.000000Z',
-//         updated_at: '2021-08-19T03:58:34.000000Z',
-//         deleted_at: null,
-//         is_valid: true,
-//       },
-//     };
-//   }
-//   approveCoupon(id: number) {
-//     const coupon = this.coupons.find((s) => s.id === Number(id));
-//     coupon.is_approve = true;
-//     return coupon;
-//   }
-//
-//   disapproveCoupon(id: number) {
-//     const coupon = this.coupons.find((s) => s.id === Number(id));
-//     coupon.is_approve = false;
-//     return coupon;
-//   }
-// }
+// src/modules/coupons/coupons.service.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, Like, FindOptionsWhere, MoreThanOrEqual, LessThanOrEqual } from 'typeorm';
+import { CreateCouponDto } from './dto/create-coupon.dto';
+import { UpdateCouponDto } from './dto/update-coupon.dto';
+import { Coupon } from './entities/coupon.entity';
+import { GetCouponsDto, CouponPaginator } from './dto/get-coupons.dto';
+import { VerifyCouponInput, VerifyCouponResponse } from './dto/verify-coupon.dto';
+import { paginate } from '../common/pagination/paginate';
+import {QueryCouponsOrderByColumn} from "../../common/enums/enums";
+
+@Injectable()
+export class CouponsService {
+    constructor(
+        @InjectRepository(Coupon)
+        private readonly couponRepository: Repository<Coupon>,
+    ) {}
+
+    async create(createCouponDto: CreateCouponDto): Promise<Coupon> {
+        // Check if coupon code already exists
+        const existingCoupon = await this.couponRepository.findOne({
+            where: { code: createCouponDto.code },
+        });
+
+        if (existingCoupon) {
+            throw new NotFoundException(`Coupon with code ${createCouponDto.code} already exists`);
+        }
+
+        const coupon = this.couponRepository.create(createCouponDto);
+        return await this.couponRepository.save(coupon);
+    }
+
+    async getCoupons({
+                         page = 1,
+                         limit = 30,
+                         search,
+                         orderBy = QueryCouponsOrderByColumn.CREATED_AT,
+                         sortedBy = 'DESC',
+                         shop_id,
+                         language,
+                         is_approve,
+                     }: GetCouponsDto): Promise<CouponPaginator> {
+        const take = limit;
+        const skip = (page - 1) * take;
+
+        const where: FindOptionsWhere<Coupon> = {};
+
+        if (search) {
+            where.code = Like(`%${search}%`);
+        }
+
+        if (shop_id) {
+            where.shop_id = shop_id;
+        }
+
+        if (language) {
+            where.language = language;
+        }
+
+        if (is_approve !== undefined) {
+            where.is_approve = is_approve === 'true';
+        }
+
+        const order = {};
+        order[orderBy] = sortedBy;
+
+        const [results, total] = await this.couponRepository.findAndCount({
+            where,
+            take,
+            skip,
+            order,
+            relations: ['image', 'shop'],
+        });
+
+        const url = `/coupons?search=${search ?? ''}&limit=${limit}`;
+        const paginationInfo = paginate(total, page, limit, results.length, url);
+
+        return {
+            data: results,
+            ...paginationInfo,
+        };
+    }
+
+    async getCoupon(param: string, language: string): Promise<Coupon> {
+        const coupon = await this.couponRepository.findOne({
+            where: [
+                { id: parseInt(param) },
+                { code: param }
+            ],
+            relations: ['image', 'shop'],
+        });
+
+        if (!coupon) {
+            throw new NotFoundException(`Coupon with ID or code ${param} not found`);
+        }
+
+        return coupon;
+    }
+
+    async update(id: number, updateCouponDto: UpdateCouponDto): Promise<Coupon> {
+        const coupon = await this.couponRepository.findOne({
+            where: { id },
+        });
+
+        if (!coupon) {
+            throw new NotFoundException(`Coupon with ID ${id} not found`);
+        }
+
+        Object.assign(coupon, updateCouponDto);
+        return await this.couponRepository.save(coupon);
+    }
+
+    async remove(id: number): Promise<void> {
+        const coupon = await this.couponRepository.findOne({
+            where: { id },
+        });
+
+        if (!coupon) {
+            throw new NotFoundException(`Coupon with ID ${id} not found`);
+        }
+
+        await this.couponRepository.remove(coupon);
+    }
+
+    async verifyCoupon(code: string): Promise<VerifyCouponResponse> {
+        const currentDate = new Date();
+
+        const coupon = await this.couponRepository.findOne({
+            where: {
+                code,
+                is_valid: true,
+                active_from: LessThanOrEqual(currentDate),
+                expire_at: MoreThanOrEqual(currentDate),
+            },
+            relations: ['image'],
+        });
+
+        if (!coupon) {
+            // return {
+            //     is_valid: false,
+            //     coupon: null,
+            // };
+            throw new NotFoundException('Invalid or expired coupon');
+        }
+
+        return {
+            is_valid: true,
+            coupon,
+        };
+    }
+
+    async approveCoupon(id: number): Promise<Coupon> {
+        const coupon = await this.couponRepository.findOne({
+            where: { id },
+        });
+
+        if (!coupon) {
+            throw new NotFoundException(`Coupon with ID ${id} not found`);
+        }
+
+        coupon.is_approve = true;
+        return await this.couponRepository.save(coupon);
+    }
+
+    async disapproveCoupon(id: number): Promise<Coupon> {
+        const coupon = await this.couponRepository.findOne({
+            where: { id },
+        });
+
+        if (!coupon) {
+            throw new NotFoundException(`Coupon with ID ${id} not found`);
+        }
+
+        coupon.is_approve = false;
+        return await this.couponRepository.save(coupon);
+    }
+}
