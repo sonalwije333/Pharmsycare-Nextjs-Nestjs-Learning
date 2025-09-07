@@ -43,3 +43,22 @@ export enum QueryAuthorsOrderByColumn {
     UPDATED_AT = 'UPDATED_AT',
     PRODUCTS_COUNT = 'PRODUCTS_COUNT',
 }
+
+export enum CouponType {
+    FIXED_COUPON = 'fixed',
+    PERCENTAGE_COUPON = 'percentage',
+    FREE_SHIPPING_COUPON = 'free_shipping',
+    DEFAULT_COUPON = 'default',
+}
+export enum QueryCouponsOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    EXPIRE_AT = 'EXPIRE_AT',
+    ID = 'ID',
+    CODE = 'CODE',
+    AMOUNT = 'AMOUNT',
+    TITLE = 'TITLE',
+    DESCRIPTION = 'DESCRIPTION',
+    MINIMUM_CART_AMOUNT = 'MINIMUM_CART_AMOUNT',
+    IS_APPROVE = 'IS_APPROVE',
+    TYPE = 'TYPE',
+}
