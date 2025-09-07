@@ -10,7 +10,6 @@ export class Faq extends CoreEntity {
     language: string;
 
     @Column()
-    @Index()
     faq_title: string;
 
     @Column({ unique: true })
