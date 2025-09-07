@@ -62,3 +62,9 @@ export enum QueryCouponsOrderByColumn {
     IS_APPROVE = 'IS_APPROVE',
     TYPE = 'TYPE',
 }
+export enum QueryFaqsOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    UPDATED_AT = 'UPDATED_AT',
+    FAQ_TITLE = 'FAQ_TITLE',
+    FAQ_DESCRIPTION = 'FAQ_DESCRIPTION',
+}
