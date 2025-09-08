@@ -1,4 +1,4 @@
-// src/modules/categories/exceptions/category-not-found.exception.ts
+// src/modules/categories/exceptions/category-not-found.exceptions.ts
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class CategoryNotFoundException extends HttpException {
