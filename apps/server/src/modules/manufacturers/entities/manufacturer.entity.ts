@@ -1,15 +1,20 @@
 import { CoreEntity } from '../../common/entities/core.entity';
-import { Attachment } from '../../common/entities/attachment.entity';
-import { ShopSocials } from '../../settings/entities/setting.entity';
-import { Type } from '../../types/entities/type.entity';
-import { Column, Entity } from 'typeorm';
-import { BaseEntity } from 'src/modules/common/entities/base.entity';
+import { Column, Entity, Index } from 'typeorm';
 
 @Entity()
-export class Manufacturer extends BaseEntity {
-  @Column({ unique: true })
-  name: string;
+export class Manufacturer extends CoreEntity {
+    @Column()
+    name: string;
 
-  @Column({ unique: true })
-  slug?: string;
+    @Column({ unique: true })
+    slug: string;
+
+    @Column({ type: 'json', nullable: true })
+    translated_languages?: string[];
+
+    @Column({ default: 'en' })
+    language: string;
+
+    @Column({ nullable: true })
+    deleted_at?: Date;
 }
