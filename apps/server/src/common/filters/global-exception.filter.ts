@@ -33,7 +33,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       status = HttpStatus.NOT_FOUND;
       message = 'The required object does not exist.';
     }
-    // else if (exception instanceof KeyError) {
+    // else if (exceptions instanceof KeyError) {
     //   status = HttpStatus.BAD_REQUEST;
     //   message = 'The required key does not exist.';
     // }
