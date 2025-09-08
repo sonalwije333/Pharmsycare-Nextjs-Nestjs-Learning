@@ -73,3 +73,7 @@ export enum QueryManufacturersOrderByColumn {
     UPDATED_AT = 'UPDATED_AT',
     NAME = 'NAME',
 }
+export enum QueryNotifyLogsOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    UPDATED_AT = 'UPDATED_AT',
+}
