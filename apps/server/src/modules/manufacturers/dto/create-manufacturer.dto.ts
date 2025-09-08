@@ -1,13 +1,25 @@
-import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { Manufacturer } from '../entities/manufacturer.entity';
-import { IsNotEmpty } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsOptional, IsString, IsArray } from 'class-validator';
 
-export class CreateManufacturerDto{
-    @IsNotEmpty()
+export class CreateManufacturerDto {
     @ApiProperty({ description: 'Manufacturer name', example: 'Manu abv' })
-    name: string;
-  
     @IsNotEmpty()
-    @ApiProperty({ description: 'Manufacturer slug', example: 'manu-abc' })
-    slug: string;
+    @IsString()
+    name: string;
+
+    @ApiPropertyOptional({ description: 'Manufacturer slug', example: 'manu-abc' })
+    @IsOptional()
+    @IsString()
+    slug?: string;
+
+    @ApiPropertyOptional({ description: 'Language', example: 'en', default: 'en' })
+    @IsOptional()
+    @IsString()
+    language?: string;
+
+    @ApiPropertyOptional({ description: 'Translated languages', example: ['en', 'es'] })
+    @IsOptional()
+    @IsArray()
+    @IsString({ each: true })
+    translated_languages?: string[];
 }
