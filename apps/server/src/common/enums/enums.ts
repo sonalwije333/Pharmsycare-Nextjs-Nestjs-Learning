@@ -68,3 +68,8 @@ export enum QueryFaqsOrderByColumn {
     FAQ_TITLE = 'FAQ_TITLE',
     FAQ_DESCRIPTION = 'FAQ_DESCRIPTION',
 }
+export enum QueryManufacturersOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    UPDATED_AT = 'UPDATED_AT',
+    NAME = 'NAME',
+}
