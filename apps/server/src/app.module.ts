@@ -34,7 +34,7 @@ import { PaymentModule } from './modules/payment/payment.module';
 import { PaymentMethodModule } from './modules/payment-method/payment-method.module';
 import { QuestionModule } from './modules/questions/questions.module';
 import { RefundPoliciesModule } from './modules/refund-policies/refund-policies.module';
-import { RefundReasonModule } from './modules/refund-reasons/refund-reasons.module';
+import { RefundReasonsModule} from './modules/refund-reasons/refund-reasons.module';
 import { RefundsModule } from './modules/refunds/refunds.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { ReviewModule } from './modules/reviews/reviews.module';
@@ -90,7 +90,7 @@ import { PaymentIntentModule } from './modules/payment-intent/payment-intent.mod
     ProductsModule,
     QuestionModule,
     RefundPoliciesModule,
-    RefundReasonModule,
+      RefundReasonsModule,
     RefundsModule,
     ReportsModule,
     ReviewModule,
