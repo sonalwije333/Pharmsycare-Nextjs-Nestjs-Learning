@@ -2,7 +2,11 @@ import { PickType } from '@nestjs/swagger';
 import { RefundPolicy } from '../entities/refund-policies.entity';
 
 export class CreateRefundPolicyDto extends PickType(RefundPolicy, [
-  'title',
-  'status',
-  'target',
+    'title',
+    'status',
+    'target',
+    'description',
+    'language',
+    'shop_id',
+    'translated_languages',
 ]) {}
