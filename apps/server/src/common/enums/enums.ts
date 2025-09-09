@@ -83,3 +83,9 @@ export enum QueryQuestionsOrderByColumn {
     QUESTION = 'QUESTION',
     ANSWER = 'ANSWER',
 }
+export enum QueryRefundPoliciesOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    UPDATED_AT = 'UPDATED_AT',
+    TITLE = 'TITLE',
+    STATUS = 'STATUS',
+}
