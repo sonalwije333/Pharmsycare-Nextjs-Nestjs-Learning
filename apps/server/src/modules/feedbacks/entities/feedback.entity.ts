@@ -1,5 +1,6 @@
 import { CoreEntity } from '../../common/entities/core.entity';
-import { Column, Entity, Index } from 'typeorm';
+import {Column, Entity, Index, JoinColumn, ManyToOne} from 'typeorm';
+import {Question} from "../../questions/entities/question.entity";
 
 @Entity()
 export class Feedback extends CoreEntity {
@@ -17,4 +18,8 @@ export class Feedback extends CoreEntity {
 
     @Column({ nullable: true, default: false })
     negative?: boolean;
+
+    @ManyToOne(() => Question, question => question.feedbacks, { nullable: true })
+    @JoinColumn({ name: 'model_id', referencedColumnName: 'id' })
+    question?: Question;
 }
