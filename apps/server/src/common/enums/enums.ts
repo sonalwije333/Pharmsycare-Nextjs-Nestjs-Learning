@@ -89,3 +89,9 @@ export enum QueryRefundPoliciesOrderByColumn {
     TITLE = 'TITLE',
     STATUS = 'STATUS',
 }
+
+export enum QueryRefundReasonsOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    UPDATED_AT = 'UPDATED_AT',
+    NAME = 'NAME',
+}
