@@ -77,3 +77,9 @@ export enum QueryNotifyLogsOrderByColumn {
     CREATED_AT = 'CREATED_AT',
     UPDATED_AT = 'UPDATED_AT',
 }
+export enum QueryQuestionsOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    UPDATED_AT = 'UPDATED_AT',
+    QUESTION = 'QUESTION',
+    ANSWER = 'ANSWER',
+}
