@@ -2,7 +2,7 @@ import { Type } from 'class-transformer';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class PaginationArgs {
-  // FIX ME
+
   @IsOptional()
   @IsNumber()
   first?: number = 15;
