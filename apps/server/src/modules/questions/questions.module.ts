@@ -1,11 +1,17 @@
 import { Module } from '@nestjs/common';
-// import { MyQuestionsController } from './my-questions.controller';
-// import { MyQuestionsService } from './my-questions.service';
-// import { QuestionController } from './questions.controller';
-// import { QuestionService } from './questions.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Question } from './entities/question.entity';
+import { Product } from '../products/entities/product.entity';
+import { User } from '../users/entities/user.entity';
+import { QuestionController } from './questions.controller';
+import { MyQuestionsController } from './my-questions.controller';
+import { QuestionService } from './questions.service';
+import { MyQuestionsService } from './my-questions.service';
 
 @Module({
-  // controllers: [QuestionController, MyQuestionsController],
-  // providers: [QuestionService, MyQuestionsService],
+    imports: [TypeOrmModule.forFeature([Question, Product, User])],
+    controllers: [QuestionController, MyQuestionsController],
+    providers: [QuestionService, MyQuestionsService],
+    exports: [QuestionService, MyQuestionsService],
 })
 export class QuestionModule {}
