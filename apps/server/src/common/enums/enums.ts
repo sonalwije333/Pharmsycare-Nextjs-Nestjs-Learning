@@ -100,3 +100,9 @@ export enum QueryReportsOrderByColumn {
     UPDATED_AT = 'UPDATED_AT',
     NAME = 'NAME',
 }
+
+export enum QueryReviewsOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    UPDATED_AT = 'UPDATED_AT',
+    NAME = 'NAME',
+}
