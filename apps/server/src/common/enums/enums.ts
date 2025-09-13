@@ -106,3 +106,16 @@ export enum QueryReviewsOrderByColumn {
     UPDATED_AT = 'UPDATED_AT',
     NAME = 'NAME',
 }
+export enum ShippingType {
+    FIXED = 'fixed',
+    PERCENTAGE = 'percentage',
+    FREE = 'free',
+}
+export enum QueryShippingClassesOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    UPDATED_AT = 'UPDATED_AT',
+    NAME = 'NAME',
+    AMOUNT = 'AMOUNT',
+    IS_GLOBAL = 'IS_GLOBAL',
+    TYPE = 'TYPE',
+}
