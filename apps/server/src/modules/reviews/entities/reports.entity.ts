@@ -26,8 +26,8 @@ export class Report extends CoreEntity {
     @Column('simple-array', { nullable: true, name: 'translated_languages' })
     translatedLanguages?: string[];
 
-    @Column({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
-    createdAt: Date;
+    // @Column({ name: 'created_at', default: () => 'CURRENT_TIMESTAMP' })
+    // createdAt: Date;
 
     @Column({ nullable: true, name: 'deleted_at' })
     deletedAt?: Date;

@@ -26,7 +26,7 @@ export class RefundPoliciesService {
         let shop: Shop | null = null;
         if (createRefundPolicyDto.shop_id) {
             shop = await this.shopRepository.findOne({
-                where: { id: createRefundPolicyDto.shop_id }
+                where: { id: Number(createRefundPolicyDto.shop_id) }
             });
             if (!shop) {
                 throw new NotFoundException(`Shop with id ${createRefundPolicyDto.shop_id} not found`);
@@ -152,7 +152,7 @@ export class RefundPoliciesService {
         let shop = refundPolicy.shop;
         if (updateRefundDto.shop_id) {
             const foundShop = await this.shopRepository.findOne({
-                where: { id: updateRefundDto.shop_id }
+                where: { id: Number(updateRefundDto.shop_id) }
             });
             if (!foundShop) {
                 throw new NotFoundException(`Shop with id ${updateRefundDto.shop_id} not found`);
