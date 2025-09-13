@@ -136,7 +136,7 @@ export class ReviewService {
 
         const [product, shop, user] = await Promise.all([
             this.productRepository.findOne({ where: { id: productId.toString() } }),
-            this.shopRepository.findOne({ where: { id: shopId.toString() } }),
+            this.shopRepository.findOne({ where: { id: shopId } }),
             this.userRepository.findOne({ where: { id: userId } }) // Use number ID
         ]);
 

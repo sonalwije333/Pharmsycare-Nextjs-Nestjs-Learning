@@ -2,8 +2,7 @@ import { CoreEntity } from '../../common/entities/core.entity';
 import { Column, Entity, Index } from 'typeorm';
 
 @Entity()
-@Index(['created_at', 'type'])
-@Index(['user_id', 'status'])
+
 export class MyReports extends CoreEntity {
     @Column({ type: 'text' })
     message: string;

@@ -1,7 +1,11 @@
-import {PaginationArgs} from "../../common/dto/pagination-args.dto";
+// src/modules/shops/dto/get-staffs.dto.ts
+import { IsOptional, IsString } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { PaginationArgs } from '../../common/dto/pagination-args.dto';
 
 export class GetStaffsDto extends PaginationArgs {
-  orderBy?: string;
-  // sortedBy?: string;
-  shop_id?: number;
+    @ApiPropertyOptional({ description: 'Shop ID' })
+    @IsOptional()
+    @IsString()
+    shop_id?: string;
 }
