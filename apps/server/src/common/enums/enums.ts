@@ -119,3 +119,10 @@ export enum QueryShippingClassesOrderByColumn {
     IS_GLOBAL = 'IS_GLOBAL',
     TYPE = 'TYPE',
 }
+export enum QueryShopsOrderByColumn {
+    NAME = 'NAME',
+    CREATED_AT = 'CREATED_AT',
+    UPDATED_AT = 'UPDATED_AT',
+    IS_ACTIVE = 'IS_ACTIVE',
+    BALANCE = 'BALANCE',
+}
