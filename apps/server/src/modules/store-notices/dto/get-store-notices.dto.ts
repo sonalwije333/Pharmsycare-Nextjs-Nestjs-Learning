@@ -1,23 +1,30 @@
-import { StoreNotice } from '../entities/store-notices.entity';
-import {Paginator} from "../../common/dto/paginator.dto";
-import {PaginationArgs} from "../../common/dto/pagination-args.dto";
-import {SortOrder} from "../../common/dto/generic-conditions.dto";
+// src/modules/store-notices/dto/get-store-notices.dto.ts
+import { PaginationArgs } from "../../common/dto/pagination-args.dto";
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { SortOrder } from "../../common/dto/generic-conditions.dto";
+import {QueryStoreNoticesOrderByColumn} from "../../../common/enums/enums";
 
-export class StoreNoticePaginator extends Paginator<StoreNotice> {
-  // data: StoreNotice[];
-}
+
 
 export class GetStoreNoticesDto extends PaginationArgs {
-  orderBy?: QueryStoreNoticesOrderByColumn;
-  // sortedBy?: SortOrder;
-  search?: string;
-  language?: string;
-}
+    @ApiProperty({ enum: QueryStoreNoticesOrderByColumn, required: false })
+    @IsEnum(QueryStoreNoticesOrderByColumn)
+    @IsOptional()
+    orderBy?: QueryStoreNoticesOrderByColumn;
 
-export enum QueryStoreNoticesOrderByColumn {
-  NOTICE = 'NOTICE',
-  DESCRIPTION = 'DESCRIPTION',
-  TYPE = 'TYPE',
-  PRIORITY = 'PRIORITY',
-  EXPIRE_AT = 'EXPIRE_AT',
+    // @ApiProperty({ enum: SortOrder, required: false })
+    // @IsEnum(SortOrder)
+    // @IsOptional()
+    // sortedBy?: SortOrder;
+
+    @ApiProperty({ required: false })
+    @IsString()
+    @IsOptional()
+    search?: string;
+
+    @ApiProperty({ required: false })
+    @IsString()
+    @IsOptional()
+    language?: string;
 }

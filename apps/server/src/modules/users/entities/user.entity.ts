@@ -2,16 +2,17 @@ import { Address } from 'src/modules/addresses/entities/address.entity';
 import { Profile } from './profile.entity';
 import { CoreEntity } from 'src/modules/common/entities/core.entity';
 import {
-  Entity,
-  Column,
-  OneToOne,
-  OneToMany,
-  ManyToOne,
-  JoinColumn,
-  Unique,
+    Entity,
+    Column,
+    OneToOne,
+    OneToMany,
+    ManyToOne,
+    JoinColumn,
+    Unique, ManyToMany,
 } from 'typeorm';
 import { Shop } from '../../shops/entites/shop.entity';
 import { AiTask } from '../../ai/entities/ai.entity';
+import {StoreNotice} from "../../store-notices/entities/store-notices.entity";
 
 @Entity()
 export class User extends CoreEntity {
@@ -49,6 +50,8 @@ export class User extends CoreEntity {
   ai_tasks?: AiTask[];
   @Column({ type: 'json', nullable: true })
   wallet?: any;
+    @ManyToMany(() => StoreNotice, storeNotice => storeNotice.users)
+    storeNotices: StoreNotice[];
 }
 
 @Entity()
@@ -65,4 +68,7 @@ export class Permission extends CoreEntity {
 
   @ManyToOne(() => User, (user) => user.permissions)
   user: User;
+
+
+
 }

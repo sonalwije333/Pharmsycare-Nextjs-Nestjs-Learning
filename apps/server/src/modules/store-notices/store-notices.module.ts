@@ -1,10 +1,16 @@
+// src/modules/store-notices/store-notices.module.ts
 import { Module } from '@nestjs/common';
-// import { UsersService } from 'src/users/users.service';
-// import { StoreNoticesController } from './store-notices.controller';
-// import { StoreNoticesService } from './store-notices.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { StoreNoticesService } from './store-notices.service';
+import { StoreNoticesController } from './store-notices.controller';
+import { StoreNotice } from './entities/store-notices.entity';
+import { User } from '../users/entities/user.entity';
+import {Shop} from "../shops/entites/shop.entity";
 
 @Module({
-  // controllers: [StoreNoticesController],
-  // providers: [StoreNoticesService, UsersService],
+    imports: [TypeOrmModule.forFeature([StoreNotice, Shop, User])],
+    controllers: [StoreNoticesController],
+    providers: [StoreNoticesService],
+    exports: [StoreNoticesService],
 })
 export class StoreNoticesModule {}
