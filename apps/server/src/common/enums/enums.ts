@@ -150,5 +150,9 @@ export enum StoreNoticeType {
     ALL_VENDOR = 'all_vendor',
     SPECIFIC_VENDOR = 'specific_vendor',
 }
-
+export enum QueryTagsOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    NAME = 'NAME',
+    UPDATED_AT = 'UPDATED_AT',
+}
 
