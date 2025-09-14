@@ -29,8 +29,8 @@ export class Tag extends CoreEntity {
     @JoinColumn()
     type: Type;
 
-    // @ManyToMany(() => Product, product => product.tags)
-    // products: Product[];
+    @ManyToMany(() => Product, product => product.tags)
+    products: Product[];
 
     @Column({ default: 'en' })
     language: string;
