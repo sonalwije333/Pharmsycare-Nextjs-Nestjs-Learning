@@ -163,3 +163,10 @@ export enum QueryTaxClassesOrderByColumn {
     COUNTRY = 'COUNTRY',
     STATE = 'STATE',
 }
+export enum QueryTermsOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    TITLE = 'TITLE',
+    UPDATED_AT = 'UPDATED_AT',
+    IS_APPROVED = 'IS_APPROVED',
+}
+
