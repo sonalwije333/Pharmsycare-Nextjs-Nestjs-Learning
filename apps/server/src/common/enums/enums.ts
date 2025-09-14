@@ -155,4 +155,11 @@ export enum QueryTagsOrderByColumn {
     NAME = 'NAME',
     UPDATED_AT = 'UPDATED_AT',
 }
-
+export enum QueryTaxClassesOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    UPDATED_AT = 'UPDATED_AT',
+    NAME = 'NAME',
+    RATE = 'RATE',
+    COUNTRY = 'COUNTRY',
+    STATE = 'STATE',
+}
