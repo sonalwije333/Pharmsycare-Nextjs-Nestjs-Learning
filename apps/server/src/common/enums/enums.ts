@@ -1,3 +1,7 @@
+import {Column, Entity} from "typeorm";
+import {CoreEntity} from "../../modules/common/entities/core.entity";
+import {ApiProperty} from "@nestjs/swagger";
+
 export enum PermissionType {
   SUPER_ADMIN = 'super_admin',
   STORE_OWNER = 'store_owner',
@@ -126,3 +130,25 @@ export enum QueryShopsOrderByColumn {
     IS_ACTIVE = 'IS_ACTIVE',
     BALANCE = 'BALANCE',
 }
+export enum QueryStoreNoticesOrderByColumn {
+    NOTICE = 'NOTICE',
+    DESCRIPTION = 'DESCRIPTION',
+    TYPE = 'TYPE',
+    PRIORITY = 'PRIORITY',
+    EXPIRED_AT = 'EXPIRED_AT',
+    CREATED_AT = 'CREATED_AT',
+}
+export enum StoreNoticePriorityType {
+    High = 'high',
+    Medium = 'medium',
+    Low = 'low',
+}
+
+export enum StoreNoticeType {
+    ALL_SHOP = 'all_shop',
+    SPECIFIC_SHOP = 'specific_shop',
+    ALL_VENDOR = 'all_vendor',
+    SPECIFIC_VENDOR = 'specific_vendor',
+}
+
+
