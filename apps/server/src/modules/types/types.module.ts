@@ -5,9 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Type } from './entities/type.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Type])], // 👈 register entity here
-  controllers: [TypesController],
-  providers: [TypesService],
-  exports: [TypesService], // if other modules need this service
+    imports: [TypeOrmModule.forFeature([Type])],
+    controllers: [TypesController],
+    providers: [TypesService],
+    exports: [TypesService],
 })
 export class TypesModule {}
