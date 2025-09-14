@@ -2,6 +2,7 @@ import { BaseEntity } from 'src/modules/common/entities/base.entity';
 import { Type } from 'src/modules/types/entities/type.entity';
 import {Column, Entity, JoinColumn, ManyToMany, ManyToOne} from 'typeorm';
 import {Tag} from "../../tags/entities/tag.entity";
+import {Shop} from "../../shops/entites/shop.entity";
 
 @Entity()
 export class Product extends BaseEntity {
@@ -27,9 +28,9 @@ export class Product extends BaseEntity {
   @Column('decimal', { precision: 10, scale: 2 })
   price: number;
 
-  //     @ManyToOne(() => Shop, { nullable: false, eager: true })
-  //   @JoinColumn({ name: 'shop_id' })
-  //   shop: Shop;
+      @ManyToOne(() => Shop, { nullable: false, eager: true })
+    @JoinColumn({ name: 'shop_id' })
+    shop: Shop;
 
   @Column('decimal', { precision: 10, scale: 2, nullable: true })
   sale_price: number;
@@ -58,9 +59,9 @@ export class Product extends BaseEntity {
   @Column({ type: 'bool', default: true })
   is_taxable: boolean;
 
-  //     @ManyToOne(() => ShippingClass, { nullable: true, eager: true })
-  //   @JoinColumn({ name: 'shipping_class_id' })
-  //   shipping_class: ShippingClass;
+    //   @ManyToOne(() => ShippingClass, { nullable: true, eager: true })
+    // @JoinColumn({ name: 'shipping_class_id' })
+    // shipping_class: ShippingClass;
 
   @Column()
   status: string;
