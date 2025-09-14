@@ -3,7 +3,8 @@ import { WebHookController } from './web-hook.controller';
 import { WebHookService } from './web-hook.service';
 
 @Module({
-  controllers: [WebHookController],
-  providers: [WebHookService],
+    controllers: [WebHookController],
+    providers: [WebHookService],
+    exports: [WebHookService],
 })
 export class WebHookModule {}
