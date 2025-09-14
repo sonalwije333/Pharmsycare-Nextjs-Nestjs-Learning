@@ -1,6 +1,7 @@
 import {Column, Entity} from "typeorm";
 import {CoreEntity} from "../../modules/common/entities/core.entity";
 import {ApiProperty} from "@nestjs/swagger";
+import {SortOrder} from "../../modules/common/dto/generic-conditions.dto";
 
 export enum PermissionType {
   SUPER_ADMIN = 'super_admin',
@@ -169,4 +170,13 @@ export enum QueryTermsOrderByColumn {
     UPDATED_AT = 'UPDATED_AT',
     IS_APPROVED = 'IS_APPROVED',
 }
+export class QueryTypesOrderByOrderByClause {
+    column: QueryTypesOrderByColumn;
+    order: SortOrder;
+}
 
+export enum QueryTypesOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    NAME = 'NAME',
+    UPDATED_AT = 'UPDATED_AT',
+}
