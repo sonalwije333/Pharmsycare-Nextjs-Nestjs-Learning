@@ -1,6 +1,7 @@
 import { BaseEntity } from 'src/modules/common/entities/base.entity';
 import { Type } from 'src/modules/types/entities/type.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import {Column, Entity, JoinColumn, ManyToMany, ManyToOne} from 'typeorm';
+import {Tag} from "../../tags/entities/tag.entity";
 
 @Entity()
 export class Product extends BaseEntity {
@@ -78,4 +79,8 @@ export class Product extends BaseEntity {
 
   @Column('decimal', { precision: 10, scale: 2, nullable: true })
   length: number;
+
+    @ManyToMany(() => Tag, tag => tag.products)
+    tags: Tag[];
+
 }
