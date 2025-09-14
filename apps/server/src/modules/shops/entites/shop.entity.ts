@@ -1,8 +1,9 @@
 // src/modules/shops/entities/shop.entity.ts
 import { CoreEntity } from 'src/modules/common/entities/core.entity';
 import { User } from 'src/modules/users/entities/user.entity';
-import { Column, Entity, ManyToOne, JoinColumn } from 'typeorm';
+import {Column, Entity, ManyToOne, JoinColumn, ManyToMany} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
+import {StoreNotice} from "../../store-notices/entities/store-notices.entity";
 
 @Entity()
 export class Shop extends CoreEntity {
@@ -44,5 +45,7 @@ export class Shop extends CoreEntity {
     is_active: boolean;
 
 
+    @ManyToMany(() => StoreNotice, storeNotice => storeNotice.shops)
+    storeNotices: StoreNotice[];
 
 }
