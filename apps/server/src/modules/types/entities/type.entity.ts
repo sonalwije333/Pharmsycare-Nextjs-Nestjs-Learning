@@ -13,6 +13,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import {Tag} from "../../tags/entities/tag.entity";
 
 // @Entity()
 // export class TypeSettings {
@@ -59,6 +60,8 @@ export class Type extends BaseEntity {
   @Column({ type: 'json', nullable: true })
   translated_languages: string[];
 
+  @OneToMany(() => Tag, tag => tag.type)
+    tags: Tag[];
   @OneToMany(() => Category, (category) => category.type, {
     cascade: true,
   })
