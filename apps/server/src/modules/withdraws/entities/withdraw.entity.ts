@@ -1,20 +1,34 @@
-import {CoreEntity} from "../../common/entities/core.entity";
-import {Shop} from "../../shops/entites/shop.entity";
+import { CoreEntity } from "../../common/entities/core.entity";
+import { Shop } from "../../shops/entites/shop.entity";
+import { Entity, Column, ManyToOne, JoinColumn } from "typeorm";
+import {WithdrawStatus} from "../../../common/enums/enums";
 
+@Entity()
 export class Withdraw extends CoreEntity {
-  amount: number;
-  status: WithdrawStatus;
-  shop_id: number;
-  shop: Shop;
-  payment_method: string;
-  details: string;
-  note: string;
-}
+    @Column({ type: 'decimal', precision: 10, scale: 2 })
+    amount: number;
 
-export enum WithdrawStatus {
-  APPROVED = 'Approved',
-  PENDING = 'Pending',
-  ON_HOLD = 'On hold',
-  REJECTED = 'Rejected',
-  PROCESSING = 'Processing',
+    @Column({
+        type: 'enum',
+        enum: WithdrawStatus,
+        default: WithdrawStatus.PENDING
+    })
+    status: WithdrawStatus;
+
+    @Column()
+    shop_id: number;
+
+    @ManyToOne(() => Shop, { eager: true })
+    @JoinColumn({ name: 'shop_id' })
+    shop: Shop;
+
+    @Column()
+    payment_method: string;
+
+    @Column({ type: 'json', nullable: true })
+    details: string;
+
+    @Column({ type: 'text', nullable: true })
+    note: string;
+
 }
