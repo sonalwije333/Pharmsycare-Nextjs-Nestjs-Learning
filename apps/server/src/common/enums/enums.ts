@@ -180,3 +180,10 @@ export enum QueryTypesOrderByColumn {
     NAME = 'NAME',
     UPDATED_AT = 'UPDATED_AT',
 }
+export enum WithdrawStatus {
+    APPROVED = 'Approved',
+    PENDING = 'Pending',
+    ON_HOLD = 'On hold',
+    REJECTED = 'Rejected',
+    PROCESSING = 'Processing',
+}
