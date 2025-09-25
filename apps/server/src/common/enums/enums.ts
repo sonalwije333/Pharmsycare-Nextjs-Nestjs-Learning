@@ -3,6 +3,7 @@ import {CoreEntity} from "../../modules/common/entities/core.entity";
 import {ApiProperty} from "@nestjs/swagger";
 import {SortOrder} from "../../modules/common/dto/generic-conditions.dto";
 
+
 export enum PermissionType {
   SUPER_ADMIN = 'super_admin',
   STORE_OWNER = 'store_owner',
@@ -187,3 +188,23 @@ export enum WithdrawStatus {
     REJECTED = 'Rejected',
     PROCESSING = 'Processing',
 }
+export enum QueryProductsOrderByColumn {
+    CREATED_AT = 'CREATED_AT',
+    NAME = 'NAME',
+    UPDATED_AT = 'UPDATED_AT',
+    PRICE = 'PRICE',
+    SALE_PRICE = 'SALE_PRICE',
+    STATUS = 'STATUS'
+}
+
+export enum ProductStatus {
+    PUBLISH = 'publish',
+    DRAFT = 'draft',
+    PENDING = 'pending'
+}
+
+export enum ProductType {
+    SIMPLE = 'simple',
+    VARIABLE = 'variable'
+}
+
