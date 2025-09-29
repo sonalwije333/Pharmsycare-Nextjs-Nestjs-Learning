@@ -1,399 +1,302 @@
-// import exportOrderJson from '@db/order-export.json';
-// import orderFilesJson from '@db/order-files.json';
-// import orderInvoiceJson from '@db/order-invoice.json';
-// import orderStatusJson from '@db/order-statuses.json';
-// import ordersJson from '@db/orders.json';
-// import paymentGatewayJson from '@db/payment-gateway.json';
-// import paymentIntentJson from '@db/payment-intent.json';
-// import setting from '@db/settings.json';
-// import { Injectable } from '@nestjs/common';
-// import { plainToClass } from 'class-transformer';
-// import Fuse from 'fuse.js';
-// import { AuthService } from 'src/auth/auth.service';
-// import { paginate } from 'src/common/pagination/paginate';
-// import { PaymentIntent } from 'src/payment-intent/entries/payment-intent.entity';
-// import { PaymentGateWay } from 'src/payment-method/entities/payment-gateway.entity';
-// import { PaypalPaymentService } from 'src/payment/paypal-payment.service';
-// import { StripePaymentService } from 'src/payment/stripe-payment.service';
-// import { Setting } from 'src/settings/entities/setting.entity';
-// import {
-//   CreateOrderStatusDto,
-//   UpdateOrderStatusDto,
-// } from './dto/create-order-status.dto';
-// import { CreateOrderDto } from './dto/create-order.dto';
-// import { GetOrderFilesDto } from './dto/get-downloads.dto';
-// import {
-//   GetOrderStatusesDto,
-//   OrderStatusPaginator,
-// } from './dto/get-order-statuses.dto';
-// import { GetOrdersDto, OrderPaginator } from './dto/get-orders.dto';
-// import { UpdateOrderDto } from './dto/update-order.dto';
-// import {
-//   CheckoutVerificationDto,
-//   VerifiedCheckoutData,
-// } from './dto/verify-checkout.dto';
-// import { OrderStatus } from './entities/order-status.entity';
-// import {
-//   Order,
-//   OrderFiles,
-//   OrderStatusType,
-//   PaymentGatewayType,
-//   PaymentStatusType,
-// } from './entities/order.entity';
-//
-// const orders = plainToClass(Order, ordersJson);
-// const paymentIntents = plainToClass(PaymentIntent, paymentIntentJson);
-// const paymentGateways = plainToClass(PaymentGateWay, paymentGatewayJson);
-// const orderStatus = plainToClass(OrderStatus, orderStatusJson);
-//
-// const options = {
-//   keys: ['name'],
-//   threshold: 0.3,
-// };
-// const fuse = new Fuse(orderStatus, options);
-//
-// const orderFiles = plainToClass(OrderFiles, orderFilesJson);
-// const settings = plainToClass(Setting, setting);
-//
-// @Injectable()
-// export class OrdersService {
-//   private orders: Order[] = orders;
-//   private orderStatus: OrderStatus[] = orderStatus;
-//   private orderFiles: OrderFiles[] = orderFiles;
-//   private setting: Setting = { ...settings };
-//
-//   constructor(
-//     private readonly authService: AuthService,
-//     private readonly stripeService: StripePaymentService,
-//     private readonly paypalService: PaypalPaymentService,
-//   ) {}
-//   async create(createOrderInput: CreateOrderDto): Promise<Order> {
-//     console.log('create order service executed: ', createOrderInput)
-//     const order: Order = this.orders[0];
-//     const payment_gateway_type = createOrderInput.payment_gateway
-//       ? createOrderInput.payment_gateway
-//       : PaymentGatewayType.CASH_ON_DELIVERY;
-//     order.payment_gateway = payment_gateway_type;
-//     order.payment_intent = null;
-//     // set the order type and payment type
-//
-//     switch (payment_gateway_type) {
-//       case PaymentGatewayType.CASH_ON_DELIVERY:
-//         order.order_status = OrderStatusType.PROCESSING;
-//         order.payment_status = PaymentStatusType.CASH_ON_DELIVERY;
-//         break;
-//       case PaymentGatewayType.CASH:
-//         order.order_status = OrderStatusType.PROCESSING;
-//         order.payment_status = PaymentStatusType.CASH;
-//         break;
-//       case PaymentGatewayType.FULL_WALLET_PAYMENT:
-//         order.order_status = OrderStatusType.COMPLETED;
-//         order.payment_status = PaymentStatusType.WALLET;
-//         break;
-//       default:
-//         order.order_status = OrderStatusType.PENDING;
-//         order.payment_status = PaymentStatusType.PENDING;
-//         break;
-//     }
-//     order.children = this.processChildrenOrder(order);
-//     try {
-//       if (
-//         [
-//           PaymentGatewayType.STRIPE,
-//           PaymentGatewayType.PAYPAL,
-//           PaymentGatewayType.RAZORPAY,
-//         ].includes(payment_gateway_type)
-//       ) {
-//         const paymentIntent = await this.processPaymentIntent(
-//           order,
-//           this.setting,
-//         );
-//         order.payment_intent = paymentIntent;
-//       }
-//       return order;
-//     } catch (error) {
-//       return order;
-//     }
-//   }
-//
-//   async getOrders({
-//     limit,
-//     page,
-//     customer_id,
-//     tracking_number,
-//     search,
-//     shop_id,
-//   }: GetOrdersDto): Promise<OrderPaginator> {
-//
-//     console.log('getOrders function executed')
-//     if (!page) page = 1;
-//     if (!limit) limit = 15;
-//     const startIndex = (page - 1) * limit;
-//     const endIndex = page * limit;
-//
-//     let data: Order[] = this.orders;
-//
-//     if (shop_id && shop_id !== 'undefined') {
-//       data = this.orders?.filter((p) => p?.shop?.id === Number(shop_id));
-//     }
-//     const results = data.slice(startIndex, endIndex);
-//     const url = `/orders?search=${search}&limit=${limit}`;
-//     return {
-//       data: results,
-//       ...paginate(data.length, page, limit, results.length, url),
-//     };
-//   }
-//
-//   async getOrderByIdOrTrackingNumber(id: number): Promise<Order> {
-//     try {
-//       return (
-//         this.orders.find(
-//           (o: Order) =>
-//             o.id === Number(id) || o.tracking_number === id.toString(),
-//         ) ?? this.orders[0]
-//       );
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-//
-//   getOrderStatuses({
-//     limit,
-//     page,
-//     search,
-//     orderBy,
-//   }: GetOrderStatusesDto): OrderStatusPaginator {
-//     if (!page) page = 1;
-//     if (!limit) limit = 30;
-//     const startIndex = (page - 1) * limit;
-//     const endIndex = page * limit;
-//     let data: OrderStatus[] = this.orderStatus;
-//
-//     // if (shop_id) {
-//     //   data = this.orders?.filter((p) => p?.shop?.id === shop_id);
-//     // }
-//
-//     if (search) {
-//       const parseSearchParams = search.split(';');
-//       const searchText: any = [];
-//       for (const searchParam of parseSearchParams) {
-//         const [key, value] = searchParam.split(':');
-//         // TODO: Temp Solution
-//         if (key !== 'slug') {
-//           searchText.push({
-//             [key]: value,
-//           });
-//         }
-//       }
-//
-//       data = fuse
-//         .search({
-//           $and: searchText,
-//         })
-//         ?.map(({ item }) => item);
-//     }
-//
-//     const results = data.slice(startIndex, endIndex);
-//     const url = `/order-status?search=${search}&limit=${limit}`;
-//
-//     return {
-//       data: results,
-//       ...paginate(data.length, page, limit, results.length, url),
-//     };
-//   }
-//
-//   getOrderStatus(param: string, language: string) {
-//     return this.orderStatus.find((p) => p.slug === param);
-//   }
-//
-//   update(id: number, updateOrderInput: UpdateOrderDto) {
-//     return this.orders[0];
-//   }
-//
-//   remove(id: number) {
-//     return `This action removes a #${id} order`;
-//   }
-//
-//   verifyCheckout(input: CheckoutVerificationDto): VerifiedCheckoutData {
-//     console.log('verify order')
-//     return {
-//       total_tax: 0,
-//       shipping_charge: 0,
-//       unavailable_products: [],
-//       wallet_currency: 0,
-//       wallet_amount: 0,
-//     };
-//   }
-//
-//   createOrderStatus(createOrderStatusInput: CreateOrderStatusDto) {
-//     return this.orderStatus[0];
-//   }
-//
-//   updateOrderStatus(updateOrderStatusInput: UpdateOrderStatusDto) {
-//     return this.orderStatus[0];
-//   }
-//
-//   async getOrderFileItems({ page, limit }: GetOrderFilesDto) {
-//     if (!page) page = 1;
-//     if (!limit) limit = 30;
-//     const startIndex = (page - 1) * limit;
-//     const endIndex = page * limit;
-//
-//     const results = orderFiles.slice(startIndex, endIndex);
-//
-//     const url = `/downloads?&limit=${limit}`;
-//     return {
-//       data: results,
-//       ...paginate(orderFiles.length, page, limit, results.length, url),
-//     };
-//   }
-//
-//   async getDigitalFileDownloadUrl(digitalFileId: number) {
-//     const item: OrderFiles = this.orderFiles.find(
-//       (singleItem) => singleItem.digital_file_id === digitalFileId,
-//     );
-//
-//     return item.file.url;
-//   }
-//
-//   async exportOrder(shop_id: string) {
-//     return exportOrderJson.url;
-//   }
-//
-//   async downloadInvoiceUrl(shop_id: string) {
-//     return orderInvoiceJson[0].url;
-//   }
-//
-//   /**
-//    * helper methods from here
-//    */
-//
-//   /**
-//    * this method will process children of Order Object
-//    * @param order
-//    * @returns Children[]
-//    */
-//   processChildrenOrder(order: Order) {
-//     return [...order.children].map((child) => {
-//       child.order_status = order.order_status;
-//       child.payment_status = order.payment_status;
-//       return child;
-//     });
-//   }
-//   /**
-//    * This action will return Payment Intent
-//    * @param order
-//    * @param setting
-//    */
-//   async processPaymentIntent(
-//     order: Order,
-//     setting: Setting,
-//   ): Promise<PaymentIntent> {
-//     const paymentIntent = paymentIntents.find(
-//       (intent: PaymentIntent) =>
-//         intent.tracking_number === order.tracking_number &&
-//         intent.payment_gateway.toString().toLowerCase() ===
-//           setting.options.paymentGateway.toString().toLowerCase(),
-//     );
-//     if (paymentIntent) {
-//       return paymentIntent;
-//     }
-//     const {
-//       id: payment_id,
-//       client_secret = null,
-//       redirect_url = null,
-//       customer = null,
-//     } = await this.savePaymentIntent(order, order.payment_gateway);
-//     const is_redirect = redirect_url ? true : false;
-//     const paymentIntentInfo: PaymentIntent = {
-//       id: Number(Date.now()),
-//       order_id: order.id,
-//       tracking_number: order.tracking_number,
-//       payment_gateway: order.payment_gateway.toString().toLowerCase(),
-//       payment_intent_info: {
-//         client_secret,
-//         payment_id,
-//         redirect_url,
-//         is_redirect,
-//       },
-//     };
-//
-//     /**
-//      * Commented below code will work for real database.
-//      * if you uncomment this for json will arise conflict.
-//      */
-//
-//     // paymentIntents.push(paymentIntentInfo);
-//     // const paymentGateway: PaymentGateWay = {
-//     //   id: Number(Date.now()),
-//     //   user_id: this.authService.me().id,
-//     //   customer_id: customer,
-//     //   gateway_name: setting.options.paymentGateway,
-//     //   created_at: new Date(),
-//     //   updated_at: new Date(),
-//     // };
-//     // paymentGateways.push(paymentGateway);
-//
-//     return paymentIntentInfo;
-//   }
-//
-//   /**
-//    * Trailing method of ProcessPaymentIntent Method
-//    *
-//    * @param order
-//    * @param paymentGateway
-//    */
-//   async savePaymentIntent(order: Order, paymentGateway?: string): Promise<any> {
-//     const me = this.authService.me();
-//     switch (order.payment_gateway) {
-//       case PaymentGatewayType.STRIPE:
-//         const paymentIntentParam =
-//           await this.stripeService.makePaymentIntentParam(order, me);
-//         return await this.stripeService.createPaymentIntent(paymentIntentParam);
-//       case PaymentGatewayType.PAYPAL:
-//         // here goes PayPal
-//         return this.paypalService.createPaymentIntent(order);
-//         break;
-//
-//       default:
-//         //
-//         break;
-//     }
-//   }
-//
-//   /**
-//    *  Route {order/payment} Submit Payment intent here
-//    * @param order
-//    * @param orderPaymentDto
-//    */
-//   async stripePay(order: Order) {
-//     this.orders[0]['order_status'] = OrderStatusType.PROCESSING;
-//     this.orders[0]['payment_status'] = PaymentStatusType.SUCCESS;
-//     this.orders[0]['payment_intent'] = null;
-//   }
-//
-//   async paypalPay(order: Order) {
-//     this.orders[0]['order_status'] = OrderStatusType.PROCESSING;
-//     this.orders[0]['payment_status'] = PaymentStatusType.SUCCESS;
-//     const { status } = await this.paypalService.verifyOrder(
-//       order.payment_intent.payment_intent_info.payment_id,
-//     );
-//     this.orders[0]['payment_intent'] = null;
-//     if (status === 'COMPLETED') {
-//       //console.log('payment Success');
-//     }
-//   }
-//
-//   /**
-//    * This method will set order status and payment status
-//    * @param orderStatus
-//    * @param paymentStatus
-//    */
-//   changeOrderPaymentStatus(
-//     orderStatus: OrderStatusType,
-//     paymentStatus: PaymentStatusType,
-//   ) {
-//     this.orders[0]['order_status'] = orderStatus;
-//     this.orders[0]['payment_status'] = paymentStatus;
-//   }
-// }
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, Like, ILike } from 'typeorm';
+import { Order } from './entities/order.entity';
+import { OrderStatus } from './entities/order-status.entity';
+import { CreateOrderStatusDto, UpdateOrderStatusDto } from './dto/create-order-status.dto';
+import { GetOrderStatusesDto, OrderStatusPaginator } from './dto/get-order-statuses.dto';
+import { GetOrdersDto, OrderPaginator, GetOrderArgs } from './dto/get-orders.dto';
+import { paginate } from '../common/pagination/paginate';
+import { OrderNotFoundException, OrderStatusNotFoundException } from './exceptions/order-not-found.exception';
+import {OrderStatusType} from "../../common/enums/enums";
+import { SortOrder } from '../common/dto/generic-conditions.dto';
+
+
+@Injectable()
+export class OrdersService {
+  constructor(
+    @InjectRepository(Order)
+    private readonly orderRepository: Repository<Order>,
+    @InjectRepository(OrderStatus)
+    private readonly orderStatusRepository: Repository<OrderStatus>,
+  ) {}
+
+  // Order Status Methods
+  async createOrderStatus(createOrderStatusDto: CreateOrderStatusDto): Promise<OrderStatus> {
+    const orderStatus = this.orderStatusRepository.create({
+      ...createOrderStatusDto,
+      language: createOrderStatusDto.language || 'en',
+      translated_languages: createOrderStatusDto.language ? [createOrderStatusDto.language] : ['en'],
+    });
+
+    return await this.orderStatusRepository.save(orderStatus);
+  }
+
+  async getOrderStatuses({
+                           page = 1,
+                           limit = 30,
+                           search,
+                           language,
+                           orderBy,
+                           sortOrder = SortOrder.ASC
+                         }: GetOrderStatusesDto): Promise<OrderStatusPaginator> {
+    const take = limit;
+    const skip = (page - 1) * take;
+
+    const where: any = {};
+
+    if (search) {
+      where.name = Like(`%${search}%`);
+    }
+
+    if (language) {
+      where.language = language;
+    }
+
+    let order = {};
+    if (orderBy) {
+      const column = this.getOrderStatusOrderByColumn(orderBy);
+      order[column] = sortOrder;
+    } else {
+      order = { serial: 'ASC' }; // Default order by serial
+    }
+
+    const [results, total] = await this.orderStatusRepository.findAndCount({
+      where,
+      take,
+      skip,
+      order,
+    });
+
+    const url = `/order-status?search=${search ?? ''}&limit=${limit}`;
+    const paginationInfo = paginate(total, page, limit, results.length, url);
+
+    return {
+      data: results,
+      ...paginationInfo,
+    };
+  }
+
+  private getOrderStatusOrderByColumn(orderBy: any): string {
+    switch (orderBy) {
+      case 'NAME':
+        return 'name';
+      case 'SERIAL':
+        return 'serial';
+      case 'UPDATED_AT':
+        return 'updated_at';
+      case 'CREATED_AT':
+      default:
+        return 'created_at';
+    }
+  }
+
+  async getOrderStatusById(id: number): Promise<OrderStatus> {
+    const orderStatus = await this.orderStatusRepository.findOne({
+      where: { id }
+    });
+
+    if (!orderStatus) {
+      throw new OrderStatusNotFoundException(id.toString());
+    }
+
+    return orderStatus;
+  }
+
+  async getOrderStatusBySlug(slug: string, language?: string): Promise<OrderStatus> {
+    const where: any = { slug };
+
+    if (language) {
+      where.language = language;
+    }
+
+    const orderStatus = await this.orderStatusRepository.findOne({ where });
+
+    if (!orderStatus) {
+      throw new OrderStatusNotFoundException(slug);
+    }
+
+    return orderStatus;
+  }
+
+  async updateOrderStatus(id: number, updateOrderStatusDto: UpdateOrderStatusDto): Promise<OrderStatus> {
+    const orderStatus = await this.orderStatusRepository.findOneBy({ id });
+
+    if (!orderStatus) {
+      throw new OrderStatusNotFoundException(id.toString());
+    }
+
+    const updated = this.orderStatusRepository.merge(orderStatus, updateOrderStatusDto);
+    return this.orderStatusRepository.save(updated);
+  }
+
+  async deleteOrderStatus(id: number): Promise<void> {
+    const orderStatus = await this.orderStatusRepository.findOneBy({ id });
+
+    if (!orderStatus) {
+      throw new OrderStatusNotFoundException(id.toString());
+    }
+
+    await this.orderStatusRepository.remove(orderStatus);
+  }
+
+  // Order Methods
+  async getOrders({
+                    page = 1,
+                    limit = 30,
+                    search,
+                    customer_id,
+                    shop_id,
+                    tracking_number,
+                    orderBy,
+                    sortOrder = SortOrder.DESC
+                  }: GetOrdersDto): Promise<OrderPaginator> {
+    const take = limit;
+    const skip = (page - 1) * take;
+
+    const where: any = {};
+
+    if (search) {
+      where.tracking_number = Like(`%${search}%`);
+    }
+
+    if (customer_id) {
+      where.customer_id = customer_id;
+    }
+
+    if (shop_id) {
+      where.shop = { id: shop_id };
+    }
+
+    if (tracking_number) {
+      where.tracking_number = tracking_number;
+    }
+
+    let order = {};
+    if (orderBy) {
+      const column = this.getOrderOrderByColumn(orderBy);
+      order[column] = sortOrder;
+    } else {
+      order = { created_at: sortOrder };
+    }
+
+    const [results, total] = await this.orderRepository.findAndCount({
+      where,
+      take,
+      skip,
+      order,
+      relations: ['customer', 'shop', 'status', 'payment_intent'],
+    });
+
+    const url = `/orders?search=${search ?? ''}&limit=${limit}`;
+    const paginationInfo = paginate(total, page, limit, results.length, url);
+
+    return {
+      data: results,
+      ...paginationInfo,
+    };
+  }
+
+  private getOrderOrderByColumn(orderBy: any): string {
+    switch (orderBy) {
+      case 'TOTAL':
+        return 'total';
+      case 'TRACKING_NUMBER':
+        return 'tracking_number';
+      case 'UPDATED_AT':
+        return 'updated_at';
+      case 'CREATED_AT':
+      default:
+        return 'created_at';
+    }
+  }
+
+  async getOrderByIdOrTrackingNumber(identifier: number | string): Promise<Order> {
+    let where: any = {};
+
+    if (typeof identifier === 'number') {
+      where = { id: identifier };
+    } else {
+      where = { tracking_number: identifier };
+    }
+
+    const order = await this.orderRepository.findOne({
+      where,
+      relations: ['customer', 'shop', 'status', 'payment_intent', 'products', 'coupon'],
+    });
+
+    if (!order) {
+      throw new OrderNotFoundException(identifier.toString());
+    }
+
+    return order;
+  }
+
+  async updateOrderStatusById(orderId: number, statusId: number): Promise<Order> {
+    const order = await this.orderRepository.findOne({
+      where: { id: orderId },
+      relations: ['status']
+    });
+
+    if (!order) {
+      throw new OrderNotFoundException(orderId.toString());
+    }
+
+    const status = await this.orderStatusRepository.findOneBy({ id: statusId });
+
+    if (!status) {
+      throw new OrderStatusNotFoundException(statusId.toString());
+    }
+
+    order.status = status;
+    return this.orderRepository.save(order);
+  }
+
+  async getOrderStats(shop_id?: string): Promise<{
+    total: number;
+    pending: number;
+    processing: number;
+    completed: number;
+    cancelled: number;
+    revenue: number;
+  }> {
+    const where: any = {};
+    if (shop_id) {
+      where.shop = { id: shop_id };
+    }
+
+    const [total, pending, processing, completed, cancelled, allOrders] = await Promise.all([
+      this.orderRepository.count({ where }),
+      this.orderRepository.count({ where: { ...where, order_status: OrderStatusType.PENDING } }),
+      this.orderRepository.count({ where: { ...where, order_status: OrderStatusType.PROCESSING } }),
+      this.orderRepository.count({ where: { ...where, order_status: OrderStatusType.COMPLETED } }),
+      this.orderRepository.count({ where: { ...where, order_status: OrderStatusType.CANCELLED } }),
+      this.orderRepository.find({ where, select: ['total'] }),
+    ]);
+
+    const revenue = allOrders.reduce((sum, order) => sum + parseFloat(order.total.toString()), 0);
+
+    return {
+      total,
+      pending,
+      processing,
+      completed,
+      cancelled,
+      revenue,
+    };
+  }
+
+  async getOrdersByStatus(status: OrderStatusType, shop_id?: string): Promise<Order[]> {
+    const where: any = { order_status: status };
+
+    if (shop_id) {
+      where.shop = { id: shop_id };
+    }
+
+    return this.orderRepository.find({
+      where,
+      relations: ['customer', 'shop', 'status'],
+      order: { created_at: 'DESC' },
+    });
+  }
+}
