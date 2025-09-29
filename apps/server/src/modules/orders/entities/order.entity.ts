@@ -1,80 +1,134 @@
-// import { UserAddress } from 'src/addresses/entities/address.entity';
-// import { CoreEntity } from 'src/common/entities/core.entity';
-// import { Coupon } from 'src/coupons/entities/coupon.entity';
-// import { PaymentIntent } from 'src/payment-intent/entries/payment-intent.entity';
-// import { File, Product } from 'src/products/entities/product.entity';
-// import { Shop } from 'src/shops/entities/shop.entity';
-// import { User } from 'src/users/entities/user.entity';
-// import { OrderStatus } from './order-status.entity';
-//
-// export enum PaymentGatewayType {
-//   STRIPE = 'STRIPE',
-//   CASH_ON_DELIVERY = 'CASH_ON_DELIVERY',
-//   CASH = 'CASH',
-//   FULL_WALLET_PAYMENT = 'FULL_WALLET_PAYMENT',
-//   PAYPAL = 'PAYPAL',
-//   RAZORPAY = 'RAZORPAY',
-// }
-// export enum OrderStatusType {
-//   PENDING = 'order-pending',
-//   PROCESSING = 'order-processing',
-//   COMPLETED = 'order-completed',
-//   CANCELLED = 'order-cancelled',
-//   REFUNDED = 'order-refunded',
-//   FAILED = 'order-failed',
-//   AT_LOCAL_FACILITY = 'order-at-local-facility',
-//   OUT_FOR_DELIVERY = 'order-out-for-delivery',
-//   DEFAULT_ORDER_STATUS = 'order-pending',
-// }
-//
-// export enum PaymentStatusType {
-//   PENDING = 'payment-pending',
-//   PROCESSING = 'payment-processing',
-//   SUCCESS = 'payment-success',
-//   FAILED = 'payment-failed',
-//   REVERSAL = 'payment-reversal',
-//   CASH_ON_DELIVERY = 'payment-cash-on-delivery',
-//   CASH = 'payment-cash',
-//   WALLET = 'payment-wallet',
-//   AWAITING_FOR_APPROVAL = 'payment-awaiting-for-approval',
-//   DEFAULT_PAYMENT_STATUS = 'payment-pending',
-// }
-//
-// export class Order extends CoreEntity {
-//   tracking_number: string;
-//   customer_id: number;
-//   customer_contact: string;
-//   customer: User;
-//   parent_order?: Order;
-//   children: Order[];
-//   status: OrderStatus;
-//   order_status: OrderStatusType;
-//   payment_status: PaymentStatusType;
-//   amount: number;
-//   sales_tax: number;
-//   total: number;
-//   paid_total: number;
-//   payment_id?: string;
-//   payment_gateway: PaymentGatewayType;
-//   coupon?: Coupon;
-//   shop: Shop;
-//   discount?: number;
-//   delivery_fee: number;
-//   delivery_time: string;
-//   products: Product[];
-//   billing_address: UserAddress;
-//   shipping_address: UserAddress;
-//   language: string;
-//   translated_languages: string[];
-//   payment_intent: PaymentIntent;
-//   altered_payment_gateway?: string;
-// }
-//
-// export class OrderFiles extends CoreEntity {
-//   purchase_key: string;
-//   digital_file_id: number;
-//   order_id?: number;
-//   customer_id: number;
-//   file: File;
-//   fileable: Product;
-// }
+import { CoreEntity } from '../../common/entities/core.entity';
+import { User } from '../../users/entities/user.entity';
+import { Coupon } from '../../coupons/entities/coupon.entity';
+import { Product } from '../../products/entities/product.entity';
+import { Column, Entity, ManyToOne, OneToMany, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
+import { OrderStatus } from './order-status.entity';
+
+import { Shop } from '../../shops/entites/shop.entity';
+import {
+  OrderStatusType,
+  PaymentGatewayType,
+  PaymentStatusType,
+} from '../../../common/enums/enums';
+// import {PaymentIntent} from "../../payment-intent/entries/payment-intent.entity";
+
+@Entity()
+export class Order extends CoreEntity {
+  @Column({ unique: true })
+  tracking_number: string;
+
+  @Column()
+  customer_id: number;
+
+  @Column()
+  customer_contact: string;
+
+  @ManyToOne(() => User, { eager: true })
+  @JoinColumn({ name: 'customer_id' })
+  customer: User;
+
+  @ManyToOne(() => Order, { nullable: true })
+  @JoinColumn({ name: 'parent_order_id' })
+  parent_order?: Order;
+
+  @OneToMany(() => Order, order => order.parent_order)
+  children: Order[];
+
+  @ManyToOne(() => OrderStatus, { eager: true })
+  @JoinColumn({ name: 'status_id' })
+  status: OrderStatus;
+
+  @Column({
+    type: 'enum',
+    enum: OrderStatusType,
+    default: OrderStatusType.PENDING  // ✅ Now this exists
+  })
+  order_status: OrderStatusType;
+
+  @Column({
+    type: 'enum',
+    enum: PaymentStatusType,
+    default: PaymentStatusType.PENDING  // ✅ Now this exists
+  })
+  payment_status: PaymentStatusType;
+
+  @Column({ type: 'decimal', precision: 12, scale: 2 })
+  amount: number;
+
+  @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
+  sales_tax: number;
+
+  @Column({ type: 'decimal', precision: 12, scale: 2 })
+  total: number;
+
+  @Column({ type: 'decimal', precision: 12, scale: 2 })
+  paid_total: number;
+
+  @Column({ nullable: true })
+  payment_id?: string;
+
+  @Column({ type: 'enum', enum: PaymentGatewayType })
+  payment_gateway: PaymentGatewayType;
+
+  @ManyToOne(() => Coupon, { eager: true, nullable: true })
+  @JoinColumn({ name: 'coupon_id' })
+  coupon?: Coupon;
+
+  @ManyToOne(() => Shop, { eager: true })
+  @JoinColumn({ name: 'shop_id' })
+  shop: Shop;
+
+  @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
+  discount?: number;
+
+  @Column({ type: 'decimal', precision: 12, scale: 2, default: 0 })
+  delivery_fee: number;
+
+  @Column()
+  delivery_time: string;
+
+  @ManyToMany(() => Product, { eager: true })
+  @JoinTable()
+  products: Product[];
+
+  @Column({ type: 'json' })
+  billing_address: any;
+
+  @Column({ type: 'json' })
+  shipping_address: any;
+
+  @Column({ default: 'en' })
+  language?: string;
+
+  @Column({ type: 'json', nullable: true })
+  translated_languages?: string[];
+
+  // @ManyToOne(() => PaymentIntent, { eager: true, nullable: true })
+  // @JoinColumn({ name: 'payment_intent_id' })
+  // payment_intent?: PaymentIntent;
+
+  @Column({ nullable: true })
+  altered_payment_gateway?: string;
+}
+
+@Entity()
+export class OrderFiles extends CoreEntity {
+  @Column()
+  purchase_key: string;
+
+  @Column()
+  digital_file_id: number;
+
+  @Column({ nullable: true })
+  order_id?: number;
+
+  @Column()
+  customer_id: number;
+
+  @Column({ type: 'json' })
+  file: any;
+
+  @Column({ type: 'json' })
+  fileable: any;
+}
