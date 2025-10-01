@@ -4,68 +4,88 @@ export class StripeCustomerList {
   has_more?: boolean;
   data?: StripeCustomer[];
 }
+
 export class StripeCustomer {
   id?: string;
   object?: string;
-  address?: Address;
+  address?: StripeAddress | null;
   balance?: number;
   created?: number;
-  currency?: string;
-  default_source?: any;
-  delinquent?: boolean;
-  description?: any;
+  currency?: string | null;
+  default_source?: string | null;
+  delinquent?: boolean | null;
+  description?: string | null;
   discount?: any;
-  email?: any;
+  email?: string | null;
   invoice_prefix?: string;
   invoice_settings?: InvoiceSettings;
   livemode?: boolean;
-  metadata?: Metadata;
-  name?: any;
+  metadata?: StripeMetadata;
+  name?: string | null;
   next_invoice_sequence?: number;
-  phone?: any;
-  preferred_locales?: any[];
+  phone?: string | null;
+  preferred_locales?: string[];
   shipping?: any;
   tax_exempt?: string;
-  test_clock?: any;
+  test_clock?: string | null;
 }
+
 export class StripePaymentMethod {
   id?: string;
   object?: string;
   billing_details?: BillingDetails;
-  card?: Card;
+  card?: StripeCard;
   created?: number;
-  customer?: any;
+  customer?: string | null;
   livemode?: boolean;
-  metadata?: Metadata;
+  metadata?: StripeMetadata;
   type?: string;
 }
+
+export class StripePaymentIntent {
+  id?: string;
+  amount?: number;
+  amount_received?: number;
+  client_secret?: string | null;
+  currency?: string;
+  customer?: string | null;
+  metadata?: PaymentIntentMetadata;
+  payment_method_types?: string[];
+  setup_future_usage?: string | null;
+  status?: string;
+}
+
 export class InvoiceSettings {
-  custom_fields?: any;
-  default_payment_method?: any;
-  footer?: any;
+  custom_fields?: any[] | null;
+  default_payment_method?: string | null;
+  footer?: string | null;
   rendering_options?: any;
 }
 
-export class Metadata {
-  order_tracking_number?: number;
+// Fix: Use a proper interface for metadata that allows our custom properties
+interface StripeMetadata extends Record<string, string | number | null> {
+  // order_tracking_number?: number;
 }
+
+export default StripeMetadata
+
 export class BillingDetails {
-  address?: Address;
-  email?: any;
-  name?: any;
-  phone?: any;
+  address?: StripeAddress | null;
+  email?: string | null;
+  name?: string | null;
+  phone?: string | null;
 }
 
-export class Address {
-  city?: any;
-  country?: any;
-  line1?: any;
-  line2?: any;
-  postal_code?: any;
-  state?: any;
+export class StripeAddress {
+  city?: string | null;
+  country?: string | null;
+  line1?: string | null;
+  line2?: string | null;
+  postal_code?: string | null;
+  state?: string | null;
 }
 
-export class Card {
+export class StripeCard {
   brand?: string;
   checks?: Checks;
   country?: string;
@@ -81,33 +101,21 @@ export class Card {
 }
 
 export class Checks {
-  address_line1_check?: any;
-  address_postal_code_check?: any;
-  cvc_check?: string;
+  address_line1_check?: string | null;
+  address_postal_code_check?: string | null;
+  cvc_check?: string | null;
 }
 
 export class Networks {
   available?: string[];
-  preferred?: any;
+  preferred?: string | null;
 }
 
 export class ThreeDSecureUsage {
   supported?: boolean;
 }
 
-export class StripePaymentIntent {
-  id?: string;
-  amount?: number;
-  amount_received?: number;
-  client_secret?: string;
-  currency?: string;
-  customer?: any;
-  metadata?: PaymentIntentMetadata;
-  payment_method_types?: string[];
-  setup_future_usage?: string;
-  status?: string;
-}
-
-export class PaymentIntentMetadata {
-  order_tracking_number?: number;
+// Fix: Use a proper interface for payment intent metadata
+export interface PaymentIntentMetadata extends Record<string, string | number | null> {
+  // order_tracking_number?: number;
 }
