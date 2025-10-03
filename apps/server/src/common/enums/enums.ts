@@ -29,7 +29,16 @@ export enum QueryAiOrderByColumn {
   UPDATED_AT = 'UPDATED_AT',
   STATUS = 'STATUS',
 }
-
+export enum AddressType {
+  BILLING = 'billing',
+  SHIPPING = 'shipping',
+}
+export enum QueryAddressesOrderByColumn {
+  TITLE = 'TITLE',
+  TYPE = 'TYPE',
+  CREATED_AT = 'CREATED_AT',
+  UPDATED_AT = 'UPDATED_AT',
+}
 export enum AiTaskType {
   DESCRIPTION_GENERATION = 'description_generation',
   IMAGE_GENERATION = 'image_generation',
