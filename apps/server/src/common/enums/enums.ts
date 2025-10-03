@@ -267,3 +267,18 @@ export enum PaymentStatusType {
   WALLET = 'payment-wallet',
   AWAITING_FOR_APPROVAL = 'payment-awaiting-for-approval',
 }
+
+
+export enum QueryRefundsOrderByColumn {
+  CREATED_AT = 'CREATED_AT',
+  UPDATED_AT = 'UPDATED_AT',
+  AMOUNT = 'AMOUNT',
+  STATUS = 'STATUS',
+}
+
+export enum RefundStatus {
+  APPROVED = 'Approved',
+  PENDING = 'Pending',
+  REJECTED = 'Rejected',
+  PROCESSING = 'Processing',
+}
