@@ -25,11 +25,11 @@ import {
     ApiParam,
     ApiQuery,
 } from '@nestjs/swagger';
-import { PermissionType } from '../../common/enums/enums';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
 import { FlashSale } from './entities/flash-sale.entity';
 import { Product } from '../products/entities/product.entity';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Flash Sales')
 @ApiBearerAuth('access-token')

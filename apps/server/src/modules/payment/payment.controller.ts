@@ -14,7 +14,7 @@ import {
 } from '@nestjs/swagger';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
-import { PermissionType } from '../../common/enums/enums';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
 import {StripePaymentService} from "./stripe-payment.service";
 

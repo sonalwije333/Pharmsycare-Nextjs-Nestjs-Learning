@@ -21,7 +21,6 @@ import {
     ApiParam,
     ApiQuery,
 } from '@nestjs/swagger';
-import { PermissionType } from '../../common/enums/enums';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
 
@@ -31,6 +30,7 @@ import {GetReviewsDto, ReviewPaginator} from "./dto/get-reviews.dto";
 import {CreateReviewDto} from "./dto/create-review.dto";
 import {UpdateReviewDto} from "./dto/update-review.dto";
 import {Review} from "./entities/review.entity";
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Reviews')
 @ApiBearerAuth('access-token')

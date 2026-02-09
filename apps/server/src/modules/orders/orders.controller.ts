@@ -23,13 +23,13 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
-import { PermissionType } from '../../common/enums/enums';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
 import { OrderStatus } from './entities/order-status.entity';
 import { Order } from './entities/order.entity';
 import { OrdersService } from './orders.service';
 import { GetOrdersDto, OrderPaginator } from './dto/get-orders.dto';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Orders')
 @ApiBearerAuth('access-token')
@@ -39,7 +39,7 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Get()
-  @Roles(PermissionType.SUPER_ADMIN, PermissionType.SUPER_ADMIN, PermissionType.STORE_OWNER, PermissionType.STAFF, PermissionType.CUSTOMER)
+
   @ApiOperation({
     summary: 'Get all orders',
     description: 'Retrieves a list of orders with filtering and pagination.'

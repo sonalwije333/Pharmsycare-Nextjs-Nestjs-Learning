@@ -22,7 +22,6 @@ import {
 } from '@nestjs/swagger';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
-import { PermissionType } from '../../common/enums/enums';
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import {Attribute} from "./entities/attribute.entity";
 import {CreateAttributeDto} from "./dto/create-attribute.dto";
@@ -30,6 +29,7 @@ import {AttributePaginator, GetAttributesDto} from "./dto/get-attributes.dto";
 import {GetAttributeArgs} from "./dto/get-attribute.dto";
 import {UpdateAttributeDto} from "./dto/update-attribute.dto";
 import { AttributesService } from './attributes.service';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Attributes')
 @ApiBearerAuth('access-token')

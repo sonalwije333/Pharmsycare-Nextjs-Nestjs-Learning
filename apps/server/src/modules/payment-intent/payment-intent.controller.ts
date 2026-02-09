@@ -8,11 +8,12 @@ import {
 } from '@nestjs/swagger';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
-import { PermissionType } from '../../common/enums/enums';
 import { PaymentIntentService } from './payment-intent.service';
 import { GetPaymentIntentDto } from './dto/get-payment-intent.dto';
 import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
 import {PaymentIntent} from "./entries/payment-intent.entity";
+import { PermissionType } from '../../common/enums/PermissionType.enum';
+
 
 @ApiTags('Payment Intents')
 @ApiBearerAuth('access-token')

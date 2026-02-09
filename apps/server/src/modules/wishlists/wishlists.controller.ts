@@ -21,12 +21,12 @@ import {
     ApiParam,
     ApiQuery,
 } from '@nestjs/swagger';
-import { PermissionType } from '../../common/enums/enums';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
 import { Wishlist } from './entities/wishlist.entity';
 import {CreateWishlistDto} from "./dto/create-wishlists.dto";
 import {UpdateWishlistDto} from "./dto/update-wishlists.dto";
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Wishlists')
 @ApiBearerAuth('access-token')

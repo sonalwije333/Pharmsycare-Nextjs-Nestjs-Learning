@@ -23,7 +23,6 @@ import {
 } from '@nestjs/swagger';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
-import {PermissionType, RefundStatus} from '../../common/enums/enums';
 import { Request } from 'express';
 import {JwtAuthGuard} from "../auth/guards/jwt-auth.guard";
 import {RefundsService} from "./refunds.service";
@@ -32,6 +31,8 @@ import {CreateRefundDto} from "./dto/create-refund.dto";
 import {GetRefundsDto, RefundPaginator} from "./dto/get-refunds.dto";
 import {UpdateRefundDto} from "./dto/update-refund.dto";
 import {UpdateRefundStatusDto} from "./dto/update-refund-status.dto";
+import { PermissionType } from '../../common/enums/PermissionType.enum';
+import { RefundStatus } from '../../common/enums/enums';
 
 @ApiTags('Refunds')
 @ApiBearerAuth('access-token')

@@ -11,11 +11,9 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User, Permission } from './entities/user.entity';
 import { paginate } from '../common/pagination/paginate';
 import * as bcrypt from 'bcrypt';
-import {
-  PermissionType,
-  QueryUsersOrderByColumn,
-} from '../../common/enums/enums';
 import { SortOrder } from '../common/dto/generic-conditions.dto';
+import { QueryUsersOrderByColumn } from '../../common/enums/enums';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @Injectable()
 export class UsersService {

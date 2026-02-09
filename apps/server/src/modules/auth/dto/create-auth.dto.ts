@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsEnum, IsNotEmpty } from 'class-validator';
-import { PermissionType } from '../../../common/enums/enums';
+import { PermissionType } from '../../../common/enums/PermissionType.enum';
+
 
 // Define UserProfileResponse first
 export class UserProfileResponse {

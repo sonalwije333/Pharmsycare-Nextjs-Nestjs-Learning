@@ -25,10 +25,10 @@ import {
     ApiParam,
     ApiQuery,
 } from '@nestjs/swagger';
-import { PermissionType } from '../../common/enums/enums';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
 import { Feedback } from './entities/feedback.entity';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Feedbacks')
 @ApiBearerAuth('access-token')
