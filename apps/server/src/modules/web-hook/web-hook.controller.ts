@@ -3,7 +3,6 @@ import { Controller, Get, UseGuards, Post, Body } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
-import { PermissionType } from '../../common/enums/enums';
 import {
     ApiBearerAuth,
     ApiTags,
@@ -11,6 +10,7 @@ import {
     ApiResponse,
     ApiExcludeEndpoint,
 } from '@nestjs/swagger';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Webhooks')
 @ApiBearerAuth('access-token')

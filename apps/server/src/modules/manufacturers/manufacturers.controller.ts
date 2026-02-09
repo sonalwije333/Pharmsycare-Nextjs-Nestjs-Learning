@@ -25,11 +25,11 @@ import {
     ApiParam,
     ApiQuery,
 } from '@nestjs/swagger';
-import { PermissionType } from '../../common/enums/enums';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
 import { Manufacturer } from './entities/manufacturer.entity';
 import {GetManufacturersDto, GetTopManufacturersDto, ManufacturerPaginator} from "./dto/get-manufactures.dto";
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Manufacturers')
 @ApiBearerAuth('access-token')

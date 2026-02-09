@@ -17,13 +17,13 @@ import {
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
-import { PermissionType } from '../../common/enums/enums';
 import { AnalyticsService } from './analytics.service';
 import { Analytics } from './entities/analytics.entity';
 import { CategoryWiseProduct } from './entities/category-wise-product.entity';
 import { TopRateProduct } from './entities/top-rate-product.entity';
 import { Product } from '../products/entities/product.entity';
 import { GetAnalyticsDto } from './dto/get-analytics.dto';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Analytics')
 @ApiBearerAuth('access-token')

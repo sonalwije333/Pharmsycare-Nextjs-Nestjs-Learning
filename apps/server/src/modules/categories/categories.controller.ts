@@ -26,9 +26,9 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
-import { PermissionType } from '../../common/enums/enums';
 import { Category } from './entities/category.entity';
 import {CategoriesPaginator, GetCategoriesDto} from "./dto/get-categories.dto";
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Categories')
 @ApiBearerAuth('access-token')

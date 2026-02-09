@@ -1,8 +1,8 @@
 import { PickType } from '@nestjs/swagger';
 import { Permission, User } from '../entities/user.entity';
 import { CreateAddressDto } from '../../addresses/dto/create-address.dto';
-import { PermissionType } from '../../../common/enums/enums';
 import { CreateProfileDto } from './create-profile.dto';
+import { PermissionType } from '../../../common/enums/PermissionType.enum';
 
 export class CreateUserDto extends PickType(User, [
   'name',

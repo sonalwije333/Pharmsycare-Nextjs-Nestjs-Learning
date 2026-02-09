@@ -24,10 +24,10 @@ import {
     ApiParam,
     ApiQuery,
 } from '@nestjs/swagger';
-import { PermissionType } from '../../common/enums/enums';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
 import { NotifyLogs } from './entities/notify-logs.entity';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Notify Logs')
 @ApiBearerAuth('access-token')

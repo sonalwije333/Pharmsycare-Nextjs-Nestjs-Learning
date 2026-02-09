@@ -24,9 +24,9 @@ import {
   ApiParam,
   ApiQuery,
 } from '@nestjs/swagger';
-import { PermissionType } from 'src/common/enums/enums';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Addresses')
 @ApiBearerAuth('access-token')

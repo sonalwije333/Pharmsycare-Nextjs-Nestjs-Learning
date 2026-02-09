@@ -15,7 +15,6 @@ import { GetWithdrawsDto, WithdrawPaginator } from './dto/get-withdraw.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
-import { PermissionType } from '../../common/enums/enums';
 import {
     ApiBearerAuth,
     ApiTags,
@@ -24,6 +23,7 @@ import {
     ApiParam,
     ApiQuery,
 } from '@nestjs/swagger';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Withdraws')
 @ApiBearerAuth('access-token')

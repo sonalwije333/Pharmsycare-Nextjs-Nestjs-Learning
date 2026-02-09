@@ -25,12 +25,16 @@ import {
     ApiParam,
     ApiQuery,
 } from '@nestjs/swagger';
-import {PermissionType, QueryShippingClassesOrderByColumn, ShippingType} from '../../common/enums/enums';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
 import { Shipping } from './entities/shipping.entity';
 
 import { SortOrder } from '../common/dto/generic-conditions.dto';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
+import {
+  QueryShippingClassesOrderByColumn,
+  ShippingType,
+} from '../../common/enums/enums';
 
 @ApiTags('Shippings')
 @ApiBearerAuth('access-token')

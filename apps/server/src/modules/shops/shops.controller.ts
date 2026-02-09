@@ -21,8 +21,6 @@ import {
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
-import { PermissionType } from '../../common/enums/enums';
-
 import { ShopsService } from './shops.service';
 import { CreateShopDto } from './dto/create-shop.dto';
 import { UpdateShopDto } from './dto/update-shop.dto';
@@ -30,6 +28,7 @@ import { GetShopsDto } from './dto/get-shops.dto';
 import { ApproveShopDto } from './dto/approve-shop.dto';
 import { ShopPaginator } from './dto/shop-paginator.dto';
 import { GetStaffsDto } from './dto/get-staffs.dto';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 @ApiTags('Shops')
 @ApiBearerAuth('access-token')

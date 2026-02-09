@@ -26,8 +26,7 @@ import { Message } from './entities/message.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
-import { PermissionType } from '../../common/enums/enums';
-
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 @ApiTags('Messages')
 @ApiBearerAuth('access-token')
 @UseGuards(JwtAuthGuard, RolesGuard)
