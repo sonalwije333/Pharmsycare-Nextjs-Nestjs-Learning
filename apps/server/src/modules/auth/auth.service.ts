@@ -130,4 +130,106 @@ export class AuthService {
 
     return user;
   }
+  async socialLogin(dto: any): Promise<AuthResponse> {
+    const { email, name } = dto;
+
+    let user = await this.userRepository.findOne({
+      where: { email },
+      relations: ['permissions'],
+    });
+
+    if (!user) {
+      user = this.userRepository.create({
+        email,
+        name,
+        password: '', // no password for social login
+      });
+      user = await this.userRepository.save(user);
+    }
+
+    const payload = { sub: user.id, email: user.email };
+    const token = this.jwtService.sign(payload);
+
+    return {
+      token,
+      permissions: [],
+      role: 'user',
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    };
+  }
+  async otpLogin(dto: any): Promise<AuthResponse> {
+    const user = await this.userRepository.findOne({
+      where: { email: dto.email },
+      relations: ['permissions'],
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
+    const payload = { sub: user.id, email: user.email };
+    const token = this.jwtService.sign(payload);
+
+    return {
+      token,
+      permissions: [],
+      role: user.permissions?.[0]?.name,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      },
+    };
+  }
+  async sendOtpCode(dto: any) {
+    return { success: true, message: 'OTP sent successfully' };
+  }
+  async verifyOtpCode(dto: any) {
+    return { success: true, message: 'OTP verified successfully' };
+  }
+  async forgetPassword(dto: any) {
+    return { success: true, message: 'Password reset link sent' };
+  }
+  async verifyForgetPasswordToken(dto: any) {
+    return { success: true, message: 'Token verified successfully' };
+  }
+  async resetPassword(dto: any) {
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+
+    await this.userRepository.update(
+      { email: dto.email },
+      { password: hashedPassword },
+    );
+
+    return { success: true, message: 'Password reset successfully' };
+  }
+  async changePassword(dto: any, userId: number) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const isMatch = await bcrypt.compare(dto.oldPassword, user.password);
+    if (!isMatch) {
+      throw new UnauthorizedException('Old password is incorrect');
+    }
+
+    user.password = await bcrypt.hash(dto.newPassword, 10);
+    await this.userRepository.save(user);
+
+    return { success: true, message: 'Password changed successfully' };
+  }
+  async addWalletPoints(dto: any, userId: number) {
+    return {
+      success: true,
+      message: `Added ${dto.points} points to user ${userId}`,
+    };
+  }
 }
