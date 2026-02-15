@@ -29,12 +29,22 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const databaseService = app.get(DatabaseService);
 
-  // Swagger configuration
+  // Swagger configuration - FIXED VERSION
   const config = new DocumentBuilder()
     .setTitle(configService.get<string>('SWAGGER_TITLE', 'PharmSyCare API'))
     .setDescription('Pharmacy Management System API')
     .setVersion('1.0')
-    .addBearerAuth()
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'access-token', // This must match the string in @ApiBearerAuth() decorators
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
