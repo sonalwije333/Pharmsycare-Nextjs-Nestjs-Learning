@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -28,6 +29,8 @@ import {
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
 import { PermissionType } from '../../common/enums/PermissionType.enum';
+import { SortOrder } from '../common/dto/generic-conditions.dto';
+import { QueryUsersOrderByColumn } from '../../common/enums/enums';
 
 @ApiTags('Users')
 @ApiBearerAuth('access-token')
@@ -72,6 +75,30 @@ export class UsersController {
     required: false,
     type: Number,
     description: 'Number of items per page',
+  })
+  @ApiQuery({
+    name: 'text',
+    required: false,
+    type: String,
+    description: 'Search text',
+  })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: String,
+    description: 'Advanced search',
+  })
+  @ApiQuery({
+    name: 'orderBy',
+    required: false,
+    enum: QueryUsersOrderByColumn,
+    description: 'Order by field',
+  })
+  @ApiQuery({
+    name: 'sortedBy',
+    required: false,
+    enum: SortOrder,
+    description: 'Sort order',
   })
   @ApiResponse({ status: 200, description: 'Users retrieved successfully' })
   getAllUsers(@Query() query: GetUsersDto) {
@@ -193,9 +220,8 @@ export class ProfilesController {
     description: 'Creates a user profile.',
   })
   @ApiResponse({ status: 201, description: 'Profile created successfully' })
-  createProfile(@Body() createProfileDto: CreateProfileDto) {
-    console.log(createProfileDto);
-    // Implement profile creation logic
+  createProfile(@Req() req: any, @Body() createProfileDto: CreateProfileDto) {
+    return this.usersService.createProfile(req.user.id, createProfileDto);
   }
 
   @Put(':id')
@@ -209,8 +235,7 @@ export class ProfilesController {
     @Param('id') id: string,
     @Body() updateProfileDto: UpdateProfileDto,
   ) {
-    console.log(updateProfileDto);
-    // Implement profile update logic
+    return this.usersService.updateProfile(+id, updateProfileDto);
   }
 
   @Delete(':id')
@@ -221,11 +246,12 @@ export class ProfilesController {
   })
   @ApiParam({ name: 'id', description: 'Profile ID' })
   @ApiResponse({ status: 200, description: 'Profile deleted successfully' })
-  deleteProfile(@Param('id') id: number) {
-    return this.usersService.remove(id);
+  deleteProfile(@Param('id') id: string) {
+    return this.usersService.removeProfile(+id);
   }
 }
 
+// Additional controllers for different user types remain the same but with v1/ prefix
 @ApiTags('Admin')
 @ApiBearerAuth('access-token')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -240,18 +266,8 @@ export class AdminController {
     description:
       'Retrieves a list of all admin users. Requires super admin privileges.',
   })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Page number',
-  })
-  @ApiQuery({
-    name: 'limit',
-    required: false,
-    type: Number,
-    description: 'Number of items per page',
-  })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiResponse({ status: 200, description: 'Admins retrieved successfully' })
   getAllAdmin(@Query() query: GetUsersDto) {
     return this.usersService.getAdmin(query);
@@ -275,18 +291,8 @@ export class VendorController {
     summary: 'Get all vendors',
     description: 'Retrieves a list of all vendor users.',
   })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Page number',
-  })
-  @ApiQuery({
-    name: 'limit',
-    required: false,
-    type: Number,
-    description: 'Number of items per page',
-  })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiResponse({ status: 200, description: 'Vendors retrieved successfully' })
   getAllVendor(@Query() query: GetUsersDto) {
     return this.usersService.getVendors(query);
@@ -306,18 +312,8 @@ export class MyStaffsController {
     summary: 'Get my staffs',
     description: 'Retrieves staff members for the current store owner.',
   })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Page number',
-  })
-  @ApiQuery({
-    name: 'limit',
-    required: false,
-    type: Number,
-    description: 'Number of items per page',
-  })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiResponse({ status: 200, description: 'Staffs retrieved successfully' })
   getAllMyStaffs(@Query() query: GetUsersDto) {
     return this.usersService.getMyStaffs(query);
@@ -335,21 +331,10 @@ export class AllStaffsController {
   @Roles(PermissionType.SUPER_ADMIN, PermissionType.STORE_OWNER)
   @ApiOperation({
     summary: 'Get all staffs',
-    description:
-      'Retrieves all staff members across all stores. Requires super admin privileges.',
+    description: 'Retrieves all staff members across all stores.',
   })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Page number',
-  })
-  @ApiQuery({
-    name: 'limit',
-    required: false,
-    type: Number,
-    description: 'Number of items per page',
-  })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiResponse({
     status: 200,
     description: 'All staffs retrieved successfully',
@@ -376,20 +361,11 @@ export class AllCustomerController {
     summary: 'Get all customers',
     description: 'Retrieves a list of all customer users.',
   })
-  @ApiQuery({
-    name: 'page',
-    required: false,
-    type: Number,
-    description: 'Page number',
-  })
-  @ApiQuery({
-    name: 'limit',
-    required: false,
-    type: Number,
-    description: 'Number of items per page',
-  })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiResponse({ status: 200, description: 'Customers retrieved successfully' })
   getAllCustomers(@Query() query: GetUsersDto) {
     return this.usersService.getAllCustomers(query);
   }
 }
+
