@@ -49,12 +49,13 @@ const registrationFormSchema = yup.object().shape({
 
 const RegistrationForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { mutate: registerUser, isLoading: loading } = useRegisterMutation();
 
   const {
     register,
     handleSubmit,
-    control, // Add control for Select
+    control,
     formState: { errors },
     setError,
   } = useForm<FormValues>({
@@ -78,25 +79,48 @@ const RegistrationForm = () => {
       {
         onSuccess: (data) => {
           if (data?.token) {
+            // If user has dashboard access (admin)
             if (hasAccess(allowedRoles, data?.permissions)) {
               setAuthCredentials(data?.token, data?.permissions, data?.role);
               router.push(Routes.dashboard);
               return;
             }
+
+            // If user is customer
+            if (data?.permissions?.includes(Permission.Customer)) {
+              setSuccessMessage(
+                'Registration successful! Please login to continue.',
+              );
+              // Redirect to login page after 3 seconds
+              setTimeout(() => {
+                router.push(Routes.login);
+              }, 3000);
+              return;
+            }
+
             setErrorMessage('form:error-enough-permission');
           } else {
             setErrorMessage('form:error-credential-wrong');
           }
         },
         onError: (error: any) => {
-          Object.keys(error?.response?.data).forEach((field: any) => {
-            setError(field, {
-              type: 'manual',
-              message: error?.response?.data[field],
-            });
-          });
+          // Handle validation errors
+          if (error?.response?.data) {
+            if (typeof error.response.data === 'object') {
+              Object.keys(error.response.data).forEach((field: any) => {
+                setError(field, {
+                  type: 'manual',
+                  message: error?.response?.data[field],
+                });
+              });
+            } else {
+              setErrorMessage(error.response.data);
+            }
+          } else {
+            setErrorMessage('form:error-credential-wrong');
+          }
         },
-      }
+      },
     );
   }
 
@@ -137,11 +161,13 @@ const RegistrationForm = () => {
             render={({ field }) => (
               <Select
                 {...field}
-                options={availableRoles.map(role => ({
+                options={availableRoles.map((role) => ({
                   ...role,
                   label: t(`form:role-${role.value}`),
                 }))}
-                value={availableRoles.find(option => option.value === field.value)}
+                value={availableRoles.find(
+                  (option) => option.value === field.value,
+                )}
                 onChange={(option) => field.onChange(option?.value)}
               />
             )}
@@ -157,7 +183,7 @@ const RegistrationForm = () => {
           {t('form:text-register')}
         </Button>
 
-        {errorMessage ? (
+        {errorMessage && (
           <Alert
             message={t(errorMessage)}
             variant="error"
@@ -165,7 +191,11 @@ const RegistrationForm = () => {
             className="mt-5"
             onClose={() => setErrorMessage(null)}
           />
-        ) : null}
+        )}
+
+        {successMessage && (
+          <Alert message={successMessage} variant="success" className="mt-5" />
+        )}
       </form>
       <div className="relative flex flex-col items-center justify-center mt-8 mb-6 text-sm text-heading sm:mt-11 sm:mb-8">
         <hr className="w-full" />
