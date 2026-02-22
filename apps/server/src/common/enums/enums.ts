@@ -21,10 +21,7 @@ export enum QueryAiOrderByColumn {
   UPDATED_AT = 'UPDATED_AT',
   STATUS = 'STATUS',
 }
-export enum AddressType {
-  BILLING = 'billing',
-  SHIPPING = 'shipping',
-}
+
 export enum QueryAddressesOrderByColumn {
   TITLE = 'TITLE',
   TYPE = 'TYPE',

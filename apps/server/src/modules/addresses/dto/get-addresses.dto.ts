@@ -1,8 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsEnum, IsNumber, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
-import { QueryAddressesOrderByColumn, AddressType } from 'src/common/enums/enums';
 import { SortOrder } from 'src/modules/common/dto/generic-conditions.dto';
+import { QueryAddressesOrderByColumn } from '../../../common/enums/enums';
+import { AddressType } from '../../../common/enums/AddressType';
 
 export class GetAddressesDto {
   @ApiPropertyOptional({ enum: SortOrder, default: SortOrder.DESC })
