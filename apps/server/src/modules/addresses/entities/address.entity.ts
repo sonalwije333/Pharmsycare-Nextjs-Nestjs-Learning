@@ -1,8 +1,8 @@
 import { CoreEntity } from 'src/modules/common/entities/core.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import { Entity, Column, ManyToOne } from 'typeorm';
-import { AddressType } from 'src/common/enums/enums';
 import { ApiProperty } from '@nestjs/swagger';
+import { AddressType } from '../../../common/enums/AddressType';
 
 export class UserAddress {
   @ApiProperty()
