@@ -46,6 +46,7 @@ import { TermsAndConditionsModule } from './modules/terms-and-conditions/terms-a
 import { UploadsModule } from './modules/uploads/uploads.module';
 import { WebHookModule } from './modules/web-hook/web-hook.module';
 import { PaymentIntentModule } from './modules/payment-intent/payment-intent.module';
+import { AttributesModule } from './modules/attributes/attributes.module';
 
 @Module({
   imports: [
@@ -70,6 +71,7 @@ import { PaymentIntentModule } from './modules/payment-intent/payment-intent.mod
     AiModule,
     AnalyticsModule,
     AuthModule,
+    AttributesModule,
     AuthorsModule,
     CategoriesModule,
     CommonModule,

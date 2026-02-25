@@ -273,6 +273,7 @@ export enum RefundStatus {
 }
 export enum QueryAttributesOrderByColumn {
   CREATED_AT = 'CREATED_AT',
+
   NAME = 'NAME',
   UPDATED_AT = 'UPDATED_AT',
 }
