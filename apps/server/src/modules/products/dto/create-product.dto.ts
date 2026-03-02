@@ -34,10 +34,10 @@ export class CreateProductDto {
   @IsString()
   description?: string;
 
-  @ApiProperty({ description: 'Product type ID', example: '550e8400-e29b-41d4-a716-446655440000' })
+  @ApiProperty({ description: 'Product type ID', example: 1 })
   @IsNotEmpty()
-  @IsString()
-  type_id: string;
+  @IsNumber()
+  type_id: number;
 
   @ApiPropertyOptional({ description: 'Shop ID', example: 1 })
   @IsOptional()
