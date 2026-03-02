@@ -18,14 +18,16 @@ export class TagsService {
 
     async create(createTagDto: CreateTagDto): Promise<Tag> {
         const slug = createTagDto.slug || generateSlug(createTagDto.name);
+        const { type: typeId, ...tagData } = createTagDto;
 
         const tag = this.tagRepository.create({
-            ...createTagDto,
+            ...tagData,
             slug,
             language: createTagDto.language || 'en',
             translated_languages: createTagDto.translated_languages || [],
             details: createTagDto.details || '',
             icon: createTagDto.icon || '',
+            type: typeId ? { id: typeId } : undefined,
         });
 
         return await this.tagRepository.save(tag);
@@ -133,7 +135,11 @@ export class TagsService {
             updateTagDto.slug = generateSlug(updateTagDto.name);
         }
 
-        const updated = this.tagRepository.merge(tag, updateTagDto);
+        const { type: typeId, ...updateData } = updateTagDto;
+        const updated = this.tagRepository.merge(tag, {
+            ...updateData,
+            ...(typeId !== undefined ? { type: { id: typeId } } : {}),
+        });
         return this.tagRepository.save(updated);
     }
 

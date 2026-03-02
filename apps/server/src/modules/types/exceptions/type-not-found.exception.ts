@@ -1,7 +1,11 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class TypeNotFoundException extends HttpException {
-    constructor(slug: string) {
-        super(`Type with slug ${slug} not found`, HttpStatus.NOT_FOUND);
-    }
+  constructor(identifier: string | number) {
+    const message =
+      typeof identifier === 'number'
+        ? `Type with ID ${identifier} not found`
+        : `Type with slug ${identifier} not found`;
+    super(message, HttpStatus.NOT_FOUND);
+  }
 }

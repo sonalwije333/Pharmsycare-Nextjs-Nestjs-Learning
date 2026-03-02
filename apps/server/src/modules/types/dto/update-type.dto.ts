@@ -1,4 +1,6 @@
 import { PartialType } from '@nestjs/swagger';
 import { CreateTypeDto } from './create-type.dto';
 
-export class UpdateTypeDto extends PartialType(CreateTypeDto) {}
+export class UpdateTypeDto extends PartialType(CreateTypeDto) {
+  // All fields are optional via PartialType
+}

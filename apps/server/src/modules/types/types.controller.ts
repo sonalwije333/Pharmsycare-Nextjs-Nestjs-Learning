@@ -1,94 +1,231 @@
 import {
-    Controller,
-    Get,
-    Post,
-    Body,
-    Put,
-    Param,
-    Delete,
-    Query,
-    HttpCode,
-    HttpStatus,
-    UseGuards,
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  Query,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { TypesService } from './types.service';
 import { CreateTypeDto } from './dto/create-type.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
 import { GetTypesDto, TypesPaginator } from './dto/get-types.dto';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags, ApiParam } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
 import { Type } from './entities/type.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/auth/auth.guard';
 import { Roles } from '../../common/decorators/role.decorator';
 import { PermissionType } from '../../common/enums/PermissionType.enum';
+
 @ApiTags('Types')
-@ApiBearerAuth('access-token')
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Controller('v1/types')
+@Controller('types')
 export class TypesController {
-    constructor(private readonly typesService: TypesService) {}
+  constructor(private readonly typesService: TypesService) {}
 
-    @Post()
-    @Roles(PermissionType.SUPER_ADMIN, PermissionType.STORE_OWNER, PermissionType.STAFF)
-    @HttpCode(HttpStatus.CREATED)
-    @ApiOperation({ summary: 'Create product type', description: 'Add a new product type to the system' })
-    @ApiResponse({ status: 201, description: 'Type created', type: Type })
-    @ApiResponse({ status: 400, description: 'Invalid input data' })
-    @ApiResponse({ status: 403, description: 'Insufficient permissions' })
-    createType(@Body() createTypeDto: CreateTypeDto) {
-        return this.typesService.create(createTypeDto);
-    }
+  @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(PermissionType.SUPER_ADMIN, PermissionType.STORE_OWNER)
+  @ApiBearerAuth('access-token')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Create product type',
+    description:
+      'Add a new product type to the system. Requires admin or store owner privileges.',
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: 'Type successfully created',
+    type: Type,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid input data',
+  })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Type slug already exists',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Insufficient permissions',
+  })
+  createType(@Body() createTypeDto: CreateTypeDto): Promise<Type> {
+    return this.typesService.create(createTypeDto);
+  }
 
-    @Get()
-    @Roles(PermissionType.SUPER_ADMIN, PermissionType.STORE_OWNER, PermissionType.STAFF)
-    @ApiOperation({ summary: 'List product types', description: 'Get paginated list of product types with filters' })
-    @ApiResponse({ status: 200, description: 'Types retrieved', type: TypesPaginator })
-    getTypes(@Query() query: GetTypesDto) {
-        return this.typesService.getTypesPaginated(query);
-    }
+  @Get()
+  @ApiOperation({
+    summary: 'List product types',
+    description: 'Get paginated list of product types with filters',
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Page number',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    type: Number,
+    description: 'Number of items per page',
+  })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    type: String,
+    description: 'Search query',
+  })
+  @ApiQuery({
+    name: 'text',
+    required: false,
+    type: String,
+    description: 'Search text',
+  })
+  @ApiQuery({
+    name: 'language',
+    required: false,
+    type: String,
+    description: 'Language filter',
+  })
+  @ApiQuery({
+    name: 'orderBy',
+    required: false,
+    type: [Object],
+    description: 'Order by clauses',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Types retrieved successfully',
+    type: TypesPaginator,
+  })
+  async getTypes(@Query() query: GetTypesDto): Promise<TypesPaginator> {
+    return this.typesService.getTypesPaginated(query);
+  }
 
-    @Get('all')
-    @Roles(PermissionType.SUPER_ADMIN, PermissionType.STORE_OWNER, PermissionType.STAFF)
-    @ApiOperation({ summary: 'Get all types', description: 'Retrieve all product types without pagination' })
-    @ApiResponse({ status: 200, description: 'All types retrieved', type: [Type] })
-    getAllTypes(@Query('language') language?: string) {
-        return this.typesService.getAllTypes(language);
-    }
+  @Get('all')
+  @ApiOperation({
+    summary: 'Get all types',
+    description: 'Retrieve all product types without pagination',
+  })
+  @ApiQuery({
+    name: 'language',
+    required: false,
+    type: String,
+    description: 'Language filter',
+  })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'All types retrieved successfully',
+    type: [Type],
+  })
+  async getAllTypes(@Query('language') language?: string): Promise<Type[]> {
+    return this.typesService.getAllTypes(language);
+  }
 
-    @Get(':slug')
-    @Roles(PermissionType.SUPER_ADMIN, PermissionType.STORE_OWNER, PermissionType.STAFF)
-    @ApiOperation({ summary: 'Get type details', description: 'Retrieve specific product type by slug' })
-    @ApiParam({ name: 'slug', description: 'Type slug' })
-    @ApiResponse({ status: 200, description: 'Type details', type: Type })
-    @ApiResponse({ status: 404, description: 'Type not found' })
-    getTypeBySlug(@Param('slug') slug: string) {
-        return this.typesService.getTypeBySlug(slug);
-    }
+  @Get(':slug')
+  @ApiOperation({
+    summary: 'Get type details',
+    description: 'Retrieve specific product type by slug',
+  })
+  @ApiParam({ name: 'slug', description: 'Type slug', type: String })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Type details retrieved successfully',
+    type: Type,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Type not found' })
+  async getTypeBySlug(@Param('slug') slug: string): Promise<Type> {
+    return this.typesService.getTypeBySlug(slug);
+  }
 
-    @Put(':id')
-    @Roles(PermissionType.SUPER_ADMIN, PermissionType.STORE_OWNER, PermissionType.STAFF)
-    @ApiOperation({ summary: 'Update product type', description: 'Modify existing product type details' })
-    @ApiParam({ name: 'id', description: 'Type ID' })
-    @ApiResponse({ status: 200, description: 'Type updated', type: Type })
-    @ApiResponse({ status: 400, description: 'Invalid input data' })
-    @ApiResponse({ status: 403, description: 'Insufficient permissions' })
-    @ApiResponse({ status: 404, description: 'Type not found' })
-    updateType(
-        @Param('id') id: string,
-        @Body() updateTypeDto: UpdateTypeDto,
-    ) {
-        return this.typesService.update(id, updateTypeDto);
-    }
+  @Get('id/:id')
+  @ApiOperation({
+    summary: 'Get type by ID',
+    description: 'Retrieve specific product type by ID',
+  })
+  @ApiParam({ name: 'id', description: 'Type ID', type: Number })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Type retrieved successfully',
+    type: Type,
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Type not found' })
+  async getTypeById(@Param('id', ParseIntPipe) id: number): Promise<Type> {
+    return this.typesService.getTypeById(id);
+  }
 
-    @Delete(':id')
-    @Roles(PermissionType.SUPER_ADMIN, PermissionType.STORE_OWNER)
-    @ApiOperation({ summary: 'Delete product type', description: 'Permanently remove a product type' })
-    @ApiParam({ name: 'id', description: 'Type ID' })
-    @ApiResponse({ status: 204, description: 'Type deleted' })
-    @ApiResponse({ status: 403, description: 'Insufficient permissions' })
-    @ApiResponse({ status: 404, description: 'Type not found' })
-    @HttpCode(HttpStatus.NO_CONTENT)
-    deleteType(@Param('id') id: string) {
-        return this.typesService.remove(id);
-    }
+  @Put(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(PermissionType.SUPER_ADMIN, PermissionType.STORE_OWNER)
+  @ApiBearerAuth('access-token')
+  @ApiOperation({
+    summary: 'Update product type',
+    description: 'Modify existing product type details',
+  })
+  @ApiParam({ name: 'id', description: 'Type ID', type: String })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Type updated successfully',
+    type: Type,
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid input data',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Insufficient permissions',
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Type not found' })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Type slug already exists',
+  })
+  async updateType(
+    @Param('id') id: string,
+    @Body() updateTypeDto: UpdateTypeDto,
+  ): Promise<Type> {
+    return this.typesService.update(id, updateTypeDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(PermissionType.SUPER_ADMIN, PermissionType.STORE_OWNER)
+  @ApiBearerAuth('access-token')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Delete product type',
+    description: 'Permanently remove a product type',
+  })
+  @ApiParam({ name: 'id', description: 'Type ID', type: String })
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'Type deleted successfully',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    description: 'Insufficient permissions',
+  })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Type not found' })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'Type is in use by categories or products',
+  })
+  async deleteType(@Param('id') id: string): Promise<void> {
+    return this.typesService.remove(id);
+  }
 }

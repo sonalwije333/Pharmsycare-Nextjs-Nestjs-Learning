@@ -52,7 +52,7 @@ export class ProductsService {
 
     // Get related entities
     const type = await this.typeRepository.findOne({
-      where: { id: createProductDto.type_id },
+      where: { id: Number(createProductDto.type_id) },
     });
     if (!type) {
       throw new NotFoundException(
@@ -387,7 +387,7 @@ export class ProductsService {
     // Update related entities if provided
     if (updateProductDto.type_id) {
       const type = await this.typeRepository.findOne({
-        where: { id: updateProductDto.type_id },
+        where: { id: Number(updateProductDto.type_id) },
       });
       if (!type) {
         throw new NotFoundException(
