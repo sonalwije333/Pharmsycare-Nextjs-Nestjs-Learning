@@ -1,7 +1,7 @@
 import { CoreEntity } from '../../common/entities/core.entity';
 import { Column, Entity } from 'typeorm';
 
-@Entity()
+@Entity('order_statuses')
 export class OrderStatus extends CoreEntity {
   @Column()
   name: string;

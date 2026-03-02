@@ -2,26 +2,32 @@ import { CoreEntity } from '../../common/entities/core.entity';
 import { User } from '../../users/entities/user.entity';
 import { Coupon } from '../../coupons/entities/coupon.entity';
 import { Product } from '../../products/entities/product.entity';
-import { Column, Entity, ManyToOne, OneToMany, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  JoinColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { OrderStatus } from './order-status.entity';
-
 import { Shop } from '../../shops/entites/shop.entity';
 import {
   OrderStatusType,
   PaymentGatewayType,
   PaymentStatusType,
 } from '../../../common/enums/enums';
-// import {PaymentIntent} from "../../payment-intent/entries/payment-intent.entity";
 
-@Entity()
+@Entity('orders')
 export class Order extends CoreEntity {
   @Column({ unique: true })
   tracking_number: string;
 
-  @Column()
+  @Column({ name: 'customer_id' })
   customer_id: number;
 
-  @Column()
+  @Column({ name: 'customer_contact' })
   customer_contact: string;
 
   @ManyToOne(() => User, { eager: true })
@@ -32,7 +38,7 @@ export class Order extends CoreEntity {
   @JoinColumn({ name: 'parent_order_id' })
   parent_order?: Order;
 
-  @OneToMany(() => Order, order => order.parent_order)
+  @OneToMany(() => Order, (order) => order.parent_order)
   children: Order[];
 
   @ManyToOne(() => OrderStatus, { eager: true })
@@ -42,14 +48,14 @@ export class Order extends CoreEntity {
   @Column({
     type: 'enum',
     enum: OrderStatusType,
-    default: OrderStatusType.PENDING  // ✅ Now this exists
+    default: OrderStatusType.PENDING,
   })
   order_status: OrderStatusType;
 
   @Column({
     type: 'enum',
     enum: PaymentStatusType,
-    default: PaymentStatusType.PENDING  // ✅ Now this exists
+    default: PaymentStatusType.PENDING,
   })
   payment_status: PaymentStatusType;
 
@@ -89,7 +95,11 @@ export class Order extends CoreEntity {
   delivery_time: string;
 
   @ManyToMany(() => Product, { eager: true })
-  @JoinTable()
+  @JoinTable({
+    name: 'order_products',
+    joinColumn: { name: 'order_id', referencedColumnName: 'id' },
+    inverseJoinColumn: { name: 'product_id', referencedColumnName: 'id' },
+  })
   products: Product[];
 
   @Column({ type: 'json' })
@@ -104,15 +114,14 @@ export class Order extends CoreEntity {
   @Column({ type: 'json', nullable: true })
   translated_languages?: string[];
 
-  // @ManyToOne(() => PaymentIntent, { eager: true, nullable: true })
-  // @JoinColumn({ name: 'payment_intent_id' })
-  // payment_intent?: PaymentIntent;
+  @Column({ type: 'json', nullable: true })
+  payment_intent?: any;
 
   @Column({ nullable: true })
   altered_payment_gateway?: string;
 }
 
-@Entity()
+@Entity('order_files')
 export class OrderFiles extends CoreEntity {
   @Column()
   purchase_key: string;

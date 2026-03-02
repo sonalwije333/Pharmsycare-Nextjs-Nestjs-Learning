@@ -5,13 +5,27 @@ import { Type } from '../types/entities/type.entity';
 import { Shop } from '../shops/entites/shop.entity';
 import { Tag } from '../tags/entities/tag.entity';
 import { ShippingClass } from '../shippings/entities/shipping-class.entity';
-import { ProductsController } from './products.controller';
 import { ProductsService } from './products.service';
+import {
+  ProductsController,
+  PopularProductsController,
+  BestSellingProductsController,
+  DraftProductsController,
+  ProductsStockController,
+} from './products.controller';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Product, Type, Shop, Tag, ShippingClass])],
-    controllers: [ProductsController],
-    providers: [ProductsService],
-    exports: [ProductsService],
+  imports: [
+    TypeOrmModule.forFeature([Product, Type, Shop, Tag, ShippingClass]),
+  ],
+  controllers: [
+    ProductsController,
+    PopularProductsController,
+    BestSellingProductsController,
+    DraftProductsController,
+    ProductsStockController,
+  ],
+  providers: [ProductsService],
+  exports: [ProductsService],
 })
 export class ProductsModule {}
