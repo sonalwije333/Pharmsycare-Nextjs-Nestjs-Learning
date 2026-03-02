@@ -1,124 +1,217 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull, Not } from 'typeorm';
 import { GetShippingsDto, ShippingPaginator } from './dto/get-shippings.dto';
 import { CreateShippingDto } from './dto/create-shipping.dto';
 import { UpdateShippingDto } from './dto/update-shipping.dto';
 import { Shipping } from './entities/shipping.entity';
-
 import { SortOrder } from '../common/dto/generic-conditions.dto';
 import { paginate } from '../common/pagination/paginate';
-import { ShippingNotFoundException } from './exceptions/shipping-not-found.exception';
-import {QueryShippingClassesOrderByColumn} from "../../common/enums/enums";
+import {
+  ShippingNotFoundException,
+  ShippingNameExistsException,
+} from './exceptions/shipping-not-found.exception';
+import { QueryShippingClassesOrderByColumn } from '../../common/enums/enums';
 
 @Injectable()
 export class ShippingsService {
-    constructor(
-        @InjectRepository(Shipping)
-        private readonly shippingRepository: Repository<Shipping>,
-    ) {}
+  constructor(
+    @InjectRepository(Shipping)
+    private readonly shippingRepository: Repository<Shipping>,
+  ) {}
 
-    async create(createShippingDto: CreateShippingDto): Promise<Shipping> {
-        const shipping = this.shippingRepository.create(createShippingDto);
-        return await this.shippingRepository.save(shipping);
+  async create(createShippingDto: CreateShippingDto): Promise<Shipping> {
+    // Check if shipping with same name exists
+    const existing = await this.shippingRepository.findOne({
+      where: { name: createShippingDto.name },
+    });
+
+    if (existing) {
+      throw new ShippingNameExistsException(createShippingDto.name);
     }
 
-    async getShippings({
-                           page = 1,
-                           limit = 30,
-                           search,
-                           type,
-                           is_global,
-                           orderBy,
-                           sortOrder = SortOrder.DESC
-                       }: GetShippingsDto): Promise<ShippingPaginator> {
-        const take = limit;
-        const skip = (page - 1) * take;
+    const shipping = this.shippingRepository.create({
+      ...createShippingDto,
+    });
+    return await this.shippingRepository.save(shipping);
+  }
 
-        const queryBuilder = this.shippingRepository.createQueryBuilder('shipping');
+  async getShippings({
+    page = 1,
+    limit = 30,
+    search,
+    type,
+    is_global,
+    orderBy,
+    sortOrder = SortOrder.DESC,
+  }: GetShippingsDto): Promise<ShippingPaginator> {
+    const take = limit;
+    const skip = (page - 1) * take;
 
-        // Apply filters
-        if (search) {
-            queryBuilder.andWhere('shipping.name ILIKE :search', {
-                search: `%${search}%`,
-            });
-        }
+    const queryBuilder = this.shippingRepository
+      .createQueryBuilder('shipping')
+      .where('shipping.deleted_at IS NULL'); // Exclude soft-deleted records
 
-        if (type) {
-            queryBuilder.andWhere('shipping.type = :type', { type });
-        }
-
-        if (is_global !== undefined) {
-            queryBuilder.andWhere('shipping.is_global = :is_global', { is_global });
-        }
-
-        // Apply ordering
-        const sortOrderString = sortOrder === SortOrder.ASC ? 'ASC' : 'DESC';
-
-        if (orderBy) {
-            const column = this.getOrderByColumn(orderBy);
-            queryBuilder.orderBy(`shipping.${column}`, sortOrderString);
-        } else {
-            queryBuilder.orderBy('shipping.created_at', sortOrderString);
-        }
-
-        // Get count and results
-        const [results, total] = await queryBuilder
-            .take(take)
-            .skip(skip)
-            .getManyAndCount();
-
-        const url = `/shippings?search=${search ?? ''}&limit=${limit}`;
-        const paginationInfo = paginate(total, page, limit, results.length, url);
-
-        return {
-            data: results,
-            ...paginationInfo,
-        };
+    // Apply filters
+    if (search) {
+      queryBuilder.andWhere('LOWER(shipping.name) LIKE LOWER(:search)', {
+        search: `%${search}%`,
+      });
     }
 
-    private getOrderByColumn(orderBy: QueryShippingClassesOrderByColumn): string {
-        switch (orderBy) {
-            case QueryShippingClassesOrderByColumn.NAME:
-                return 'name';
-            case QueryShippingClassesOrderByColumn.AMOUNT:
-                return 'amount';
-            case QueryShippingClassesOrderByColumn.IS_GLOBAL:
-                return 'is_global';
-            case QueryShippingClassesOrderByColumn.TYPE:
-                return 'type';
-            case QueryShippingClassesOrderByColumn.UPDATED_AT:
-                return 'updated_at';
-            case QueryShippingClassesOrderByColumn.CREATED_AT:
-            default:
-                return 'created_at';
-        }
+    if (type) {
+      queryBuilder.andWhere('shipping.type = :type', { type });
     }
 
-    async findOne(id: number): Promise<Shipping> {
-        const shipping = await this.shippingRepository.findOne({
-            where: { id },
-        });
-
-        if (!shipping) {
-            throw new ShippingNotFoundException(id);
-        }
-
-        return shipping;
+    if (is_global !== undefined) {
+      queryBuilder.andWhere('shipping.is_global = :is_global', { is_global });
     }
 
-    async update(id: number, updateShippingDto: UpdateShippingDto): Promise<Shipping> {
-        const shipping = await this.findOne(id);
+    // Apply ordering
+    const sortOrderString = sortOrder === SortOrder.ASC ? 'ASC' : 'DESC';
 
-        const updated = this.shippingRepository.merge(shipping, updateShippingDto);
-        return this.shippingRepository.save(updated);
+    if (orderBy) {
+      const column = this.getOrderByColumn(orderBy);
+      queryBuilder.orderBy(`shipping.${column}`, sortOrderString);
+    } else {
+      queryBuilder.orderBy('shipping.created_at', sortOrderString);
     }
 
-    async remove(id: number): Promise<void> {
-        const shipping = await this.findOne(id);
+    // Get count and results
+    const [results, total] = await queryBuilder
+      .take(take)
+      .skip(skip)
+      .getManyAndCount();
 
-        // Soft delete implementation
-        shipping.deleted_at = new Date();
-        await this.shippingRepository.save(shipping);
+    const url = `/shippings?search=${search ?? ''}&limit=${limit}`;
+    const paginationInfo = paginate(total, page, limit, results.length, url);
+
+    return {
+      data: results,
+      ...paginationInfo,
+    };
+  }
+
+  async getAll(is_global?: boolean): Promise<Shipping[]> {
+    const where: any = { deleted_at: IsNull() };
+
+    if (is_global !== undefined) {
+      where.is_global = is_global;
     }
+
+    return this.shippingRepository.find({
+      where,
+      order: { created_at: 'DESC' },
+    });
+  }
+
+  async getGlobalShippings(): Promise<Shipping[]> {
+    return this.shippingRepository.find({
+      where: {
+        is_global: true,
+        deleted_at: IsNull(),
+      },
+      order: { amount: 'ASC' },
+    });
+  }
+
+  async findOne(id: number): Promise<Shipping> {
+    const shipping = await this.shippingRepository.findOne({
+      where: {
+        id,
+        deleted_at: IsNull(),
+      },
+    });
+
+    if (!shipping) {
+      throw new ShippingNotFoundException(id);
+    }
+
+    return shipping;
+  }
+
+  async update(
+    id: number,
+    updateShippingDto: UpdateShippingDto,
+  ): Promise<Shipping> {
+    const shipping = await this.findOne(id);
+
+    // Check name uniqueness if name is being updated
+    if (updateShippingDto.name && updateShippingDto.name !== shipping.name) {
+      const existing = await this.shippingRepository.findOne({
+        where: { name: updateShippingDto.name },
+      });
+      if (existing) {
+        throw new ShippingNameExistsException(updateShippingDto.name);
+      }
+    }
+
+    const updated = this.shippingRepository.merge(shipping, updateShippingDto);
+    return this.shippingRepository.save(updated);
+  }
+
+  async remove(id: number): Promise<void> {
+    const shipping = await this.findOne(id);
+
+    // Soft delete implementation
+    shipping.deleted_at = new Date();
+    await this.shippingRepository.save(shipping);
+  }
+
+  async restore(id: number): Promise<Shipping> {
+    const shipping = await this.shippingRepository.findOne({
+      where: {
+        id,
+        deleted_at: Not(IsNull()),
+      },
+      withDeleted: true,
+    });
+
+    if (!shipping) {
+      throw new ShippingNotFoundException(id);
+    }
+
+    shipping.deleted_at = undefined;
+    return this.shippingRepository.save(shipping);
+  }
+
+  private getOrderByColumn(orderBy: QueryShippingClassesOrderByColumn): string {
+    switch (orderBy) {
+      case QueryShippingClassesOrderByColumn.NAME:
+        return 'name';
+      case QueryShippingClassesOrderByColumn.AMOUNT:
+        return 'amount';
+      case QueryShippingClassesOrderByColumn.IS_GLOBAL:
+        return 'is_global';
+      case QueryShippingClassesOrderByColumn.TYPE:
+        return 'type';
+      case QueryShippingClassesOrderByColumn.UPDATED_AT:
+        return 'updated_at';
+      case QueryShippingClassesOrderByColumn.CREATED_AT:
+      default:
+        return 'created_at';
+    }
+  }
+
+  // Additional utility methods
+  async getShippingsByType(type: string): Promise<Shipping[]> {
+    return this.shippingRepository.find({
+      where: {
+        type: type as any,
+        deleted_at: IsNull(),
+      },
+      order: { amount: 'ASC' },
+    });
+  }
+
+  async getCheapestShipping(): Promise<Shipping | null> {
+    return this.shippingRepository.findOne({
+      where: { deleted_at: IsNull() },
+      order: { amount: 'ASC' },
+    });
+  }
 }
