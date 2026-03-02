@@ -1,5 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNumber, IsOptional, IsArray, ValidateNested } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsArray,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ConnectProductOrderPivot, UserAddressInput } from './create-order.dto';
 
@@ -10,7 +16,7 @@ export class CheckoutVerificationDto {
 
   @ApiProperty({
     description: 'Products to verify',
-    type: [ConnectProductOrderPivot]
+    type: [ConnectProductOrderPivot],
   })
   @IsArray()
   @ValidateNested({ each: true })
@@ -19,7 +25,7 @@ export class CheckoutVerificationDto {
 
   @ApiPropertyOptional({
     description: 'Billing address',
-    type: UserAddressInput
+    type: UserAddressInput,
   })
   @IsOptional()
   @ValidateNested()
@@ -28,14 +34,14 @@ export class CheckoutVerificationDto {
 
   @ApiPropertyOptional({
     description: 'Shipping address',
-    type: UserAddressInput
+    type: UserAddressInput,
   })
   @IsOptional()
   @ValidateNested()
   @Type(() => UserAddressInput)
   shipping_address?: UserAddressInput;
 
-  @ApiPropertyOptional({ description: 'Customer ID', example: 'cust_123' })
+  @ApiPropertyOptional({ description: 'Customer ID', example: '1' })
   @IsOptional()
   @IsString()
   customer_id?: string;
@@ -54,6 +60,6 @@ export class VerifiedCheckoutData {
   @ApiProperty({ description: 'Wallet currency', example: 'USD' })
   wallet_currency: string;
 
-  @ApiProperty({ description: 'Wallet amount', example: 25.00 })
+  @ApiProperty({ description: 'Wallet amount', example: 25.0 })
   wallet_amount: number;
 }

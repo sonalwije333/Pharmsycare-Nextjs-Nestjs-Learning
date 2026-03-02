@@ -1,18 +1,19 @@
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { OrderStatus } from '../entities/order-status.entity';
 import { PaginationArgs } from '../../common/dto/pagination-args.dto';
 import { SortOrder } from '../../common/dto/generic-conditions.dto';
 import { Paginator } from '../../common/dto/paginator.dto';
-import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
-import {QueryOrderStatusesOrderByColumn} from "../../../common/enums/enums";
+import { QueryOrderStatusesOrderByColumn } from '../../../common/enums/enums';
 
-export class OrderStatusPaginator extends Paginator<OrderStatus> {}
+export class OrderStatusPaginator extends Paginator<OrderStatus> {
+}
 
 export class GetOrderStatusesDto extends PaginationArgs {
   @ApiPropertyOptional({
     description: 'Order by column',
     enum: QueryOrderStatusesOrderByColumn,
-    example: QueryOrderStatusesOrderByColumn.SERIAL
+    example: QueryOrderStatusesOrderByColumn.SERIAL,
   })
   @IsOptional()
   @IsEnum(QueryOrderStatusesOrderByColumn)
@@ -21,7 +22,7 @@ export class GetOrderStatusesDto extends PaginationArgs {
   @ApiPropertyOptional({
     description: 'Sort order',
     enum: SortOrder,
-    example: SortOrder.ASC
+    example: SortOrder.ASC,
   })
   @IsOptional()
   @IsEnum(SortOrder)

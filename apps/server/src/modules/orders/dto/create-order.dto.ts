@@ -1,5 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNumber, IsOptional, IsArray, IsEnum, ValidateNested, IsObject } from 'class-validator';
+import {
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsArray,
+  IsEnum,
+  ValidateNested,
+  IsObject,
+  IsPhoneNumber,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { PaymentGatewayType } from '../../../common/enums/enums';
 
@@ -65,7 +74,10 @@ export class CardInput {
   @IsString()
   cvv: string;
 
-  @ApiPropertyOptional({ description: 'Email', example: 'customer@example.com' })
+  @ApiPropertyOptional({
+    description: 'Email',
+    example: 'customer@example.com',
+  })
   @IsOptional()
   @IsString()
   email?: string;
@@ -82,9 +94,9 @@ export class CreateOrderDto {
   @IsNumber()
   coupon_id?: number;
 
-  @ApiProperty({ description: 'Order status', example: 'pending' })
-  @IsString()
-  status: string;
+  @ApiProperty({ description: 'Customer ID', example: 1 })
+  @IsNumber()
+  customer_id: number;
 
   @ApiProperty({ description: 'Customer contact', example: '+1234567890' })
   @IsString()
@@ -92,7 +104,7 @@ export class CreateOrderDto {
 
   @ApiProperty({
     description: 'Products in order',
-    type: [ConnectProductOrderPivot]
+    type: [ConnectProductOrderPivot],
   })
   @IsArray()
   @ValidateNested({ each: true })
@@ -125,13 +137,13 @@ export class CreateOrderDto {
   @ApiPropertyOptional({
     description: 'Payment gateway',
     enum: PaymentGatewayType,
-    example: PaymentGatewayType.STRIPE
+    example: PaymentGatewayType.STRIPE,
   })
   @IsOptional()
   @IsEnum(PaymentGatewayType)
   payment_gateway?: PaymentGatewayType;
 
-  @ApiPropertyOptional({ description: 'Discount amount', example: 10.00 })
+  @ApiPropertyOptional({ description: 'Discount amount', example: 10.0 })
   @IsOptional()
   @IsNumber()
   discount?: number;
@@ -153,7 +165,7 @@ export class CreateOrderDto {
 
   @ApiPropertyOptional({
     description: 'Billing address',
-    type: UserAddressInput
+    type: UserAddressInput,
   })
   @IsOptional()
   @ValidateNested()
@@ -162,7 +174,7 @@ export class CreateOrderDto {
 
   @ApiPropertyOptional({
     description: 'Shipping address',
-    type: UserAddressInput
+    type: UserAddressInput,
   })
   @IsOptional()
   @ValidateNested()
@@ -173,7 +185,11 @@ export class CreateOrderDto {
   @IsObject()
   payment_intent: any;
 
-  @ApiPropertyOptional({ description: 'Language', example: 'en', default: 'en' })
+  @ApiPropertyOptional({
+    description: 'Language',
+    example: 'en',
+    default: 'en',
+  })
   @IsOptional()
   @IsString()
   language?: string;

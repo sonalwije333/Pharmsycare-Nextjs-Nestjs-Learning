@@ -32,7 +32,7 @@ export class User extends CoreEntity {
   @OneToMany(() => Shop, (shop) => shop.owner, { cascade: true })
   shops?: Shop[];
 
-  @ManyToOne(() => Shop, { nullable: true, eager: true })
+  @ManyToOne(() => Shop, { nullable: true })
   @JoinColumn()
   managed_shop?: Shop;
 

@@ -47,6 +47,8 @@ import { UploadsModule } from './modules/uploads/uploads.module';
 import { WebHookModule } from './modules/web-hook/web-hook.module';
 import { PaymentIntentModule } from './modules/payment-intent/payment-intent.module';
 import { AttributesModule } from './modules/attributes/attributes.module';
+import { ShopsModule } from './modules/shops/shops.module';
+import { OrdersModule } from './modules/orders/orders.module';
 
 @Module({
   imports: [
@@ -85,7 +87,7 @@ import { AttributesModule } from './modules/attributes/attributes.module';
     MessagesModule,
     NewslettersModule,
     NotifyLogsModule,
-    // OrdersModule,
+     OrdersModule,
     PaymentModule,
     PaymentIntentModule,
     PaymentMethodModule,
@@ -98,7 +100,7 @@ import { AttributesModule } from './modules/attributes/attributes.module';
     ReviewModule,
     SettingsModule,
     ShippingsModule,
-    //ShopsModule,
+    ShopsModule,
     StoreNoticesModule,
     TagsModule,
     TaxesModule,

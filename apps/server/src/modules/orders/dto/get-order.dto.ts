@@ -1,14 +1,40 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { OrderStatus } from '../entities/order-status.entity';
+import { PaginationArgs } from '../../common/dto/pagination-args.dto';
+import { SortOrder } from '../../common/dto/generic-conditions.dto';
+import { Paginator } from '../../common/dto/paginator.dto';
+import { QueryOrderStatusesOrderByColumn } from '../../../common/enums/enums';
 
-export class GetOrderArgs {
-  @ApiPropertyOptional({ description: 'Order ID', example: 1 })
+export class OrderStatusPaginator extends Paginator<OrderStatus> {
+}
+
+export class GetOrderStatusesDto extends PaginationArgs {
+  @ApiPropertyOptional({
+    description: 'Order by column',
+    enum: QueryOrderStatusesOrderByColumn,
+    example: QueryOrderStatusesOrderByColumn.SERIAL,
+  })
   @IsOptional()
-  @IsNumber()
-  id?: number;
+  @IsEnum(QueryOrderStatusesOrderByColumn)
+  orderBy?: QueryOrderStatusesOrderByColumn;
 
-  @ApiPropertyOptional({ description: 'Tracking number', example: 'TRK-123456' })
+  @ApiPropertyOptional({
+    description: 'Sort order',
+    enum: SortOrder,
+    example: SortOrder.ASC,
+  })
+  @IsOptional()
+  @IsEnum(SortOrder)
+  sortOrder?: SortOrder;
+
+  @ApiPropertyOptional({ description: 'Search query', example: 'processing' })
   @IsOptional()
   @IsString()
-  tracking_number?: string;
+  search?: string;
+
+  @ApiPropertyOptional({ description: 'Language filter', example: 'en' })
+  @IsOptional()
+  @IsString()
+  language?: string;
 }

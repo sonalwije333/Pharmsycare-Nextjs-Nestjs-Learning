@@ -1,30 +1,29 @@
-// src/modules/shops/shops.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ShopsService } from './shops.service';
 import {
-    ShopsController,
-    StaffsController,
-    ApproveShopController,
-    DisapproveShopController,
-    NearByShopController,
-    NewShopsController,
+  ShopsController,
+  StaffsController,
+  DisapproveShopController,
+  ApproveShopController,
+  NearByShopController,
+  NewShopsController,
 } from './shops.controller';
+import { ShopsService } from './shops.service';
 import { User } from '../users/entities/user.entity';
-import { Withdraw } from '../withdraws/entities/withdraw.entity';
-import {Shop} from "./entites/shop.entity";
+import { Permission } from '../users/entities/user.entity';
+import { Shop } from './entites/shop.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Shop, User, Withdraw])],
-    controllers: [
-        ShopsController,
-        StaffsController,
-        ApproveShopController,
-        DisapproveShopController,
-        NearByShopController,
-        NewShopsController,
-    ],
-    providers: [ShopsService],
-    exports: [ShopsService],
+  imports: [TypeOrmModule.forFeature([Shop, User, Permission])],
+  controllers: [
+    ShopsController,
+    StaffsController,
+    DisapproveShopController,
+    ApproveShopController,
+    NearByShopController,
+    NewShopsController,
+  ],
+  providers: [ShopsService],
+  exports: [ShopsService],
 })
 export class ShopsModule {}
