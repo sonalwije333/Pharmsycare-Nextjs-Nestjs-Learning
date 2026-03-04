@@ -187,23 +187,23 @@ export enum WithdrawStatus {
     PROCESSING = 'Processing',
 }
 export enum QueryProductsOrderByColumn {
-    CREATED_AT = 'CREATED_AT',
-    NAME = 'NAME',
-    UPDATED_AT = 'UPDATED_AT',
-    PRICE = 'PRICE',
-    SALE_PRICE = 'SALE_PRICE',
-    STATUS = 'STATUS'
+  CREATED_AT = 'CREATED_AT',
+  NAME = 'NAME',
+  UPDATED_AT = 'UPDATED_AT',
+  PRICE = 'PRICE',
+  SALE_PRICE = 'SALE_PRICE',
+  STATUS = 'STATUS',
 }
 
 export enum ProductStatus {
-    PUBLISH = 'publish',
-    DRAFT = 'draft',
-    PENDING = 'pending'
+  PUBLISH = 'PUBLISH',
+  DRAFT = 'DRAFT',
+  PENDING = 'PENDING',
 }
 
 export enum ProductType {
-    SIMPLE = 'simple',
-    VARIABLE = 'variable'
+  SIMPLE = 'SIMPLE',
+  VARIABLE = 'VARIABLE',
 }
 //orders
 export enum OrderStatusType {

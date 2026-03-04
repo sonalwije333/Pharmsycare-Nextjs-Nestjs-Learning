@@ -152,7 +152,7 @@ export class ProductsService {
       .leftJoinAndSelect('product.tags', 'tags');
 
     if (search) {
-      queryBuilder.andWhere('product.name ILIKE :search', {
+      queryBuilder.andWhere('LOWER(product.name) LIKE LOWER(:search)', {
         search: `%${search}%`,
       });
     }
@@ -169,7 +169,7 @@ export class ProductsService {
 
     if (type_id) {
       queryBuilder.andWhere('type.id = :type_id', {
-        type_id: type_id,
+        type_id,
       });
     }
 
@@ -225,7 +225,7 @@ export class ProductsService {
 
     return queryBuilder
       .orderBy('product.views', 'DESC')
-      .addOrderBy('product.created_at', 'DESC')
+      .addOrderBy('product.createdAt', 'DESC')
       .take(limit)
       .getMany();
   }
@@ -271,7 +271,7 @@ export class ProductsService {
       .where('product.status = :status', { status: ProductStatus.DRAFT });
 
     if (search) {
-      queryBuilder.andWhere('product.name ILIKE :search', {
+      queryBuilder.andWhere('LOWER(product.name) LIKE LOWER(:search)', {
         search: `%${search}%`,
       });
     }
@@ -285,7 +285,7 @@ export class ProductsService {
     const [results, total] = await queryBuilder
       .take(take)
       .skip(skip)
-      .orderBy('product.created_at', 'DESC')
+      .orderBy('product.createdAt', 'DESC')
       .getManyAndCount();
 
     const url = `/draft-products?search=${search ?? ''}&limit=${limit}`;
@@ -313,7 +313,7 @@ export class ProductsService {
       .where('product.quantity <= :threshold', { threshold: 10 });
 
     if (search) {
-      queryBuilder.andWhere('product.name ILIKE :search', {
+      queryBuilder.andWhere('LOWER(product.name) LIKE LOWER(:search)', {
         search: `%${search}%`,
       });
     }
@@ -461,10 +461,10 @@ export class ProductsService {
       case QueryProductsOrderByColumn.STATUS:
         return 'status';
       case QueryProductsOrderByColumn.UPDATED_AT:
-        return 'updated_at';
+        return 'updatedAt';
       case QueryProductsOrderByColumn.CREATED_AT:
       default:
-        return 'created_at';
+        return 'createdAt';
     }
   }
 }
