@@ -136,7 +136,7 @@ export class OrdersService {
       .leftJoinAndSelect('order.coupon', 'coupon');
 
     if (search) {
-      queryBuilder.andWhere('order.tracking_number ILIKE :search', {
+      queryBuilder.andWhere('order.tracking_number LIKE :search', {
         search: `%${search}%`,
       });
     }
