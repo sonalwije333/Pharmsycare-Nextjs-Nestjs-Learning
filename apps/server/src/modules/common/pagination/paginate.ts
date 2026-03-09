@@ -9,6 +9,23 @@ export function paginate(
   // maxPages = 10,
   url = '',
 ): PaginatorInfo {
+  // Handle the case when there are no items
+  if (totalItems === 0) {
+    return {
+      total: 0,
+      current_page: 1,
+      count: 0,
+      last_page: 1,
+      firstItem: 0,
+      lastItem: 0,
+      per_page: pageSize,
+      first_page_url: `${APP_URL}${url}&page=1`,
+      last_page_url: `${APP_URL}${url}&page=1`,
+      next_page_url: null,
+      prev_page_url: null,
+    };
+  }
+
   // calculate total pages
   const totalPages = Math.ceil(totalItems / pageSize);
 

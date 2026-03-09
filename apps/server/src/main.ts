@@ -5,6 +5,8 @@ import { ConfigService } from '@nestjs/config';
 import { DatabaseService } from './core/database/database.service';
 import { ValidationPipe } from '@nestjs/common';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
+import { DataSource } from 'typeorm';
+import { seedOrderStatuses } from './modules/orders/seed-order-statuses';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -28,6 +30,14 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const databaseService = app.get(DatabaseService);
+  const dataSource = app.get(DataSource);
+
+  // Seed order statuses on startup
+  try {
+    await seedOrderStatuses(dataSource);
+  } catch (error) {
+    console.error('Error seeding order statuses:', error.message);
+  }
 
   // Swagger configuration - FIXED VERSION
   const config = new DocumentBuilder()

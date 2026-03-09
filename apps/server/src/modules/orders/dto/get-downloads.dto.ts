@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { OrderFiles } from '../entities/order.entity';
 import { QueryOrderFilesOrderByColumn } from '../../../common/enums/enums';
 import { Paginator } from '../../common/dto/paginator.dto';
@@ -16,6 +17,7 @@ export class GetOrderFilesDto extends PaginationArgs {
     example: QueryOrderFilesOrderByColumn.CREATED_AT,
   })
   @IsOptional()
+  @Transform(({ value }) => value?.toString()?.toUpperCase())
   @IsEnum(QueryOrderFilesOrderByColumn)
   orderBy?: QueryOrderFilesOrderByColumn;
 
@@ -25,6 +27,7 @@ export class GetOrderFilesDto extends PaginationArgs {
     example: SortOrder.DESC,
   })
   @IsOptional()
+  @Transform(({ value }) => value?.toString()?.toLowerCase())
   @IsEnum(SortOrder)
   sortOrder?: SortOrder;
 }
