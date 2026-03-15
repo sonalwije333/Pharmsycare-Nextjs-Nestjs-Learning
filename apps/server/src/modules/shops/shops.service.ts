@@ -37,10 +37,8 @@ export class ShopsService {
 
   // ==================== SHOP METHODS ====================
 
-  async create(createShopDto: CreateShopDto): Promise<Shop> {
-    // For demo purposes, we'll use a default user
-    // In a real app, you'd get the user from the request
-    const user = await this.userRepository.findOne({ where: { id: 1 } });
+  async create(createShopDto: CreateShopDto, ownerId: number): Promise<Shop> {
+    const user = await this.userRepository.findOne({ where: { id: ownerId } });
 
     if (!user) {
       throw new NotFoundException(`User not found`);

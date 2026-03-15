@@ -4,6 +4,7 @@ import { PaginationArgs } from "../../common/dto/pagination-args.dto";
 import { SortOrder } from "../../common/dto/generic-conditions.dto";
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 import {QueryTagsOrderByColumn} from "../../../common/enums/enums";
 
 export class TagPaginator extends Paginator<Tag> {}
@@ -15,6 +16,7 @@ export class GetTagsDto extends PaginationArgs {
         example: QueryTagsOrderByColumn.NAME
     })
     @IsOptional()
+    @Transform(({ value }) => typeof value === 'string' ? value.toUpperCase() : value)
     @IsEnum(QueryTagsOrderByColumn)
     orderBy?: QueryTagsOrderByColumn;
 

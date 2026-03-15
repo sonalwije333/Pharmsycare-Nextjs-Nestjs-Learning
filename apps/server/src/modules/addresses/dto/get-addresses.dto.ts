@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsEnum, IsNumber, IsString } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import { SortOrder } from 'src/modules/common/dto/generic-conditions.dto';
 import { QueryAddressesOrderByColumn } from '../../../common/enums/enums';
 import { AddressType } from '../../../common/enums/AddressType';
@@ -13,6 +13,7 @@ export class GetAddressesDto {
 
   @ApiPropertyOptional({ enum: QueryAddressesOrderByColumn, default: QueryAddressesOrderByColumn.CREATED_AT })
   @IsEnum(QueryAddressesOrderByColumn)
+  @Transform(({ value }) => typeof value === 'string' ? value.toUpperCase() : value)
   @IsOptional()
   orderBy?: QueryAddressesOrderByColumn;
 

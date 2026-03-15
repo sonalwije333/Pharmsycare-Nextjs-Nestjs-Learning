@@ -1,6 +1,7 @@
 // src/modules/coupons/dto/get-coupons.dto.ts
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString, IsNumber, IsEnum } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { PaginationArgs } from '../../common/dto/pagination-args.dto';
 import { Paginator } from '../../common/dto/paginator.dto';
 import { Coupon } from '../entities/coupon.entity';
@@ -12,6 +13,7 @@ export class CouponPaginator extends Paginator<Coupon> {}
 export class GetCouponsDto extends PaginationArgs {
     @ApiPropertyOptional({ description: 'Order by column', enum: QueryCouponsOrderByColumn })
     @IsOptional()
+    @Transform(({ value }) => typeof value === 'string' ? value.toUpperCase() : value)
     @IsEnum(QueryCouponsOrderByColumn)
     orderBy?: QueryCouponsOrderByColumn;
 

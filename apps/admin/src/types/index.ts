@@ -208,6 +208,12 @@ export interface Type {
   name: string;
   icon: string;
   slug: string;
+  banners?: {
+    id?: string | number;
+    title?: string;
+    description?: string;
+    image?: AttachmentInput;
+  }[];
   promotional_sliders?: AttachmentInput[];
   settings?: TypeSettings;
   products?: ProductPaginator;

@@ -49,6 +49,7 @@ import { PaymentIntentModule } from './modules/payment-intent/payment-intent.mod
 import { AttributesModule } from './modules/attributes/attributes.module';
 import { ShopsModule } from './modules/shops/shops.module';
 import { OrdersModule } from './modules/orders/orders.module';
+import { OwnershipTransferModule } from './modules/ownership-transfer/ownership-transfer.module';
 
 @Module({
   imports: [
@@ -87,6 +88,7 @@ import { OrdersModule } from './modules/orders/orders.module';
     MessagesModule,
     NewslettersModule,
     NotifyLogsModule,
+    OwnershipTransferModule,
      OrdersModule,
     PaymentModule,
     PaymentIntentModule,

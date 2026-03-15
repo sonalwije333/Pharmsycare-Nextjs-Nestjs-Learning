@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString, IsNumber } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { PaginationArgs } from '../../common/dto/pagination-args.dto';
 import { SortOrder } from '../../common/dto/generic-conditions.dto';
 import { Paginator } from '../../common/dto/paginator.dto';
@@ -15,6 +16,7 @@ export class GetAttributesDto extends PaginationArgs {
     example: QueryAttributesOrderByColumn.CREATED_AT,
   })
   @IsOptional()
+  @Transform(({ value }) => typeof value === 'string' ? value.toUpperCase() : value)
   @IsEnum(QueryAttributesOrderByColumn)
   orderBy?: QueryAttributesOrderByColumn;
 

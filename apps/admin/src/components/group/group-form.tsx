@@ -31,6 +31,7 @@ import classNames from 'classnames';
 import CategoryTypeFilter from '@/components/filters/category-type-filter';
 import SwitchInput from '@/components/ui/switch-input';
 import { useProductsQuery } from '@/data/product';
+import { getFormattedImage } from '@/utils/get-formatted-image';
 
 export const updatedIcons = typeIconList.map((item: any) => {
   item.label = (
@@ -147,6 +148,15 @@ export default function CreateOrUpdateTypeForm({ initialValues }: IProps) {
     resolver: yupResolver(typeValidationSchema),
     defaultValues: {
       ...initialValues,
+      promotional_sliders:
+        initialValues?.promotional_sliders?.map((image: any) =>
+          getFormattedImage(image),
+        ) ?? [],
+      banners:
+        initialValues?.banners?.map((banner: any) => ({
+          ...banner,
+          image: getFormattedImage(banner?.image),
+        })) ?? [],
       // @ts-ignore
       settings: {
         ...initialValues?.settings,

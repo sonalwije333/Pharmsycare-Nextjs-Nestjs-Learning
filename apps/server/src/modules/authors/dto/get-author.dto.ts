@@ -4,6 +4,7 @@ import { SortOrder } from "../../common/dto/generic-conditions.dto";
 import { Paginator } from "../../common/dto/paginator.dto";
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import {IsEnum, IsOptional, IsString, IsNumber, IsBoolean} from 'class-validator';
+import { Transform } from 'class-transformer';
 import {QueryAuthorsOrderByColumn} from "../../../common/enums/enums";
 
 export class AuthorPaginator extends Paginator<Author> {}
@@ -15,6 +16,7 @@ export class GetAuthorDto extends PaginationArgs {
         example: QueryAuthorsOrderByColumn.NAME
     })
     @IsOptional()
+    @Transform(({ value }) => typeof value === 'string' ? value.toUpperCase() : value)
     @IsEnum(QueryAuthorsOrderByColumn)
     orderBy?: QueryAuthorsOrderByColumn;
 

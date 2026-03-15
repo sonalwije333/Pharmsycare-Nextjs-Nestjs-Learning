@@ -19,6 +19,7 @@ export const useApproveShopMutation = () => {
     },
     // Always refetch after error or success:
     onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.OWNERSHIP_TRANSFER);
       queryClient.invalidateQueries(API_ENDPOINTS.SHOPS);
     },
   });
@@ -52,6 +53,7 @@ export const useCreateShopMutation = () => {
     },
     // Always refetch after error or success:
     onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.ME);
       queryClient.invalidateQueries(API_ENDPOINTS.SHOPS);
     },
   });
@@ -69,6 +71,7 @@ export const useUpdateShopMutation = () => {
       toast.success(t('common:successfully-updated'));
     },
     onSettled: () => {
+      queryClient.invalidateQueries(API_ENDPOINTS.ME);
       queryClient.invalidateQueries(API_ENDPOINTS.SHOPS);
     },
   });

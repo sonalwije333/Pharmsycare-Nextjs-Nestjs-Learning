@@ -3,7 +3,7 @@ import { Paginator } from '../../common/dto/paginator.dto';
 import { PaginationArgs } from '../../common/dto/pagination-args.dto';
 import { SortOrder } from '../../common/dto/generic-conditions.dto';
 import { IsOptional, IsString, IsEnum } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 import { User } from '../entities/user.entity';
 import { QueryUsersOrderByColumn } from '../../../common/enums/enums';
 
@@ -13,6 +13,7 @@ export class UserPaginator extends Paginator<User> {
 
 export class GetUsersDto extends PaginationArgs {
   @IsOptional()
+  @Transform(({ value }) => typeof value === 'string' ? value.toUpperCase() : value)
   @IsEnum(QueryUsersOrderByColumn)
   orderBy?: QueryUsersOrderByColumn;
 

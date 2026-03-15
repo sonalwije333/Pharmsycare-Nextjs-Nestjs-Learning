@@ -1,6 +1,7 @@
 // src/modules/store-notices/dto/get-store-notices.dto.ts
 import { PaginationArgs } from "../../common/dto/pagination-args.dto";
 import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { SortOrder } from "../../common/dto/generic-conditions.dto";
 import {QueryStoreNoticesOrderByColumn} from "../../../common/enums/enums";
@@ -10,6 +11,7 @@ import {QueryStoreNoticesOrderByColumn} from "../../../common/enums/enums";
 export class GetStoreNoticesDto extends PaginationArgs {
     @ApiProperty({ enum: QueryStoreNoticesOrderByColumn, required: false })
     @IsEnum(QueryStoreNoticesOrderByColumn)
+    @Transform(({ value }) => typeof value === 'string' ? value.toUpperCase() : value)
     @IsOptional()
     orderBy?: QueryStoreNoticesOrderByColumn;
 

@@ -10,8 +10,11 @@ import {
   ParseIntPipe,
   HttpCode,
   HttpStatus,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiTags,
   ApiOperation,
   ApiResponse,
@@ -29,6 +32,10 @@ import { ShopPaginator } from './dto/shop-paginator.dto';
 import { GetShopsDto } from './dto/get-shops.dto';
 import { UpdateStaffDto } from './dto/update-staff.dto';
 import { CreateStaffDto } from './dto/create-staff.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/auth/auth.guard';
+import { Roles } from '../../common/decorators/role.decorator';
+import { PermissionType } from '../../common/enums/PermissionType.enum';
 
 
 @ApiTags('Shops')
@@ -37,6 +44,9 @@ export class ShopsController {
   constructor(private readonly shopsService: ShopsService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(PermissionType.SUPER_ADMIN, PermissionType.STORE_OWNER)
+  @ApiBearerAuth('access-token')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Create a new shop' })
   @ApiResponse({
@@ -46,8 +56,8 @@ export class ShopsController {
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 409, description: 'Shop slug already exists' })
-  create(@Body() createShopDto: CreateShopDto): Promise<Shop> {
-    return this.shopsService.create(createShopDto);
+  create(@Body() createShopDto: CreateShopDto, @Req() req: any): Promise<Shop> {
+    return this.shopsService.create(createShopDto, req.user.id);
   }
 
   @Get()
