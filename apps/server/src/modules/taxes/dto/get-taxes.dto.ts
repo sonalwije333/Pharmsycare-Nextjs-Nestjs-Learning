@@ -1,6 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { SortOrder } from "../../common/dto/generic-conditions.dto";
 import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 import {QueryTaxClassesOrderByColumn} from "../../../common/enums/enums";
 
 export class GetTaxesDto {
@@ -15,6 +16,7 @@ export class GetTaxesDto {
         example: QueryTaxClassesOrderByColumn.NAME
     })
     @IsOptional()
+    @Transform(({ value }) => typeof value === 'string' ? value.toUpperCase() : value)
     @IsEnum(QueryTaxClassesOrderByColumn)
     orderBy?: QueryTaxClassesOrderByColumn;
 

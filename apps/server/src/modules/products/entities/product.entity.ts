@@ -3,6 +3,7 @@ import { Type } from '../../types/entities/type.entity';
 import { Shop } from '../../shops/entites/shop.entity';
 import { Tag } from '../../tags/entities/tag.entity';
 import { ShippingClass } from '../../shippings/entities/shipping-class.entity';
+import { Category } from '../../categories/entities/category.entity';
 import {
   Column,
   Entity,
@@ -37,6 +38,14 @@ export class Product extends BaseEntity {
   @ManyToOne(() => Shop, { eager: true })
   @JoinColumn({ name: 'shop_id' })
   shop: Shop;
+
+  @ManyToOne(() => Category, (category) => category.products, {
+    eager: true,
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
 
   @Column('decimal', { precision: 10, scale: 2 })
   price: number;

@@ -8,6 +8,10 @@ import { GetParams, Type, TypeQueryOptions } from '@/types';
 import { typeClient } from '@/data/client/type';
 import { Config } from '@/config';
 
+type TypeListResponse = {
+  data?: Type[];
+};
+
 export const useCreateTypeMutation = () => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -75,7 +79,7 @@ export const useTypeQuery = ({ slug, language }: GetParams) => {
 };
 
 export const useTypesQuery = (options?: Partial<TypeQueryOptions>) => {
-  const { data, isLoading, error } = useQuery<Type[], Error>(
+  const { data, isLoading, error } = useQuery<Type[] | TypeListResponse, Error>(
     [API_ENDPOINTS.TYPES, options],
     ({ queryKey, pageParam }) =>
       typeClient.all(Object.assign({}, queryKey[1], pageParam)),
@@ -84,8 +88,10 @@ export const useTypesQuery = (options?: Partial<TypeQueryOptions>) => {
     }
   );
 
+  const normalizedTypes = Array.isArray(data) ? data : data?.data ?? [];
+
   return {
-    types: data ?? [],
+    types: normalizedTypes,
     loading: isLoading,
     error,
   };

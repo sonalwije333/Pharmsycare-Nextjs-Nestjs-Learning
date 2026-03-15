@@ -11,6 +11,7 @@ export class GetShopsDto extends PaginationArgs {
     enum: QueryShopsOrderByColumn,
   })
   @IsOptional()
+  @Transform(({ value }) => typeof value === 'string' ? value.toUpperCase() : value)
   @IsEnum(QueryShopsOrderByColumn)
   orderBy?: QueryShopsOrderByColumn;
 

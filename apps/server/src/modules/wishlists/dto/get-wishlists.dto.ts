@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsNumber, IsEnum } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { PaginationArgs } from '../../common/dto/pagination-args.dto';
 import { SortOrder } from '../../common/dto/generic-conditions.dto';
 import { Wishlist } from '../entities/wishlist.entity';
@@ -19,6 +20,7 @@ export class GetWishlistDto extends PaginationArgs {
         example: QueryWishlistsOrderByColumn.CREATED_AT
     })
     @IsOptional()
+    @Transform(({ value }) => typeof value === 'string' ? value.toUpperCase() : value)
     @IsEnum(QueryWishlistsOrderByColumn)
     orderBy?: QueryWishlistsOrderByColumn;
 

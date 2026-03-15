@@ -99,6 +99,81 @@ type FormValues = {
   };
 };
 
+const getAttachmentValue = (attachment?: Attachment | Attachment[] | string) => {
+  if (!attachment) {
+    return undefined;
+  }
+
+  if (Array.isArray(attachment)) {
+    return getAttachmentValue(attachment[0]);
+  }
+
+  if (typeof attachment === 'string') {
+    return attachment;
+  }
+
+  return attachment.original ?? attachment.thumbnail;
+};
+
+const formatShopAddress = (address?: UserAddressInput) => {
+  if (!address) {
+    return '';
+  }
+
+  return [
+    address.street_address,
+    address.city,
+    address.state,
+    address.zip,
+    address.country,
+  ]
+    .filter((part): part is string => Boolean(part?.trim()))
+    .join(', ');
+};
+
+const normalizeCategoryIds = (categories?: unknown[]) => {
+  if (!Array.isArray(categories)) {
+    return [];
+  }
+
+  return categories
+    .map((category) => {
+      if (typeof category === 'number') {
+        return category;
+      }
+
+      if (typeof category === 'string') {
+        const parsedCategoryId = Number(category);
+        return Number.isFinite(parsedCategoryId) ? parsedCategoryId : null;
+      }
+
+      if (category && typeof category === 'object') {
+        const rawCategoryId =
+          (category as { id?: number | string; value?: number | string }).id ??
+          (category as { id?: number | string; value?: number | string }).value;
+        const parsedCategoryId = Number(rawCategoryId);
+        return Number.isFinite(parsedCategoryId) ? parsedCategoryId : null;
+      }
+
+      return null;
+    })
+    .filter((categoryId): categoryId is number => categoryId !== null);
+};
+
+const normalizeBalanceAmount = (balance: any) => {
+  if (typeof balance === 'number') {
+    return balance;
+  }
+
+  const parsedBalance = Number(
+    balance?.current_balance ?? balance?.amount ?? balance?.value ?? 0,
+  );
+
+  return Number.isFinite(parsedBalance) && parsedBalance >= 0
+    ? parsedBalance
+    : 0;
+};
+
 const ShopForm = ({ initialValues }: { initialValues?: any }) => {
   const [location] = useAtom(locationAtom);
   const { mutate: createShop, isLoading: creating } = useCreateShopMutation();
@@ -192,9 +267,14 @@ const ShopForm = ({ initialValues }: { initialValues?: any }) => {
     router?.locale === Config.defaultLanguage;
 
   function onSubmit(values: FormValues) {
+    const address = omit(values.address, '__typename');
+    const paymentInfo = values.balance?.payment_info;
     const settings = {
       ...values?.settings,
       location: { ...omit(values?.settings?.location, '__typename') },
+      address,
+      payment_info: paymentInfo,
+      balance_info: paymentInfo ? { payment_info: paymentInfo } : undefined,
       socials: values?.settings?.socials
         ? values?.settings?.socials?.map((social: any) => ({
             icon: social?.icon?.value,
@@ -203,26 +283,25 @@ const ShopForm = ({ initialValues }: { initialValues?: any }) => {
         : [],
       shopMaintenance: values?.settings?.shopMaintenance,
     };
+
+    const payload = {
+      ...values,
+      slug: values.slug || slugAutoSuggest,
+      logo: getAttachmentValue(values.logo),
+      cover_image: getAttachmentValue(values.cover_image),
+      address: formatShopAddress(address),
+      settings,
+      balance: normalizeBalanceAmount(initialValues?.balance),
+      categories: normalizeCategoryIds(initialValues?.categories),
+    };
+
     if (initialValues) {
-      const { ...restAddress } = values.address;
       updateShop({
         id: initialValues.id,
-        ...values,
-        address: restAddress,
-        settings,
-        balance: {
-          id: initialValues.balance?.id,
-          ...values.balance,
-        },
+        ...payload,
       });
     } else {
-      createShop({
-        ...values,
-        settings,
-        balance: {
-          ...values.balance,
-        },
-      });
+      createShop(payload);
     }
   }
 

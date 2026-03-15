@@ -43,8 +43,10 @@ export class TypesService {
       slug: slug,
       icon: createTypeDto.icon,
       language: createTypeDto.language || 'en',
-      banners: createTypeDto.banners || [],
-      promotional_sliders: [],
+      banners: this.normalizeBanners(createTypeDto.banners),
+      promotional_sliders: this.normalizeAttachments(
+        createTypeDto.promotional_sliders,
+      ),
       settings: createTypeDto.settings || {},
       translated_languages: createTypeDto.translated_languages || [],
     });
@@ -152,15 +154,32 @@ export class TypesService {
       throw new TypeNotFoundException(id);
     }
 
+    const normalizedUpdateTypeDto = {
+      ...updateTypeDto,
+      ...(updateTypeDto.banners !== undefined
+        ? { banners: this.normalizeBanners(updateTypeDto.banners) }
+        : {}),
+      ...(updateTypeDto.promotional_sliders !== undefined
+        ? {
+            promotional_sliders: this.normalizeAttachments(
+              updateTypeDto.promotional_sliders,
+            ),
+          }
+        : {}),
+    };
+
     // If name is being updated and no slug is provided, generate a new slug
-    if (updateTypeDto.name && !updateTypeDto.slug) {
-      updateTypeDto.slug = generateSlug(updateTypeDto.name);
+    if (normalizedUpdateTypeDto.name && !normalizedUpdateTypeDto.slug) {
+      normalizedUpdateTypeDto.slug = generateSlug(normalizedUpdateTypeDto.name);
     }
 
     // Check if new slug already exists (if slug is being updated)
-    if (updateTypeDto.slug && updateTypeDto.slug !== type.slug) {
+    if (
+      normalizedUpdateTypeDto.slug &&
+      normalizedUpdateTypeDto.slug !== type.slug
+    ) {
       const slugExists = await this.typeRepository.findOne({
-        where: { slug: updateTypeDto.slug },
+        where: { slug: normalizedUpdateTypeDto.slug },
       });
       if (slugExists) {
         throw new ConflictException('Type slug already exists');
@@ -168,7 +187,7 @@ export class TypesService {
     }
 
     // Merge the update data into the existing entity
-    const updated = this.typeRepository.merge(type, updateTypeDto);
+    const updated = this.typeRepository.merge(type, normalizedUpdateTypeDto);
 
     // Save and return the updated entity
     return this.typeRepository.save(updated);
@@ -211,6 +230,67 @@ export class TypesService {
       default:
         return 'created_at';
     }
+  }
+
+  private normalizeBanners(banners?: any[]): any[] {
+    if (!Array.isArray(banners)) {
+      return [];
+    }
+
+    return banners
+      .map((banner, index) => {
+        const normalizedImage = this.normalizeAttachment(banner?.image);
+
+        if (!normalizedImage) {
+          return null;
+        }
+
+        return {
+          id: banner?.id ?? index + 1,
+          title: banner?.title ?? '',
+          description: banner?.description ?? '',
+          image: normalizedImage,
+        };
+      })
+      .filter((banner): banner is Record<string, any> => Boolean(banner));
+  }
+
+  private normalizeAttachments(attachments?: any[]): any[] {
+    if (!Array.isArray(attachments)) {
+      return [];
+    }
+
+    return attachments
+      .map((attachment) => this.normalizeAttachment(attachment))
+      .filter(
+        (attachment): attachment is Record<string, any> => Boolean(attachment),
+      );
+  }
+
+  private normalizeAttachment(attachment?: any) {
+    if (!attachment) {
+      return null;
+    }
+
+    if (typeof attachment === 'string') {
+      return {
+        original: attachment,
+        thumbnail: attachment,
+      };
+    }
+
+    const original = attachment.original ?? attachment.thumbnail;
+    const thumbnail = attachment.thumbnail ?? attachment.original;
+
+    if (!original && !thumbnail) {
+      return null;
+    }
+
+    return {
+      ...(attachment.id ? { id: attachment.id } : {}),
+      original,
+      thumbnail,
+    };
   }
 
   // Additional utility methods for relationships

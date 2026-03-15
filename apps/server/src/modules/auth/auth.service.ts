@@ -120,15 +120,23 @@ export class AuthService {
   async me(userId: number): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { id: userId },
-      relations: ['permissions'],
-      select: ['id', 'email', 'name'],
+      relations: [
+        'permissions',
+        'profile',
+        'address',
+        'shops',
+        'shops.owner',
+        'managed_shop',
+        'managed_shop.owner',
+      ],
     });
 
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
 
-    return user;
+    const { password, ...safeUser } = user;
+    return safeUser as User;
   }
   async socialLogin(dto: any): Promise<AuthResponse> {
     const { email, name } = dto;

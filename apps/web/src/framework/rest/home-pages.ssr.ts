@@ -1,6 +1,7 @@
 import type {
   CategoryQueryOptions,
   HomePageProps,
+  PaginatorInfo,
   PopularProductQueryOptions,
   SettingsQueryOptions,
   TypeQueryOptions,
@@ -23,13 +24,17 @@ type ParsedQueryParams = {
   pages: string[];
 };
 
+const normalizeTypes = (data?: PaginatorInfo<any> | any[]) =>
+  Array.isArray(data) ? data : data?.data ?? [];
+
 // This function gets called at build time
 export const getStaticPaths: GetStaticPaths<ParsedQueryParams> = async ({
   locales,
 }) => {
   invariant(locales, 'locales is not defined');
   const data = await client.types.all({ limit: 100 });
-  const paths = data?.flatMap((type) =>
+  const types = normalizeTypes(data);
+  const paths = types.flatMap((type) =>
     locales?.map((locale) => ({ params: { pages: [type.slug] }, locale }))
   );
   // We'll pre-render only these paths at build time also with the slash route.
@@ -54,17 +59,19 @@ export const getStaticProps: GetStaticProps<
     [API_ENDPOINTS.TYPES, { limit: TYPES_PER_PAGE, language: locale }],
     ({ queryKey }) => client.types.all(queryKey[1] as TypeQueryOptions)
   );
+  const normalizedTypes = normalizeTypes(types);
 
   const { pages } = params!;
   let pageType: string | undefined;
   if (!pages) {
     pageType =
-      types.find((type) => type?.settings?.isHome)?.slug ?? types?.[0]?.slug;
+      normalizedTypes.find((type) => type?.settings?.isHome)?.slug ??
+      normalizedTypes?.[0]?.slug;
   } else {
     pageType = pages[0];
   }
 
-  if (!types?.some((t) => t.slug === pageType)) {
+  if (!normalizedTypes.some((t) => t.slug === pageType)) {
     return {
       notFound: true,
       // This is require to regenerate the page
@@ -117,7 +124,8 @@ export const getStaticProps: GetStaticProps<
     limit: CATEGORIES_PER_PAGE,
     language: locale,
     parent:
-      types.find((t) => t.slug === pageType)?.settings.layoutType === 'minimal'
+      normalizedTypes.find((t) => t.slug === pageType)?.settings.layoutType ===
+      'minimal'
         ? 'all'
         : 'null',
   };
@@ -134,14 +142,14 @@ export const getStaticProps: GetStaticProps<
         categories: categoryVariables,
         bestSellingProducts: popularProductVariables,
         layoutSettings: {
-          ...types.find((t) => t.slug === pageType)?.settings,
+          ...normalizedTypes.find((t) => t.slug === pageType)?.settings,
         },
         types: {
           type: pageType,
         },
       },
       layout:
-        types.find((t) => t.slug === pageType)?.settings.layoutType ??
+        normalizedTypes.find((t) => t.slug === pageType)?.settings.layoutType ??
         'default',
       ...(await serverSideTranslations(locale!, ['common', 'banner'])),
       dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))),

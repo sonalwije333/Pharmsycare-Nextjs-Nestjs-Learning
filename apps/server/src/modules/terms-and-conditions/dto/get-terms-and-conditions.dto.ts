@@ -16,6 +16,7 @@ export class GetTermsAndConditionsDto extends PaginationArgs {
         example: QueryTermsOrderByColumn.CREATED_AT
     })
     @IsOptional()
+    @Transform(({ value }) => typeof value === 'string' ? value.toUpperCase() : value)
     @IsEnum(QueryTermsOrderByColumn)
     orderBy?: QueryTermsOrderByColumn;
 

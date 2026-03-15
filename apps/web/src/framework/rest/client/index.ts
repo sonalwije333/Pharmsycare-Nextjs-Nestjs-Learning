@@ -236,7 +236,7 @@ class Client {
   };
   types = {
     all: (params?: Partial<TypeQueryOptions>) =>
-      HttpClient.get<Type[]>(API_ENDPOINTS.TYPES, params),
+      HttpClient.get<Type[] | PaginatorInfo<Type>>(API_ENDPOINTS.TYPES, params),
     get: ({ slug, language }: { slug: string; language: string }) =>
       HttpClient.get<Type>(`${API_ENDPOINTS.TYPES}/${slug}`, { language }),
   };

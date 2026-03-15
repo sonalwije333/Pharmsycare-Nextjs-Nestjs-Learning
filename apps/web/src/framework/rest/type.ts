@@ -1,8 +1,10 @@
-import type { Type, TypeQueryOptions } from '@/types';
+import type { PaginatorInfo, Type, TypeQueryOptions } from '@/types';
 import { useQuery } from 'react-query';
 import client from './client';
 import { API_ENDPOINTS } from './client/api-endpoints';
 import { useRouter } from 'next/router';
+
+type TypeListResponse = Type[] | PaginatorInfo<Type>;
 
 export function useTypes(options?: Partial<TypeQueryOptions>) {
   const { locale } = useRouter();
@@ -12,12 +14,15 @@ export function useTypes(options?: Partial<TypeQueryOptions>) {
     language: locale
   }
 
-  const { data, isLoading, error } = useQuery<Type[], Error>(
+  const { data, isLoading, error } = useQuery<TypeListResponse, Error>(
     [API_ENDPOINTS.TYPES, formattedOptions],
     ({ queryKey }) => client.types.all(Object.assign({}, queryKey[1]))
   );
+
+  const types = Array.isArray(data) ? data : data?.data ?? [];
+
   return {
-    types: data,
+    types,
     isLoading,
     error,
   };
