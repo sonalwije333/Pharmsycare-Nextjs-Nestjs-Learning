@@ -252,7 +252,7 @@ export class TypesService {
           image: normalizedImage,
         };
       })
-      .filter((banner): banner is Record<string, any> => Boolean(banner));
+      .filter((banner) => Boolean(banner));
   }
 
   private normalizeAttachments(attachments?: any[]): any[] {
@@ -262,9 +262,7 @@ export class TypesService {
 
     return attachments
       .map((attachment) => this.normalizeAttachment(attachment))
-      .filter(
-        (attachment): attachment is Record<string, any> => Boolean(attachment),
-      );
+      .filter((attachment) => Boolean(attachment));
   }
 
   private normalizeAttachment(attachment?: any) {
