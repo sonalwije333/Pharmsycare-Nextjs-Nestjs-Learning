@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   NotFoundException,
   ConflictException,
@@ -195,29 +196,76 @@ export class UsersService {
     await this.userRepository.remove(user);
   }
 
-  async makeAdmin(user_id: string): Promise<User> {
-    const user = await this.findOne(Number(user_id));
+  async makeAdmin(user_id: string): Promise<{
+    success: boolean;
+    action: 'assigned' | 'revoked';
+    user: User;
+  }> {
+    const userId = Number(user_id);
 
-    // Check if user already has admin permission
-    const hasAdminPermission = user.permissions?.some(
-      (p) =>
-        p.name === PermissionType.SUPER_ADMIN ||
-        p.name === PermissionType.STORE_OWNER,
-    );
-
-    if (!hasAdminPermission) {
-      const adminPermission = this.permissionRepository.create({
-        name: PermissionType.STORE_OWNER,
-        guard_name: 'api',
-        user: user,
-      });
-      await this.permissionRepository.save(adminPermission);
-
-      // Refresh user permissions
-      user.permissions = [...(user.permissions || []), adminPermission];
+    if (!Number.isFinite(userId) || userId <= 0) {
+      throw new BadRequestException('A valid user_id is required');
     }
 
-    return user;
+    const user = await this.findOne(userId);
+    const permissions = user.permissions ?? [];
+
+    const hasSuperAdminPermission = permissions.some(
+      (p) => p.name === PermissionType.SUPER_ADMIN,
+    );
+
+    if (hasSuperAdminPermission) {
+      throw new ConflictException('Cannot change SUPER_ADMIN permission');
+    }
+
+    const storeOwnerPermissions = permissions.filter(
+      (p) => p.name === PermissionType.STORE_OWNER,
+    );
+    const hasStoreOwnerPermission = storeOwnerPermissions.length > 0;
+
+    if (hasStoreOwnerPermission) {
+      await this.permissionRepository.remove(storeOwnerPermissions);
+
+      const hasCustomerPermission = permissions.some(
+        (p) => p.name === PermissionType.CUSTOMER,
+      );
+
+      if (!hasCustomerPermission) {
+        const customerPermission = this.permissionRepository.create({
+          name: PermissionType.CUSTOMER,
+          guard_name: 'api',
+          user,
+        });
+        await this.permissionRepository.save(customerPermission);
+      }
+
+      return {
+        success: true,
+        action: 'revoked',
+        user: await this.findOne(userId),
+      };
+    }
+
+    const customerPermissions = permissions.filter(
+      (p) => p.name === PermissionType.CUSTOMER,
+    );
+
+    if (customerPermissions.length) {
+      await this.permissionRepository.remove(customerPermissions);
+    }
+
+    const adminPermission = this.permissionRepository.create({
+      name: PermissionType.STORE_OWNER,
+      guard_name: 'api',
+      user,
+    });
+    await this.permissionRepository.save(adminPermission);
+
+    return {
+      success: true,
+      action: 'assigned',
+      user: await this.findOne(userId),
+    };
   }
 
   async banUser(id: number): Promise<User> {

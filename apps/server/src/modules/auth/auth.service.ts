@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -235,9 +236,50 @@ export class AuthService {
     return { success: true, message: 'Password changed successfully' };
   }
   async addWalletPoints(dto: any, userId: number) {
+    const customerId = Number(dto?.customer_id ?? dto?.user_id ?? dto?.id);
+    const points = Number(dto?.points);
+
+    if (!Number.isFinite(customerId) || customerId <= 0) {
+      throw new BadRequestException('A valid customer_id is required');
+    }
+
+    if (!Number.isFinite(points) || points <= 0) {
+      throw new BadRequestException('Points must be a positive number');
+    }
+
+    const targetUser = await this.userRepository.findOne({
+      where: { id: customerId },
+    });
+
+    if (!targetUser) {
+      throw new NotFoundException(`User with ID ${customerId} not found`);
+    }
+
+    const currentWallet =
+      targetUser.wallet && typeof targetUser.wallet === 'object'
+        ? targetUser.wallet
+        : {};
+
+    const currentAvailablePoints = Number(currentWallet.available_points ?? 0);
+    const safeCurrentAvailablePoints = Number.isFinite(currentAvailablePoints)
+      ? currentAvailablePoints
+      : 0;
+
+    targetUser.wallet = {
+      ...currentWallet,
+      available_points: safeCurrentAvailablePoints + points,
+    };
+
+    const updatedUser = await this.userRepository.save(targetUser);
+
     return {
       success: true,
-      message: `Added ${dto.points} points to user ${userId}`,
+      message: `Added ${points} points to user ${customerId}`,
+      data: {
+        id: updatedUser.id,
+        wallet: updatedUser.wallet,
+        updated_by: userId,
+      },
     };
   }
 }
