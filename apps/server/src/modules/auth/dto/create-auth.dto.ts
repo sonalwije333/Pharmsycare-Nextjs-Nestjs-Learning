@@ -56,10 +56,10 @@ export class RegisterDto {
   })
   @ApiPropertyOptional({
     enum: PermissionType,
-    default: PermissionType.SUPER_ADMIN,
+    default: PermissionType.CUSTOMER,
     description: 'User role permission',
   })
-  permission?: PermissionType = PermissionType.SUPER_ADMIN;
+  permission?: PermissionType = PermissionType.CUSTOMER;
 }
 
 export class LoginDto {

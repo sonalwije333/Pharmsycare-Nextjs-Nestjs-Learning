@@ -66,7 +66,11 @@ export class Permission extends CoreEntity {
   @Column({ type: 'json', nullable: true })
   pivot?: any;
 
-  @ManyToOne(() => User, (user) => user.permissions)
+  @ManyToOne(() => User, (user) => user.permissions, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn()
   user: User;
 
 

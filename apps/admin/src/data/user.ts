@@ -186,6 +186,9 @@ export const useMakeOrRevokeAdminMutation = () => {
     // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.USERS);
+      queryClient.invalidateQueries(API_ENDPOINTS.ADMIN_LIST);
+      queryClient.invalidateQueries(API_ENDPOINTS.CUSTOMERS);
+      queryClient.invalidateQueries(API_ENDPOINTS.VENDORS_LIST);
     },
   });
 };
@@ -238,6 +241,11 @@ export const useAddWalletPointsMutation = () => {
     // Always refetch after error or success:
     onSettled: () => {
       queryClient.invalidateQueries(API_ENDPOINTS.USERS);
+      queryClient.invalidateQueries(API_ENDPOINTS.ADMIN_LIST);
+      queryClient.invalidateQueries(API_ENDPOINTS.CUSTOMERS);
+      queryClient.invalidateQueries(API_ENDPOINTS.VENDORS_LIST);
+      queryClient.invalidateQueries(API_ENDPOINTS.MY_STAFFS);
+      queryClient.invalidateQueries(API_ENDPOINTS.ALL_STAFFS);
     },
   });
 };

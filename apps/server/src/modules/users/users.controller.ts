@@ -202,7 +202,26 @@ export class UsersController {
     status: 403,
     description: 'Forbidden - insufficient permissions',
   })
-  makeAdmin(@Param('user_id') id: string) {
+  makeAdminByParam(@Param('user_id') id: string) {
+    return this.usersService.makeAdmin(id);
+  }
+
+  @Post('make-admin')
+  @Roles(PermissionType.SUPER_ADMIN)
+  @ApiOperation({
+    summary: 'Assign or revoke admin role',
+    description:
+      'Toggles admin role (store_owner) for a user by user_id in request body.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Admin permission assigned or revoked successfully',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - insufficient permissions',
+  })
+  makeAdmin(@Body('user_id') id: string) {
     return this.usersService.makeAdmin(id);
   }
 }
