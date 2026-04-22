@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="8dc02683-6e69-4f4e-879c-2a3532735815" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/config/database/seeders/seeder.command.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/config/database/seeders/seeder.command.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/config/database/seeders/seeder.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/config/database/seeders/seeder.module.ts" afterDir="false" />
+<<<<<<< Updated upstream
+      <change beforePath="$PROJECT_DIR$/api/rest/src/manufacturers/dto/create-manufacturer.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/manufacturers/dto/create-manufacturer.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/manufacturers/dto/get-manufactures.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/manufacturers/dto/get-manufactures.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/manufacturers/dto/get-top-manufacturers.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/manufacturers/dto/get-top-manufacturers.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/manufacturers/dto/update-manufacturer.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/manufacturers/dto/update-manufacturer.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/manufacturers/entities/manufacturer.entity.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/manufacturers/entities/manufacturer.entity.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/manufacturers/manufacturers.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/manufacturers/manufacturers.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/manufacturers/manufacturers.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/manufacturers/manufacturers.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/manufacturers/manufacturers.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/manufacturers/manufacturers.service.ts" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/api/rest/src/messages/dto/create-message.dto.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/messages/dto/create-message.dto.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/messages/entities/message.entity.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/messages/entities/message.entity.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/messages/messages.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/messages/messages.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/messages/messages.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/messages/messages.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/rest/src/messages/messages.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/api/rest/src/messages/messages.service.ts" afterDir="false" />
+>>>>>>> Stashed changes
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="39W3fDgAGnhc6OX4Y3lLfHzGH5j" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "javascript.preferred.runtime.type.id": "node",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "npm.rest > dev.executor": "Debug",
+    "npm.rest > start:dev.executor": "Debug",
+    "npm.shop > dev:rest.executor": "Debug",
+    "prettierjs.PrettierConfiguration.Package": "E:\\Projects\\Testing\\Default-Admin-Dashboard-02\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "advanced.settings",
+    "ts.external.directory.path": "D:\\Company project\\Default-Admin-Dashboard-02\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="npm.rest &gt; start:dev">
+    <configuration name="rest &gt; dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/admin/rest/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="rest &gt; start:dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/api/rest/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start:dev" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="shop &gt; dev:rest" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/shop/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev:rest" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.rest &gt; start:dev" />
+        <item itemvalue="npm.rest &gt; dev" />
+        <item itemvalue="npm.shop &gt; dev:rest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-WS-253.31033.133" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="8dc02683-6e69-4f4e-879c-2a3532735815" name="Changes" comment="" />
+      <created>1770798106209</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1770798106209</updated>
+      <workItem from="1770798111845" duration="211000" />
+      <workItem from="1770808364780" duration="981000" />
+      <workItem from="1770890854824" duration="1347000" />
+      <workItem from="1771270230602" duration="413000" />
+      <workItem from="1771692056329" duration="1306000" />
+      <workItem from="1772549920431" duration="990000" />
+      <workItem from="1772602885380" duration="2229000" />
+      <workItem from="1772693228283" duration="2203000" />
+      <workItem from="1772791672427" duration="4785000" />
+      <workItem from="1773237265903" duration="77000" />
+      <workItem from="1773237391740" duration="451000" />
+      <workItem from="1773423294902" duration="1231000" />
+<<<<<<< Updated upstream
+      <workItem from="1774382298439" duration="4767000" />
+=======
+      <workItem from="1774560923750" duration="1512000" />
+>>>>>>> Stashed changes
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
