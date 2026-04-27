@@ -48,6 +48,8 @@ import { BecomeSellerModule } from './become-seller/become-seller.module';
 import { OwnershipTransferModule } from './ownership-transfer/ownership-transfer.module';
 import * as Joi from 'joi';
 import { StoreNoticesModule } from './store-notices/store-notices.module';
+import { PrescriptionsModule } from './prescriptions/prescriptions.module';
+import { OrderTrackingModule } from './order-tracking/order-tracking-module';
 
 @Module({
   imports: [
@@ -116,7 +118,9 @@ import { StoreNoticesModule } from './store-notices/store-notices.module';
     BecomeSellerModule,
     OwnershipTransferModule,
     TagsModule,
-    TaxesModule
+    TaxesModule,
+    PrescriptionsModule,
+    OrderTrackingModule,
   ],
   controllers: [],
   providers: [],

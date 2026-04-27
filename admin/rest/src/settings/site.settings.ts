@@ -267,6 +267,26 @@ export const siteSettings = {
         ],
       },
 
+      medical: {
+        href: '',
+        label: 'Medical Management',
+        icon: 'FountainPenIcon',
+        childMenu: [
+          {
+            href: Routes.prescriptions.list,
+            label: 'Prescriptions',
+            icon: 'FountainPenIcon',
+            permission: adminOwnerAndStaffOnly,
+          },
+          {
+            href: Routes.orderTracking.list,
+            label: 'Order Tracking',
+            icon: 'OrderTrackingIcon',
+            permission: adminOwnerAndStaffOnly,
+          },
+        ],
+      },
+
       order: {
         href: Routes.order.list,
         label: 'text-order-management',
