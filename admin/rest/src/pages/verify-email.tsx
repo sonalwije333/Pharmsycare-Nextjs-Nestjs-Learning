@@ -10,15 +10,23 @@ import { useRouter } from 'next/router';
 import AuthPageLayout from '@/components/layouts/auth-layout';
 
 import { useTranslation } from 'next-i18next';
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { getEmailVerified } from '@/utils/auth-utils';
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale!, ['common', 'form'])),
-  },
-});
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const { emailVerified } = getEmailVerified();
+  if (emailVerified) {
+    return {
+      redirect: { destination: Routes.dashboard, permanent: false },
+    };
+  }
+  return {
+    props: {
+      ...(await serverSideTranslations(ctx.locale!, ['common', 'form'])),
+    },
+  };
+};
 
 export default function VerifyEmailActions() {
   const { t } = useTranslation('common');
@@ -27,11 +35,6 @@ export default function VerifyEmailActions() {
   const { mutate: logout, isLoading: isLoading } = useLogoutMutation();
   const { mutate: verifyEmail, isLoading: isVerifying } =
     useResendVerificationEmail();
-  const router = useRouter();
-  const { emailVerified } = getEmailVerified();
-  if (emailVerified) {
-    router.push(Routes.dashboard);
-  }
 
   return (
     <>

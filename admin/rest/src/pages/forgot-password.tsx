@@ -7,11 +7,8 @@ import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export const getServerSideProps: GetServerSideProps = async ({
-  context,
-  locale,
-}: any) => {
-  const cookies = parseContextCookie(context?.req?.headers?.cookie);
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const cookies = parseContextCookie(ctx?.req?.headers?.cookie);
   if (cookies?.auth_token) {
     if (cookies?.auth_permissions?.includes(SUPER_ADMIN)) {
       return {
@@ -21,7 +18,7 @@ export const getServerSideProps: GetServerSideProps = async ({
   }
   return {
     props: {
-      ...(await serverSideTranslations(locale!, ['common', 'form'])),
+      ...(await serverSideTranslations(ctx.locale!, ['common', 'form'])),
     },
   };
 };

@@ -118,6 +118,12 @@ export const Routes = {
   refundReasons: {
     ...routesFactory('/refund-reasons'),
   },
+  prescriptions: {
+    ...routesFactory('/prescriptions'),
+  },
+  orderTracking: {
+    ...routesFactory('/order-tracking'),
+  },
   newShops: '/new-shops',
   draftProducts: '/products/draft',
   outOfStockOrLowProducts: '/products/product-stock',
