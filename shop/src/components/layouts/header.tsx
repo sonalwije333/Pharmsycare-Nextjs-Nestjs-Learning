@@ -293,6 +293,20 @@ const Header = ({ layout }: { layout?: string }) => {
                   </div>
                 ) : null}
 
+                <Link
+                  href="/prescriptions"
+                  className="hidden h-9 shrink-0 items-center justify-center rounded border border-transparent bg-accent px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-accent-hover focus:shadow focus:outline-none focus:ring-1 focus:ring-accent-700 lg:inline-flex"
+                >
+                  Upload Your Prescription
+                </Link>
+
+                <Link
+                  href={Routes.orders}
+                  className="hidden h-9 shrink-0 items-center justify-center rounded border border-transparent bg-accent px-3 py-0 text-sm font-semibold leading-none text-light outline-none transition duration-300 ease-in-out hover:bg-accent-hover focus:shadow focus:outline-none focus:ring-1 focus:ring-accent-700 lg:inline-flex"
+                >
+                  Orders Tracking
+                </Link>
+
                 <div className="hidden lg:inline-flex">
                   {isAuthorize ? <AuthorizedMenu /> : <JoinButton />}
                 </div>
