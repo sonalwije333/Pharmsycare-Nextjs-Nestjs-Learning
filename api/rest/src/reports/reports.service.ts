@@ -1,5 +1,5 @@
 // reports/reports.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { paginate } from 'src/common/pagination/paginate';
 import { Report } from './entities/report.entity';
 import { CreateReportDto } from './dto/create-report.dto';
@@ -63,8 +63,9 @@ export class ReportsService {
     // Apply sorting
     data.sort((a, b) => {
       let aValue: any, bValue: any;
+      const normalizedSortedBy = (sortedBy || 'created_at').toLowerCase();
       
-      switch (sortedBy) {
+      switch (normalizedSortedBy) {
         case 'model_type':
           aValue = a.model_type;
           bValue = b.model_type;
@@ -78,11 +79,12 @@ export class ReportsService {
           bValue = new Date(b.updated_at).getTime();
           break;
         default:
-          aValue = a.created_at;
-          bValue = b.created_at;
+          aValue = new Date(a.created_at).getTime();
+          bValue = new Date(b.created_at).getTime();
       }
 
-      if (orderBy === 'ASC') {
+      const normalizedOrderBy = (orderBy || 'DESC').toUpperCase();
+      if (normalizedOrderBy === 'ASC') {
         return aValue > bValue ? 1 : -1;
       } else {
         return aValue < bValue ? 1 : -1;
@@ -114,6 +116,20 @@ export class ReportsService {
 
   async findByUser(userId: number, query: GetReportDto): Promise<ReportPaginator> {
     return this.findAll({ ...query, user_id: userId });
+  }
+
+  async findMyReport(id: number, userId: number): Promise<Report> {
+    const report = this.reports.find(r => r.id === id);
+    
+    if (!report) {
+      throw new NotFoundException('Report not found');
+    }
+
+    if (report.user_id !== userId) {
+      throw new ForbiddenException('You do not have permission to view this report');
+    }
+    
+    return report;
   }
 
   async findByModel(modelType: string, modelId: number, query: GetReportDto): Promise<ReportPaginator> {
