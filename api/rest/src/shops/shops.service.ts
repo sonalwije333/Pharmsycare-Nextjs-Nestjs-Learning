@@ -76,7 +76,7 @@ export class ShopsService {
     const searchText = search || name;
 
     if (is_active !== undefined) {
-      data = data.filter(shop => shop.is_active === is_active);
+      data = data.filter(shop => shop.is_active == is_active);
     }
 
     if (owner_id) {
