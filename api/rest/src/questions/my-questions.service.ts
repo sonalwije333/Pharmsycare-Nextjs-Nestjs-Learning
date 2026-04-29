@@ -42,7 +42,8 @@ export class MyQuestionsService {
     }
 
     const orderByColumn = orderBy === QueryQuestionsOrderByColumn.QUESTION ? 'question.question' : `question.${orderBy}`;
-    query.orderBy(orderByColumn, sortedBy);
+    const sortDirection = (sortedBy || 'DESC').toString().toUpperCase() as 'ASC' | 'DESC';
+    query.orderBy(orderByColumn, sortDirection);
     query.skip((page - 1) * limit).take(limit);
 
     const [data, total] = await query.getManyAndCount();
