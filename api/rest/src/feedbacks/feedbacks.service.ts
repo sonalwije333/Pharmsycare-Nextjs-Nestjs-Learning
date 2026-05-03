@@ -1,8 +1,8 @@
-// feedbacks/feedbacks.service.ts
 import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -13,6 +13,9 @@ import { Feedback } from './entities/feedback.entity';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { paginate } from 'src/common/pagination/paginate';
 import { FeedbackPaginator } from './dto/feedback-response.dto';
+import { SortOrder, Permission } from '../common/enums/enums';
+import { FeedbackOrderByColumn, ModelType } from 'src/common/enums/model-type.enum';
+
 
 @Injectable()
 export class FeedbackService {
@@ -22,11 +25,9 @@ export class FeedbackService {
   ) {}
 
   async create(createFeedBackDto: CreateFeedBackDto): Promise<Feedback> {
-    // Check if both positive and negative are set (they should be mutually exclusive)
+    // Validate positive and negative are not both true
     if (createFeedBackDto.positive && createFeedBackDto.negative) {
-      throw new BadRequestException(
-        'Feedback cannot be both positive and negative',
-      );
+      throw new BadRequestException('Feedback cannot be both positive and negative');
     }
 
     // Check if user already gave feedback for this model
@@ -38,36 +39,35 @@ export class FeedbackService {
       },
     });
 
+    // Update existing feedback instead of creating new one
     if (existing) {
-      // Update existing feedback instead of creating new one
       existing.positive = createFeedBackDto.positive;
       existing.negative = createFeedBackDto.negative;
       return this.feedbackRepository.save(existing);
     }
 
-    const feedback = this.feedbackRepository.create({
-      ...createFeedBackDto,
-    });
-
+    // Create new feedback
+    const feedback = this.feedbackRepository.create(createFeedBackDto);
     return this.feedbackRepository.save(feedback);
   }
 
   async findAllFeedbacks({
     page = 1,
-    limit = 30,
+    limit = 15,
     model_type,
     model_id,
     user_id,
     positive,
     negative,
     search,
+    orderBy = FeedbackOrderByColumn.CREATED_AT,
+    sortedBy = SortOrder.DESC,
   }: GetFeedbacksDto): Promise<FeedbackPaginator> {
     const queryBuilder = this.feedbackRepository.createQueryBuilder('feedback');
 
+    // Apply filters
     if (model_type) {
-      queryBuilder.andWhere('feedback.model_type = :model_type', {
-        model_type,
-      });
+      queryBuilder.andWhere('feedback.model_type = :model_type', { model_type });
     }
 
     if (model_id) {
@@ -88,12 +88,31 @@ export class FeedbackService {
 
     if (search) {
       queryBuilder.andWhere(
-        'feedback.model_type LIKE :search OR feedback.model_id LIKE :search',
+        '(feedback.model_type LIKE :search OR feedback.model_id LIKE :search OR feedback.user_id LIKE :search)',
         { search: `%${search}%` },
       );
     }
 
-    queryBuilder.orderBy('feedback.created_at', 'DESC');
+    // Apply sorting
+    let orderColumn: string;
+    switch (orderBy) {
+      case FeedbackOrderByColumn.MODEL_TYPE:
+        orderColumn = 'feedback.model_type';
+        break;
+      case FeedbackOrderByColumn.MODEL_ID:
+        orderColumn = 'feedback.model_id';
+        break;
+      case FeedbackOrderByColumn.UPDATED_AT:
+        orderColumn = 'feedback.updated_at';
+        break;
+      default:
+        orderColumn = 'feedback.created_at';
+    }
+    
+    const orderDirection = sortedBy === SortOrder.ASC ? 'ASC' : 'DESC';
+    queryBuilder.orderBy(orderColumn, orderDirection);
+
+    // Apply pagination
     queryBuilder.skip((page - 1) * limit).take(limit);
 
     const [data, total] = await queryBuilder.getManyAndCount();
@@ -113,7 +132,7 @@ export class FeedbackService {
     };
   }
 
-  async findFeedback(id: number): Promise<Feedback> {
+  async findOne(id: number): Promise<Feedback> {
     const feedback = await this.feedbackRepository.findOne({
       where: { id },
     });
@@ -125,10 +144,7 @@ export class FeedbackService {
     return feedback;
   }
 
-  async getFeedbacksByModel(
-    model_type: string,
-    model_id: string,
-  ): Promise<Feedback[]> {
+  async getFeedbacksByModel(model_type: ModelType, model_id: string): Promise<Feedback[]> {
     return this.feedbackRepository.find({
       where: { model_type, model_id },
       order: { created_at: 'DESC' },
@@ -138,14 +154,23 @@ export class FeedbackService {
   async update(
     id: number,
     updateFeedBackDto: UpdateFeedBackDto,
+    user: any,
   ): Promise<Feedback> {
-    const feedback = await this.findFeedback(id);
+    const feedback = await this.findOne(id);
 
-    // Check if both positive and negative are set
+    // Check permissions
+    const userPermissions = user?.permissions || [];
+    const isAdmin = userPermissions.includes(Permission.SUPER_ADMIN);
+    const userId = user?.id?.toString() || user?._id?.toString();
+    const isOwner = feedback.user_id === userId;
+
+    if (!isAdmin && !isOwner) {
+      throw new ForbiddenException('You do not have permission to update this feedback');
+    }
+
+    // Validate positive and negative are not both true
     if (updateFeedBackDto.positive && updateFeedBackDto.negative) {
-      throw new BadRequestException(
-        'Feedback cannot be both positive and negative',
-      );
+      throw new BadRequestException('Feedback cannot be both positive and negative');
     }
 
     // Update fields
@@ -172,10 +197,21 @@ export class FeedbackService {
     return this.feedbackRepository.save(feedback);
   }
 
-  async delete(id: number): Promise<CoreMutationOutput> {
-    const feedback = await this.findFeedback(id);
+  async remove(id: number, user: any): Promise<CoreMutationOutput> {
+    const feedback = await this.findOne(id);
 
-    await this.feedbackRepository.remove(feedback);
+    // Check permissions
+    const userPermissions = user?.permissions || [];
+    const isAdmin = userPermissions.includes(Permission.SUPER_ADMIN);
+    const userId = user?.id?.toString() || user?._id?.toString();
+    const isOwner = feedback.user_id === userId;
+
+    if (!isAdmin && !isOwner) {
+      throw new ForbiddenException('You do not have permission to delete this feedback');
+    }
+
+    // Soft delete
+    await this.feedbackRepository.softDelete(id);
 
     return {
       success: true,
@@ -183,7 +219,7 @@ export class FeedbackService {
     };
   }
 
-  async getFeedbackStats(model_type: string, model_id: string): Promise<any> {
+  async getFeedbackStats(model_type: ModelType, model_id: string): Promise<any> {
     const feedbacks = await this.feedbackRepository.find({
       where: { model_type, model_id },
     });
@@ -196,8 +232,8 @@ export class FeedbackService {
       total,
       positive,
       negative,
-      positive_percentage: total ? (positive / total) * 100 : 0,
-      negative_percentage: total ? (negative / total) * 100 : 0,
+      positive_percentage: total ? Number(((positive / total) * 100).toFixed(2)) : 0,
+      negative_percentage: total ? Number(((negative / total) * 100).toFixed(2)) : 0,
     };
   }
 }
