@@ -1,4 +1,3 @@
-// faqs/faqs.controller.ts
 import {
   Body,
   Controller,
@@ -14,7 +13,6 @@ import {
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse,
   ApiBearerAuth,
   ApiBody,
   ApiParam,
@@ -35,7 +33,7 @@ import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
-import { Permission } from '../common/enums/enums';
+import { Permission, SortOrder } from '../common/enums/enums';
 import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('❓ FAQs')
@@ -53,13 +51,13 @@ export class FaqsController {
   })
   @ApiCreatedResponse({
     description: 'FAQ created successfully',
-    type: Faq,
+    type: () => Faq,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
   @ApiBody({ type: CreateFaqDto })
-  createFaq(@Body() createFaqDto: CreateFaqDto): Promise<Faq> {
+  create(@Body() createFaqDto: CreateFaqDto): Promise<Faq> {
     return this.faqService.create(createFaqDto);
   }
 
@@ -73,11 +71,8 @@ export class FaqsController {
     description: 'FAQs retrieved successfully',
     type: FaqPaginator,
   })
-  @ApiQuery({ name: 'faq_type', required: false })
-  @ApiQuery({ name: 'shop_id', required: false })
-  @ApiQuery({ name: 'search', required: false })
   findAll(@Query() query: GetFaqsDto): Promise<FaqPaginator> {
-    return this.faqService.findAllFaqs(query);
+    return this.faqService.findAll(query);
   }
 
   @Get(':param')
@@ -90,18 +85,18 @@ export class FaqsController {
     name: 'param',
     description: 'FAQ ID or slug',
     example: '1 or what-is-your-return-policy',
+    type: String,
   })
   @ApiOkResponse({
     description: 'FAQ retrieved successfully',
-    type: Faq,
+    type: () => Faq,
   })
   @ApiNotFoundResponse({ description: 'FAQ not found' })
-  @ApiQuery({ name: 'language', required: false })
-  getFaq(
+  findOne(
     @Param('param') param: string,
-    @Query('language') language: string,
+    @Query('language') language?: string,
   ): Promise<Faq> {
-    return this.faqService.getFaq(param, language);
+    return this.faqService.findOne(param, language);
   }
 
   @Put(':id')
@@ -110,10 +105,10 @@ export class FaqsController {
     summary: 'Update FAQ',
     description: 'Update FAQ information by ID (Admin/Store Owner only)',
   })
-  @ApiParam({ name: 'id', description: 'FAQ ID', type: Number })
+  @ApiParam({ name: 'id', description: 'FAQ ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'FAQ updated successfully',
-    type: Faq,
+    type: () => Faq,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiNotFoundResponse({ description: 'FAQ not found' })
@@ -129,17 +124,15 @@ export class FaqsController {
   @Roles(Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Delete FAQ',
-    description: 'Permanently delete a FAQ by ID (Admin only)',
+    description: 'Soft delete a FAQ by ID (Admin only)',
   })
-  @ApiParam({ name: 'id', description: 'FAQ ID', type: Number })
+  @ApiParam({ name: 'id', description: 'FAQ ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'FAQ deleted successfully',
     type: CoreMutationOutput,
   })
   @ApiNotFoundResponse({ description: 'FAQ not found' })
-  deleteFaq(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<CoreMutationOutput> {
+  remove(@Param('id', ParseIntPipe) id: number): Promise<CoreMutationOutput> {
     return this.faqService.remove(id);
   }
 }

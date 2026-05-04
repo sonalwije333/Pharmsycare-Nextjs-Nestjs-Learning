@@ -53,6 +53,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.6",
     "stripe": "^11.2.0",
+    "swagger": "^0.7.5",
     "typeorm": "^0.3.12"
   },
   "devDependencies": {

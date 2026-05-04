@@ -1,22 +1,18 @@
-// faqs/faqs.service.ts
 import {
   Injectable,
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
-import {
-  GetFaqsDto,
-  FaqPaginator,
-} from './dto/get-faqs.dto';
+import { Repository } from 'typeorm';
+import { GetFaqsDto, FaqPaginator } from './dto/get-faqs.dto';
 import { CreateFaqDto } from './dto/create-faq.dto';
 import { UpdateFaqDto } from './dto/update-faq.dto';
 import { Faq } from './entities/faq.entity';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { paginate } from 'src/common/pagination/paginate';
-import { SortOrder } from 'src/common/dto/generic-conditions.dto';
-import { QueryFaqsOrderByColumn } from '../common/enums/enums';
+import { SortOrder } from 'src/common/enums/enums';
+import { FaqOrderByColumn, FaqType } from 'src/common/enums/faq-type.enum';
 
 @Injectable()
 export class FaqsService {
@@ -26,10 +22,8 @@ export class FaqsService {
   ) {}
 
   async create(createFaqDto: CreateFaqDto): Promise<Faq> {
-    // Generate slug from title
     const slug = this.generateSlug(createFaqDto.faq_title);
 
-    // Check if FAQ with same slug exists
     const existing = await this.faqRepository.findOne({
       where: { slug },
     });
@@ -42,7 +36,7 @@ export class FaqsService {
       faq_title: createFaqDto.faq_title,
       faq_description: createFaqDto.faq_description,
       slug,
-      faq_type: createFaqDto.faq_type || 'global',
+      faq_type: createFaqDto.faq_type || FaqType.GLOBAL,
       issued_by: createFaqDto.issued_by,
       shop_id: createFaqDto.shop_id,
       user_id: createFaqDto.user_id,
@@ -54,7 +48,7 @@ export class FaqsService {
     return this.faqRepository.save(faq);
   }
 
-  async findAllFaqs({
+  async findAll({
     page = 1,
     limit = 10,
     search,
@@ -62,7 +56,7 @@ export class FaqsService {
     shop_id,
     issued_by,
     language,
-    orderBy = QueryFaqsOrderByColumn.CREATED_AT,
+    orderBy = FaqOrderByColumn.CREATED_AT,
     sortedBy = SortOrder.DESC,
   }: GetFaqsDto): Promise<FaqPaginator> {
     const queryBuilder = this.faqRepository.createQueryBuilder('faq');
@@ -93,15 +87,20 @@ export class FaqsService {
       );
     }
 
-    // Apply ordering
-    const orderColumn =
-      orderBy === QueryFaqsOrderByColumn.FAQ_TITLE
-        ? 'faq.faq_title'
-        : orderBy === QueryFaqsOrderByColumn.FAQ_DESCRIPTION
-        ? 'faq.faq_description'
-        : orderBy === QueryFaqsOrderByColumn.UPDATED_AT
-        ? 'faq.updated_at'
-        : 'faq.created_at';
+    let orderColumn: string;
+    switch (orderBy) {
+      case FaqOrderByColumn.FAQ_TITLE:
+        orderColumn = 'faq.faq_title';
+        break;
+      case FaqOrderByColumn.FAQ_DESCRIPTION:
+        orderColumn = 'faq.faq_description';
+        break;
+      case FaqOrderByColumn.UPDATED_AT:
+        orderColumn = 'faq.updated_at';
+        break;
+      default:
+        orderColumn = 'faq.created_at';
+    }
 
     const orderDirection = sortedBy === SortOrder.ASC ? 'ASC' : 'DESC';
     queryBuilder.orderBy(orderColumn, orderDirection);
@@ -125,7 +124,7 @@ export class FaqsService {
     };
   }
 
-  async getFaq(param: string, language?: string): Promise<Faq> {
+  async findOne(param: string, language?: string): Promise<Faq> {
     const isId = !isNaN(Number(param));
 
     const queryBuilder = this.faqRepository
@@ -162,7 +161,6 @@ export class FaqsService {
       throw new NotFoundException(`FAQ with ID ${id} not found`);
     }
 
-    // Update fields
     if (updateFaqDto.faq_title) {
       faq.faq_title = updateFaqDto.faq_title;
       faq.slug = this.generateSlug(updateFaqDto.faq_title);
@@ -210,7 +208,6 @@ export class FaqsService {
       throw new NotFoundException(`FAQ with ID ${id} not found`);
     }
 
-    // Soft delete
     await this.faqRepository.softDelete(id);
 
     return {
