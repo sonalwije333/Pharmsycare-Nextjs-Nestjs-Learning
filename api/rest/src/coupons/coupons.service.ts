@@ -1,4 +1,3 @@
-// coupons/coupons.service.ts
 import {
   Injectable,
   NotFoundException,
@@ -9,16 +8,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCouponDto } from './dto/create-coupon.dto';
 import { UpdateCouponDto } from './dto/update-coupon.dto';
-import {
-  GetCouponsDto,
-  CouponPaginator,
-} from './dto/get-coupons.dto';
+import { GetCouponsDto, CouponPaginator } from './dto/get-coupons.dto';
 import { VerifyCouponResponse } from './dto/verify-coupon.dto';
 import { Coupon } from './entities/coupon.entity';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { paginate } from 'src/common/pagination/paginate';
-import { SortOrder } from 'src/common/dto/generic-conditions.dto';
-import { QueryCouponsOrderByColumn } from '../common/enums/enums';
+import { SortOrder } from 'src/common/enums/enums';
+import { CouponOrderByColumn } from 'src/common/enums/coupon-type.enum';
+import { Attachment } from 'src/common/entities/attachment.entity';
+
 
 @Injectable()
 export class CouponsService {
@@ -28,7 +26,6 @@ export class CouponsService {
   ) {}
 
   async create(createCouponDto: CreateCouponDto): Promise<Coupon> {
-    // Check if coupon with same code exists
     const existing = await this.couponRepository.findOne({
       where: { code: createCouponDto.code },
     });
@@ -37,18 +34,18 @@ export class CouponsService {
       throw new ConflictException('Coupon with this code already exists');
     }
 
-    // Create coupon data with proper types
     const couponData: Partial<Coupon> = {
       code: createCouponDto.code,
       type: createCouponDto.type,
       description: createCouponDto.description,
       amount: createCouponDto.amount,
       minimum_cart_amount: createCouponDto.minimum_cart_amount || 0,
-      image: createCouponDto.image,
+      image: this.normalizeAttachment(createCouponDto.image),
       active_from: createCouponDto.active_from,
       expire_at: createCouponDto.expire_at,
       target: createCouponDto.target || 0,
       shop_id: createCouponDto.shop_id,
+      user_id: createCouponDto.user_id,
       language: createCouponDto.language || 'en',
       translated_languages: [createCouponDto.language || 'en'],
       is_valid: true,
@@ -59,13 +56,14 @@ export class CouponsService {
     return this.couponRepository.save(coupon);
   }
 
-  async getCoupons({
+  async findAll({
     page = 1,
     limit = 30,
     search,
     shop_id,
     language,
-    orderBy = QueryCouponsOrderByColumn.CREATED_AT,
+    is_approve,
+    orderBy = CouponOrderByColumn.CREATED_AT,
     sortedBy = SortOrder.DESC,
   }: GetCouponsDto): Promise<CouponPaginator> {
     const queryBuilder = this.couponRepository.createQueryBuilder('coupon');
@@ -74,12 +72,14 @@ export class CouponsService {
       queryBuilder.andWhere('coupon.shop_id = :shop_id', { shop_id });
     }
 
+    if (is_approve !== undefined) {
+      queryBuilder.andWhere('coupon.is_approve = :is_approve', { is_approve });
+    }
+
     if (search) {
       queryBuilder.andWhere(
         'coupon.code LIKE :search OR coupon.description LIKE :search',
-        {
-          search: `%${search}%`,
-        },
+        { search: `%${search}%` },
       );
     }
 
@@ -90,21 +90,29 @@ export class CouponsService {
       );
     }
 
-    // Apply ordering
-    const orderColumn =
-      orderBy === QueryCouponsOrderByColumn.CODE
-        ? 'coupon.code'
-        : orderBy === QueryCouponsOrderByColumn.AMOUNT
-        ? 'coupon.amount'
-        : orderBy === QueryCouponsOrderByColumn.MINIMUM_CART_AMOUNT
-        ? 'coupon.minimum_cart_amount'
-        : orderBy === QueryCouponsOrderByColumn.EXPIRE_AT
-        ? 'coupon.expire_at'
-        : orderBy === QueryCouponsOrderByColumn.IS_APPROVE
-        ? 'coupon.is_approve'
-        : orderBy === QueryCouponsOrderByColumn.TYPE
-        ? 'coupon.type'
-        : 'coupon.created_at';
+    let orderColumn: string;
+    switch (orderBy) {
+      case CouponOrderByColumn.CODE:
+        orderColumn = 'coupon.code';
+        break;
+      case CouponOrderByColumn.AMOUNT:
+        orderColumn = 'coupon.amount';
+        break;
+      case CouponOrderByColumn.MINIMUM_CART_AMOUNT:
+        orderColumn = 'coupon.minimum_cart_amount';
+        break;
+      case CouponOrderByColumn.EXPIRE_AT:
+        orderColumn = 'coupon.expire_at';
+        break;
+      case CouponOrderByColumn.IS_APPROVE:
+        orderColumn = 'coupon.is_approve';
+        break;
+      case CouponOrderByColumn.TYPE:
+        orderColumn = 'coupon.type';
+        break;
+      default:
+        orderColumn = 'coupon.created_at';
+    }
 
     const orderDirection = sortedBy === SortOrder.ASC ? 'ASC' : 'DESC';
     queryBuilder.orderBy(orderColumn, orderDirection);
@@ -128,7 +136,7 @@ export class CouponsService {
     };
   }
 
-  async getCoupon(param: string, language?: string): Promise<Coupon> {
+  async findOne(param: string, language?: string): Promise<Coupon> {
     const isId = !isNaN(Number(param));
 
     const queryBuilder = this.couponRepository
@@ -165,12 +173,17 @@ export class CouponsService {
       throw new NotFoundException(`Coupon with ID ${id} not found`);
     }
 
-    // Update fields
-    if (updateCouponDto.code) {
+    if (updateCouponDto.code && updateCouponDto.code !== coupon.code) {
+      const existing = await this.couponRepository.findOne({
+        where: { code: updateCouponDto.code },
+      });
+      if (existing) {
+        throw new ConflictException('Coupon with this code already exists');
+      }
       coupon.code = updateCouponDto.code;
     }
 
-    if (updateCouponDto.type) {
+    if (updateCouponDto.type !== undefined) {
       coupon.type = updateCouponDto.type;
     }
 
@@ -187,7 +200,7 @@ export class CouponsService {
     }
 
     if (updateCouponDto.image !== undefined) {
-      coupon.image = updateCouponDto.image;
+      coupon.image = this.normalizeAttachment(updateCouponDto.image);
     }
 
     if (updateCouponDto.active_from) {
@@ -199,11 +212,15 @@ export class CouponsService {
     }
 
     if (updateCouponDto.target !== undefined) {
-      coupon.target = updateCouponDto.target; // Now both are numbers
+      coupon.target = updateCouponDto.target;
     }
 
     if (updateCouponDto.shop_id !== undefined) {
       coupon.shop_id = updateCouponDto.shop_id;
+    }
+
+    if (updateCouponDto.user_id !== undefined) {
+      coupon.user_id = updateCouponDto.user_id;
     }
 
     if (updateCouponDto.language) {
@@ -228,7 +245,7 @@ export class CouponsService {
       throw new NotFoundException(`Coupon with ID ${id} not found`);
     }
 
-    await this.couponRepository.remove(coupon);
+    await this.couponRepository.softDelete(id);
 
     return {
       success: true,
@@ -236,7 +253,7 @@ export class CouponsService {
     };
   }
 
-  async verifyCoupon(code: string): Promise<VerifyCouponResponse> {
+  async verify(code: string): Promise<VerifyCouponResponse> {
     const coupon = await this.couponRepository.findOne({
       where: { code },
     });
@@ -248,7 +265,6 @@ export class CouponsService {
       };
     }
 
-    // Check if coupon is approved
     if (coupon.is_approve === false) {
       return {
         is_valid: false,
@@ -256,7 +272,6 @@ export class CouponsService {
       };
     }
 
-    // Check if coupon is valid
     if (!coupon.is_valid) {
       return {
         is_valid: false,
@@ -264,7 +279,6 @@ export class CouponsService {
       };
     }
 
-    // Check expiration
     const now = new Date();
     const activeFrom = new Date(coupon.active_from);
     const expireAt = new Date(coupon.expire_at);
@@ -282,7 +296,7 @@ export class CouponsService {
     };
   }
 
-  async approveCoupon(id: number): Promise<Coupon> {
+  async approve(id: number): Promise<Coupon> {
     const coupon = await this.couponRepository.findOne({
       where: { id },
     });
@@ -295,7 +309,7 @@ export class CouponsService {
     return this.couponRepository.save(coupon);
   }
 
-  async disapproveCoupon(id: number): Promise<Coupon> {
+  async disapprove(id: number): Promise<Coupon> {
     const coupon = await this.couponRepository.findOne({
       where: { id },
     });
@@ -306,5 +320,15 @@ export class CouponsService {
 
     coupon.is_approve = false;
     return this.couponRepository.save(coupon);
+  }
+
+  private normalizeAttachment(
+    image?: Record<string, string>,
+  ): Attachment | undefined {
+    if (!image) {
+      return undefined;
+    }
+
+    return image as unknown as Attachment;
   }
 }

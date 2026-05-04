@@ -1,4 +1,3 @@
-// coupons/coupons.controller.ts
 import {
   Controller,
   Get,
@@ -16,7 +15,6 @@ import {
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse,
   ApiBearerAuth,
   ApiBody,
   ApiParam,
@@ -40,10 +38,10 @@ import { Coupon } from './entities/coupon.entity';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Permission } from '../common/enums/enums';;
-import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
+import { Permission, SortOrder } from '../common/enums/enums';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Public } from '../common/decorators/public.decorator';
+
 
 @ApiTags('🎫 Coupons')
 @Controller('coupons')
@@ -60,13 +58,13 @@ export class CouponsController {
   })
   @ApiCreatedResponse({
     description: 'Coupon created successfully',
-    type: Coupon,
+    type: () => Coupon,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
   @ApiBody({ type: CreateCouponDto })
-  createCoupon(@Body() createCouponDto: CreateCouponDto): Promise<Coupon> {
+  create(@Body() createCouponDto: CreateCouponDto): Promise<Coupon> {
     return this.couponsService.create(createCouponDto);
   }
 
@@ -80,10 +78,8 @@ export class CouponsController {
     description: 'Coupons retrieved successfully',
     type: CouponPaginator,
   })
-  @ApiQuery({ name: 'shop_id', required: false })
-  @ApiQuery({ name: 'search', required: false })
-  getCoupons(@Query() query: GetCouponsDto): Promise<CouponPaginator> {
-    return this.couponsService.getCoupons(query);
+  findAll(@Query() query: GetCouponsDto): Promise<CouponPaginator> {
+    return this.couponsService.findAll(query);
   }
 
   @Get(':param')
@@ -96,18 +92,18 @@ export class CouponsController {
     name: 'param',
     description: 'Coupon code or ID',
     example: '5OFF',
+    type: String,
   })
   @ApiOkResponse({
     description: 'Coupon retrieved successfully',
-    type: Coupon,
+    type: () => Coupon,
   })
   @ApiNotFoundResponse({ description: 'Coupon not found' })
-  @ApiQuery({ name: 'language', required: false })
-  getCoupon(
+  findOne(
     @Param('param') param: string,
-    @Query('language') language: string,
+    @Query('language') language?: string,
   ): Promise<Coupon> {
-    return this.couponsService.getCoupon(param, language);
+    return this.couponsService.findOne(param, language);
   }
 
   @Post('verify')
@@ -122,8 +118,8 @@ export class CouponsController {
     type: VerifyCouponResponse,
   })
   @ApiBody({ type: VerifyCouponInput })
-  verifyCoupon(@Body('code') code: string): Promise<VerifyCouponResponse> {
-    return this.couponsService.verifyCoupon(code);
+  verify(@Body('code') code: string): Promise<VerifyCouponResponse> {
+    return this.couponsService.verify(code);
   }
 
   @Put(':id')
@@ -132,15 +128,15 @@ export class CouponsController {
     summary: 'Update coupon',
     description: 'Update coupon information by ID',
   })
-  @ApiParam({ name: 'id', description: 'Coupon ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Coupon ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Coupon updated successfully',
-    type: Coupon,
+    type: () => Coupon,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiNotFoundResponse({ description: 'Coupon not found' })
   @ApiBody({ type: UpdateCouponDto })
-  updateCoupon(
+  update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCouponDto: UpdateCouponDto,
   ): Promise<Coupon> {
@@ -151,77 +147,55 @@ export class CouponsController {
   @Roles(Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Delete coupon',
-    description: 'Permanently delete a coupon by ID (Admin only)',
+    description: 'Soft delete a coupon by ID (Admin only)',
   })
-  @ApiParam({ name: 'id', description: 'Coupon ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Coupon ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Coupon deleted successfully',
     type: CoreMutationOutput,
   })
   @ApiNotFoundResponse({ description: 'Coupon not found' })
-  deleteCoupon(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<CoreMutationOutput> {
+  remove(@Param('id', ParseIntPipe) id: number): Promise<CoreMutationOutput> {
     return this.couponsService.remove(id);
   }
 }
 
-@ApiTags('🎫 Coupons - Approval')
-@Controller('approve-coupon')
+@ApiTags('🎫 Coupons')
+@Controller('coupons')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiBearerAuth('JWT-auth')
 export class ApproveCouponController {
   constructor(private couponsService: CouponsService) {}
 
-  @Post()
+  @Post('approve/:id')
   @Roles(Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Approve coupon',
     description: 'Approve a coupon (Admin only)',
   })
+  @ApiParam({ name: 'id', description: 'Coupon ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Coupon approved successfully',
-    type: Coupon,
+    type: () => Coupon,
   })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        id: { type: 'number', example: 1 },
-      },
-    },
-  })
-  async approveCoupon(@Body('id') id: number): Promise<Coupon> {
-    return this.couponsService.approveCoupon(id);
+  @ApiNotFoundResponse({ description: 'Coupon not found' })
+  async approve(@Param('id', ParseIntPipe) id: number): Promise<Coupon> {
+    return this.couponsService.approve(id);
   }
-}
 
-@ApiTags('🎫 Coupons - Approval')
-@Controller('disapprove-coupon')
-@UseGuards(JwtAuthGuard, RolesGuard)
-@ApiBearerAuth('JWT-auth')
-export class DisapproveCouponController {
-  constructor(private couponsService: CouponsService) {}
-
-  @Post()
+  @Post('disapprove/:id')
   @Roles(Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Disapprove coupon',
     description: 'Disapprove a coupon (Admin only)',
   })
+  @ApiParam({ name: 'id', description: 'Coupon ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Coupon disapproved successfully',
-    type: Coupon,
+    type: () => Coupon,
   })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        id: { type: 'number', example: 1 },
-      },
-    },
-  })
-  async disapproveCoupon(@Body('id') id: number): Promise<Coupon> {
-    return this.couponsService.disapproveCoupon(id);
+  @ApiNotFoundResponse({ description: 'Coupon not found' })
+  async disapprove(@Param('id', ParseIntPipe) id: number): Promise<Coupon> {
+    return this.couponsService.disapprove(id);
   }
 }
