@@ -1,4 +1,3 @@
-// conversations/conversations.controller.ts
 import {
   Body,
   Controller,
@@ -14,7 +13,6 @@ import {
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse,
   ApiBearerAuth,
   ApiBody,
   ApiParam,
@@ -39,7 +37,9 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Permission } from '../common/enums/enums';
 import { CurrentUser } from 'src/auth/decorators/current-user.decorator';
-import {Roles} from "../common/decorators/roles.decorator";
+import { Roles } from "../common/decorators/roles.decorator";
+
+import { SortOrder } from '../common/enums/enums';
 
 @ApiTags('💬 Conversations')
 @Controller('conversations')
@@ -56,16 +56,16 @@ export class ConversationsController {
   })
   @ApiCreatedResponse({
     description: 'Conversation created successfully',
-    type: Conversation,
+    type: () => Conversation,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
+  @ApiForbiddenResponse({ description: 'Insufficient permissions' })
   @ApiBody({ type: CreateConversationDto })
-  createConversation(
+  create(
     @Body() createConversationDto: CreateConversationDto,
     @CurrentUser() user: any,
   ): Promise<Conversation> {
-    // If user is not admin, use their own ID
     if (!user?.permissions?.includes(Permission.SUPER_ADMIN)) {
       createConversationDto.user_id = user.id;
     }
@@ -73,7 +73,7 @@ export class ConversationsController {
   }
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Get all conversations',
     description: 'Retrieve paginated list of all conversations',
@@ -84,11 +84,10 @@ export class ConversationsController {
   })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  async getConversations(
+  findAll(
     @Query() query: GetConversationsDto,
     @CurrentUser() user: any,
   ): Promise<ConversationPaginator> {
-    // Filter by user if not admin
     if (!user?.permissions?.includes(Permission.SUPER_ADMIN)) {
       if (user?.permissions?.includes(Permission.STORE_OWNER)) {
         query.shop_id = user.shop_id;
@@ -96,26 +95,27 @@ export class ConversationsController {
         query.user_id = user.id;
       }
     }
-    return this.conversationsService.getAllConversations(query);
+    return this.conversationsService.findAll(query);
   }
 
-  @Get(':param')
+  @Get(':id')
   @Roles(Permission.CUSTOMER, Permission.STORE_OWNER, Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Get conversation by ID',
     description: 'Retrieve conversation details by ID',
   })
-  @ApiParam({ name: 'param', description: 'Conversation ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Conversation ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Conversation retrieved successfully',
-    type: Conversation,
+    type: () => Conversation,
   })
   @ApiNotFoundResponse({ description: 'Conversation not found' })
-  getConversation(
-    @Param('param', ParseIntPipe) param: number,
+  @ApiForbiddenResponse({ description: 'Access denied to this conversation' })
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
     @CurrentUser() user: any,
   ): Promise<Conversation> {
-    return this.conversationsService.getConversation(param, user);
+    return this.conversationsService.findOne(id, user);
   }
 
   @Put(':id')
@@ -124,10 +124,10 @@ export class ConversationsController {
     summary: 'Update conversation',
     description: 'Update conversation information by ID',
   })
-  @ApiParam({ name: 'id', description: 'Conversation ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Conversation ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Conversation updated successfully',
-    type: Conversation,
+    type: () => Conversation,
   })
   @ApiNotFoundResponse({ description: 'Conversation not found' })
   @ApiBody({ type: UpdateConversationDto })
@@ -142,9 +142,9 @@ export class ConversationsController {
   @Roles(Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Delete conversation',
-    description: 'Permanently delete a conversation by ID (Admin only)',
+    description: 'Soft delete a conversation by ID (Admin only)',
   })
-  @ApiParam({ name: 'id', description: 'Conversation ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Conversation ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Conversation deleted successfully',
     type: CoreMutationOutput,
@@ -160,11 +160,13 @@ export class ConversationsController {
     summary: 'Mark conversation as read',
     description: 'Mark conversation as read for the current user',
   })
-  @ApiParam({ name: 'id', description: 'Conversation ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Conversation ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Conversation marked as read',
-    type: Conversation,
+    type: () => Conversation,
   })
+  @ApiNotFoundResponse({ description: 'Conversation not found' })
+  @ApiForbiddenResponse({ description: 'Access denied to this conversation' })
   markAsRead(
     @Param('id', ParseIntPipe) id: number,
     @CurrentUser() user: any,

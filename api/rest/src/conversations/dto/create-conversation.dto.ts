@@ -1,20 +1,32 @@
-// conversations/dto/create-conversation.dto.ts
-import { ApiProperty, PickType } from '@nestjs/swagger';
-import { IsNumber, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { Conversation } from '../entities/conversation.entity';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsNotEmpty, IsOptional, IsString, Min } from 'class-validator';
 
-export class CreateConversationDto extends PickType(Conversation, [
-  'shop_id',
-] as const) {
-  @ApiProperty({ description: 'User ID', example: 1 })
+export class CreateConversationDto {
+  @ApiProperty({ 
+    description: 'User ID', 
+    example: 1,
+    type: Number,
+  })
   @IsNumber()
   @IsNotEmpty()
+  @Min(1)
   user_id: number;
+
+  @ApiProperty({ 
+    description: 'Shop ID', 
+    example: 7,
+    type: Number,
+  })
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(1)
+  shop_id: number;
 
   @ApiProperty({
     description: 'Initial message',
     example: 'Hello, I have a question',
     required: false,
+    type: String,
   })
   @IsString()
   @IsOptional()

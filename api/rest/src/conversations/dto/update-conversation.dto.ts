@@ -1,4 +1,3 @@
-// conversations/dto/update-conversation.dto.ts
 import { PartialType } from '@nestjs/swagger';
 import { CreateConversationDto } from './create-conversation.dto';
 

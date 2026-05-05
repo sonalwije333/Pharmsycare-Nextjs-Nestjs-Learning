@@ -1,12 +1,11 @@
-// conversations/conversations.service.ts
 import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
-import { plainToClass } from 'class-transformer';
+import { Repository } from 'typeorm';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import {
@@ -17,7 +16,9 @@ import { Conversation } from './entities/conversation.entity';
 import { LatestMessage } from './entities/latest-message.entity';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { paginate } from 'src/common/pagination/paginate';
-import { SortOrder } from 'src/common/dto/generic-conditions.dto';
+import { SortOrder, Permission } from '../common/enums/enums';
+import { ConversationOrderByColumn } from 'src/common/enums/conversation-order-by.enum';
+
 
 @Injectable()
 export class ConversationsService {
@@ -28,10 +29,7 @@ export class ConversationsService {
     private latestMessageRepository: Repository<LatestMessage>,
   ) {}
 
-  async create(
-    createConversationDto: CreateConversationDto,
-  ): Promise<Conversation> {
-    // Check if conversation already exists between user and shop
+  async create(createConversationDto: CreateConversationDto): Promise<Conversation> {
     const existing = await this.conversationRepository.findOne({
       where: {
         user_id: createConversationDto.user_id.toString(),
@@ -43,18 +41,14 @@ export class ConversationsService {
       return existing;
     }
 
-    // Create conversation
     const conversation = this.conversationRepository.create({
       user_id: createConversationDto.user_id.toString(),
       shop_id: createConversationDto.shop_id,
       unseen: true,
     });
 
-    const savedConversation = await this.conversationRepository.save(
-      conversation,
-    );
+    const savedConversation = await this.conversationRepository.save(conversation);
 
-    // If initial message provided, create latest message
     if (createConversationDto.message) {
       const latestMessage = this.latestMessageRepository.create({
         body: createConversationDto.message,
@@ -62,30 +56,29 @@ export class ConversationsService {
         user_id: createConversationDto.user_id.toString(),
       });
 
-      const savedMessage = await this.latestMessageRepository.save(
-        latestMessage,
-      );
+      const savedMessage = await this.latestMessageRepository.save(latestMessage);
 
       savedConversation.latest_message = savedMessage;
       savedConversation.latest_message_id = savedMessage.id;
       await this.conversationRepository.save(savedConversation);
     }
 
-    return this.findOne(savedConversation.id);
+    return this.findOneById(savedConversation.id);
   }
 
-  async getAllConversations({
+  async findAll({
     page = 1,
     limit = 30,
     search,
     user_id,
     shop_id,
-    sortedBy = SortOrder.DESC, // Fix: Use enum instead of string literal
+    unseen,
+    orderBy = ConversationOrderByColumn.UPDATED_AT,
+    sortedBy = SortOrder.DESC,
   }: GetConversationsDto): Promise<ConversationPaginator> {
     const queryBuilder = this.conversationRepository
       .createQueryBuilder('conversation')
       .leftJoinAndSelect('conversation.user', 'user')
-      .leftJoinAndSelect('conversation.shop', 'shop')
       .leftJoinAndSelect('conversation.latest_message', 'latest_message');
 
     if (user_id) {
@@ -98,16 +91,38 @@ export class ConversationsService {
       queryBuilder.andWhere('conversation.shop_id = :shop_id', { shop_id });
     }
 
+    if (unseen !== undefined) {
+      queryBuilder.andWhere('conversation.unseen = :unseen', { unseen });
+    }
+
     if (search) {
       queryBuilder.andWhere(
-        '(user.name LIKE :search OR shop.name LIKE :search OR latest_message.body LIKE :search)',
+        '(user.name LIKE :search OR latest_message.body LIKE :search)',
         { search: `%${search}%` },
       );
     }
 
-    // Fix: Convert SortOrder enum to string literal for TypeORM
+    let orderColumn: string;
+    switch (orderBy) {
+      case ConversationOrderByColumn.USER_ID:
+        orderColumn = 'conversation.user_id';
+        break;
+      case ConversationOrderByColumn.SHOP_ID:
+        orderColumn = 'conversation.shop_id';
+        break;
+      case ConversationOrderByColumn.UNSEEN:
+        orderColumn = 'conversation.unseen';
+        break;
+      case ConversationOrderByColumn.CREATED_AT:
+        orderColumn = 'conversation.created_at';
+        break;
+      default:
+        orderColumn = 'conversation.updated_at';
+    }
+
     const orderDirection = sortedBy === SortOrder.ASC ? 'ASC' : 'DESC';
-    queryBuilder.orderBy('conversation.updated_at', orderDirection);
+    queryBuilder.orderBy(orderColumn, orderDirection);
+
     queryBuilder.skip((page - 1) * limit).take(limit);
 
     const [data, total] = await queryBuilder.getManyAndCount();
@@ -127,28 +142,25 @@ export class ConversationsService {
     };
   }
 
-  async getConversation(param: number, user?: any): Promise<Conversation> {
-    const conversation = await this.findOne(param);
+  async findOne(id: number, user?: any): Promise<Conversation> {
+    const conversation = await this.findOneById(id);
 
-    // Check permissions
-    if (user && !user?.permissions?.includes('super_admin')) {
-      if (
-        conversation.user_id !== user.id.toString() &&
-        conversation.shop_id !== user.shop_id
-      ) {
-        throw new BadRequestException(
-          'You do not have permission to view this conversation',
-        );
+    if (user && !user?.permissions?.includes(Permission.SUPER_ADMIN)) {
+      const userId = user.id?.toString();
+      const shopId = user.shop_id;
+      
+      if (conversation.user_id !== userId && conversation.shop_id !== shopId) {
+        throw new ForbiddenException('You do not have permission to view this conversation');
       }
     }
 
     return conversation;
   }
 
-  async findOne(id: number): Promise<Conversation> {
+  async findOneById(id: number): Promise<Conversation> {
     const conversation = await this.conversationRepository.findOne({
       where: { id },
-      relations: ['user', 'shop', 'latest_message'],
+      relations: ['user', 'latest_message'],
     });
 
     if (!conversation) {
@@ -158,28 +170,28 @@ export class ConversationsService {
     return conversation;
   }
 
-  async update(
-    id: number,
-    updateConversationDto: UpdateConversationDto,
-  ): Promise<Conversation> {
-    const conversation = await this.findOne(id);
+  async update(id: number, updateConversationDto: UpdateConversationDto): Promise<Conversation> {
+    const conversation = await this.findOneById(id);
 
     if (updateConversationDto.shop_id !== undefined) {
       conversation.shop_id = updateConversationDto.shop_id;
+    }
+
+    if (updateConversationDto.user_id !== undefined) {
+      conversation.user_id = updateConversationDto.user_id.toString();
     }
 
     return this.conversationRepository.save(conversation);
   }
 
   async remove(id: number): Promise<CoreMutationOutput> {
-    const conversation = await this.findOne(id);
+    const conversation = await this.findOneById(id);
 
-    // Delete associated latest message
     if (conversation.latest_message) {
-      await this.latestMessageRepository.remove(conversation.latest_message);
+      await this.latestMessageRepository.softDelete(conversation.latest_message.id);
     }
 
-    await this.conversationRepository.remove(conversation);
+    await this.conversationRepository.softDelete(id);
 
     return {
       success: true,
@@ -188,20 +200,17 @@ export class ConversationsService {
   }
 
   async markAsRead(id: number, user: any): Promise<Conversation> {
-    const conversation = await this.findOne(id);
+    const conversation = await this.findOneById(id);
 
-    // Only mark as read if user is part of the conversation
-    if (
-      conversation.user_id === user.id.toString() ||
-      conversation.shop_id === user.shop_id
-    ) {
+    const userId = user.id?.toString();
+    const shopId = user.shop_id;
+
+    if (conversation.user_id === userId || conversation.shop_id === shopId) {
       conversation.unseen = false;
       return this.conversationRepository.save(conversation);
     }
 
-    throw new BadRequestException(
-      'You do not have permission to mark this conversation as read',
-    );
+    throw new ForbiddenException('You do not have permission to mark this conversation as read');
   }
 
   async addMessage(
@@ -209,9 +218,8 @@ export class ConversationsService {
     userId: number,
     message: string,
   ): Promise<Conversation> {
-    const conversation = await this.findOne(conversationId);
+    const conversation = await this.findOneById(conversationId);
 
-    // Create new latest message
     const latestMessage = this.latestMessageRepository.create({
       body: message,
       conversation_id: conversationId.toString(),
@@ -220,7 +228,6 @@ export class ConversationsService {
 
     const savedMessage = await this.latestMessageRepository.save(latestMessage);
 
-    // Update conversation
     conversation.latest_message = savedMessage;
     conversation.latest_message_id = savedMessage.id;
     conversation.unseen = true;
