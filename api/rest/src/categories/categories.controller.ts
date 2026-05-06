@@ -1,4 +1,3 @@
-// categories/categories.controller.ts
 import {
   Controller,
   Get,
@@ -14,7 +13,6 @@ import {
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse,
   ApiBearerAuth,
   ApiBody,
   ApiParam,
@@ -34,9 +32,10 @@ import { Category } from './entities/category.entity';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Permission } from '../common/enums/enums';
+import { Permission, SortOrder } from '../common/enums/enums';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Public } from '../common/decorators/public.decorator';
+
 
 @ApiTags('📁 Categories')
 @Controller('categories')
@@ -53,7 +52,7 @@ export class CategoriesController {
   })
   @ApiCreatedResponse({
     description: 'Category created successfully',
-    type: Category,
+    type: () => Category,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
@@ -73,11 +72,8 @@ export class CategoriesController {
     description: 'Categories retrieved successfully',
     type: CategoryPaginator,
   })
-  @ApiQuery({ name: 'search', required: false })
-  @ApiQuery({ name: 'parent', required: false })
-  @ApiQuery({ name: 'language', required: false })
   findAll(@Query() query: GetCategoriesDto): Promise<CategoryPaginator> {
-    return this.categoriesService.getCategories(query);
+    return this.categoriesService.findAll(query);
   }
 
   @Get(':param')
@@ -90,18 +86,18 @@ export class CategoriesController {
     name: 'param',
     description: 'Category ID or slug',
     example: '1 or fruits-vegetables',
+    type: String,
   })
   @ApiOkResponse({
     description: 'Category retrieved successfully',
-    type: Category,
+    type: () => Category,
   })
   @ApiNotFoundResponse({ description: 'Category not found' })
-  @ApiQuery({ name: 'language', required: false })
   findOne(
     @Param('param') param: string,
-    @Query('language') language: string,
+    @Query('language') language?: string,
   ): Promise<Category> {
-    return this.categoriesService.getCategory(param, language);
+    return this.categoriesService.findOne(param, language);
   }
 
   @Put(':id')
@@ -110,10 +106,10 @@ export class CategoriesController {
     summary: 'Update category',
     description: 'Update category information by ID (Admin/Store Owner only)',
   })
-  @ApiParam({ name: 'id', description: 'Category ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Category ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Category updated successfully',
-    type: Category,
+    type: () => Category,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiNotFoundResponse({ description: 'Category not found' })
@@ -129,14 +125,15 @@ export class CategoriesController {
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
   @ApiOperation({
     summary: 'Delete category',
-    description: 'Permanently delete a category by ID (Admin/Store Owner only)',
+    description: 'Soft delete a category by ID (Admin/Store Owner only)',
   })
-  @ApiParam({ name: 'id', description: 'Category ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Category ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Category deleted successfully',
     type: CoreMutationOutput,
   })
   @ApiNotFoundResponse({ description: 'Category not found' })
+  @ApiForbiddenResponse({ description: 'Cannot delete category with subcategories' })
   remove(@Param('id', ParseIntPipe) id: number): Promise<CoreMutationOutput> {
     return this.categoriesService.remove(id);
   }

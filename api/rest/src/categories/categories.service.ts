@@ -14,8 +14,9 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { paginate } from 'src/common/pagination/paginate';
-import { SortOrder } from 'src/common/dto/generic-conditions.dto';
-import { QueryCategoriesOrderByColumn } from '../common/enums/enums';
+import { SortOrder } from 'src/common/enums/enums';
+import { CategoryOrderByColumn } from 'src/common/enums/category-type.enum';
+
 
 @Injectable()
 export class CategoriesService {
@@ -25,10 +26,8 @@ export class CategoriesService {
   ) {}
 
   async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
-    // Generate slug from name
     const slug = this.generateSlug(createCategoryDto.name);
 
-    // Check if category with same slug exists
     const existing = await this.categoryRepository.findOne({
       where: { slug },
     });
@@ -37,58 +36,52 @@ export class CategoriesService {
       throw new ConflictException('Category with this name already exists');
     }
 
-    // Create a new category instance
-    const category = new Category();
+    const categoryData: Partial<Category> = {
+      name: createCategoryDto.name,
+      slug: slug,
+      details: createCategoryDto.details,
+      icon: createCategoryDto.icon,
+      image: createCategoryDto.image,
+      type_id: createCategoryDto.type_id,
+      language: createCategoryDto.language || 'en',
+      translated_languages: [createCategoryDto.language || 'en'],
+    };
 
-    // Manually assign all properties
-    category.name = createCategoryDto.name;
-    category.slug = slug;
-    category.details = createCategoryDto.details;
-    category.icon = createCategoryDto.icon;
-    category.image = createCategoryDto.image;
-    category.type_id = createCategoryDto.type_id;
-    category.language = createCategoryDto.language || 'en';
-    category.translated_languages = [createCategoryDto.language || 'en'];
-
-    // Set parent_id directly if provided
     if (createCategoryDto.parent) {
-      category.parent_id = createCategoryDto.parent;
+      categoryData.parent_id = createCategoryDto.parent;
     }
 
+    const category = this.categoryRepository.create(categoryData);
     return this.categoryRepository.save(category);
   }
 
-  async getCategories({
+  async findAll({
     page = 1,
     limit = 30,
     search,
     parent,
     language,
     type_id,
-    orderBy = QueryCategoriesOrderByColumn.CREATED_AT,
+    orderBy = CategoryOrderByColumn.CREATED_AT,
     sortedBy = SortOrder.DESC,
   }: GetCategoriesDto): Promise<CategoryPaginator> {
     const queryBuilder = this.categoryRepository
       .createQueryBuilder('category')
-      .leftJoinAndSelect('category.parent', 'parent')
-      .leftJoinAndSelect('category.children', 'children')
-      .leftJoinAndSelect('category.type', 'type');
+      .leftJoinAndSelect('category.parent', 'parent');
 
     if (search) {
       queryBuilder.andWhere(
         '(category.name LIKE :search OR category.details LIKE :search)',
-        {
-          search: `%${search}%`,
-        },
+        { search: `%${search}%` },
       );
     }
 
-    if (parent !== undefined) {
-      if (parent === 'null') {
+    if (parent !== undefined && parent !== null) {
+      if (parent === 0 || parent === null) {
         queryBuilder.andWhere('category.parent_id IS NULL');
       } else {
         queryBuilder.andWhere('category.parent_id = :parent', {
-          parent: Number(parent),
+          parent: parent,
         });
       }
     }
@@ -104,12 +97,16 @@ export class CategoriesService {
       queryBuilder.andWhere('category.type_id = :type_id', { type_id });
     }
 
-    // Apply ordering
-    let orderColumn = 'category.created_at';
-    if (orderBy === QueryCategoriesOrderByColumn.NAME) {
-      orderColumn = 'category.name';
-    } else if (orderBy === QueryCategoriesOrderByColumn.UPDATED_AT) {
-      orderColumn = 'category.updated_at';
+    let orderColumn: string;
+    switch (orderBy) {
+      case CategoryOrderByColumn.NAME:
+        orderColumn = 'category.name';
+        break;
+      case CategoryOrderByColumn.UPDATED_AT:
+        orderColumn = 'category.updated_at';
+        break;
+      default:
+        orderColumn = 'category.created_at';
     }
 
     const orderDirection = sortedBy === SortOrder.ASC ? 'ASC' : 'DESC';
@@ -119,55 +116,30 @@ export class CategoriesService {
 
     const [data, total] = await queryBuilder.getManyAndCount();
 
-    // TODO: Uncomment this when Product module is developed
-    // Calculate products count for each category
-    // for (const category of data) {
-    //   if (category.children && category.children.length > 0) {
-    //     // For parent categories, sum products from all children
-    //     let totalProducts = 0;
-    //     for (const child of category.children) {
-    //       const childWithProducts = await this.categoryRepository.findOne({
-    //         where: { id: child.id },
-    //         relations: ['products'],
-    //       });
-    //       totalProducts += childWithProducts?.products?.length || 0;
-    //     }
-    //     category.products_count = totalProducts;
-    //   } else {
-    //     // For leaf categories, get direct products count
-    //     const categoryWithProducts = await this.categoryRepository.findOne({
-    //       where: { id: category.id },
-    //       relations: ['products'],
-    //     });
-    //     category.products_count = categoryWithProducts?.products?.length || 0;
-    //   }
-    // }
-
     const url = `/categories?limit=${limit}`;
     const paginationInfo = paginate(total, page, limit, data.length, url);
 
-    // Calculate from and to values
     const from = (page - 1) * limit + 1;
     const to = Math.min(page * limit, total);
 
     return {
       data,
       ...paginationInfo,
+      current_page: page,
+      per_page: limit,
+      total,
+      last_page: Math.ceil(total / limit),
       from,
       to,
     };
   }
 
-  async getCategory(param: string, language?: string): Promise<Category> {
+  async findOne(param: string, language?: string): Promise<Category> {
     const isId = !isNaN(Number(param));
 
     const queryBuilder = this.categoryRepository
       .createQueryBuilder('category')
-      .leftJoinAndSelect('category.parent', 'parent')
-      .leftJoinAndSelect('category.children', 'children')
-      .leftJoinAndSelect('category.type', 'type');
-    // TODO: Uncomment this when Product module is developed
-    // .leftJoinAndSelect('category.products', 'products')
+      .leftJoinAndSelect('category.parent', 'parent');
 
     if (isId) {
       queryBuilder.where('category.id = :id', { id: Number(param) });
@@ -190,27 +162,18 @@ export class CategoriesService {
       );
     }
 
-    // TODO: Uncomment this when Product module is developed
-    // Set products count
-    // category.products_count = category.products?.length || 0;
-
     return category;
   }
 
-  async update(
-    id: number,
-    updateCategoryDto: UpdateCategoryDto,
-  ): Promise<Category> {
+  async update(id: number, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
     const category = await this.categoryRepository.findOne({
       where: { id },
-      relations: ['parent', 'children', 'type'],
     });
 
     if (!category) {
       throw new NotFoundException(`Category with ID ${id} not found`);
     }
 
-    // Update fields
     if (updateCategoryDto.name) {
       category.name = updateCategoryDto.name;
       category.slug = this.generateSlug(updateCategoryDto.name);
@@ -249,25 +212,18 @@ export class CategoriesService {
   async remove(id: number): Promise<CoreMutationOutput> {
     const category = await this.categoryRepository.findOne({
       where: { id },
-      relations: ['children'], // Removed 'products' temporarily
+      relations: ['children'],
     });
 
     if (!category) {
       throw new NotFoundException(`Category with ID ${id} not found`);
     }
 
-    // Check if category has children
     if (category.children && category.children.length > 0) {
       throw new ConflictException('Cannot delete category with subcategories');
     }
 
-    // TODO: Uncomment this when Product module is developed
-    // Check if category has products
-    // if (category.products && category.products.length > 0) {
-    //   throw new ConflictException('Cannot delete category with products');
-    // }
-
-    await this.categoryRepository.remove(category);
+    await this.categoryRepository.softDelete(id);
 
     return {
       success: true,

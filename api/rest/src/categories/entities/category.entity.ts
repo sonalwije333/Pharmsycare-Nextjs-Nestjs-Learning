@@ -4,56 +4,62 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  DeleteDateColumn,
   ManyToOne,
   OneToMany,
   JoinColumn,
 } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
 import { CoreEntity } from '../../common/entities/core.entity';
 import { Attachment } from '../../common/entities/attachment.entity';
-// TODO: Uncomment when Type module is developed
-// import { Type } from '../../types/entities/type.entity';
-// TODO: Uncomment when Product module is developed
-// import { Product } from '../../products/entities/product.entity';
 
 @Entity('categories')
 export class Category extends CoreEntity {
-  @ApiProperty({ description: 'Category ID', example: 1 })
+  @ApiProperty({ description: 'Category ID', example: 1, type: Number })
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ApiProperty({ description: 'Category name', example: 'Fruits & Vegetables' })
+  @ApiProperty({ 
+    description: 'Category name', 
+    example: 'Fruits & Vegetables',
+    type: String,
+  })
   @Column()
   name: string;
 
-  @ApiProperty({ description: 'Category slug', example: 'fruits-vegetables' })
+  @ApiProperty({ 
+    description: 'Category slug', 
+    example: 'fruits-vegetables',
+    type: String,
+  })
   @Column({ unique: true })
   slug: string;
 
-  @ApiProperty({
-    type: () => Category,
-    description: 'Parent category',
-    required: false,
-  })
+  @ApiHideProperty()
   @ManyToOne(() => Category, (category) => category.children, {
     nullable: true,
   })
   @JoinColumn({ name: 'parent_id' })
   parent?: Category;
 
-  @ApiProperty({ description: 'Parent category ID', required: false })
+  @ApiProperty({ 
+    description: 'Parent category ID', 
+    required: false,
+    type: Number,
+    example: 1,
+  })
   @Column({ nullable: true })
   parent_id?: number;
 
-  @ApiProperty({
-    type: () => [Category],
-    description: 'Child categories',
-    required: false,
-  })
+  @ApiHideProperty()
   @OneToMany(() => Category, (category) => category.parent)
   children?: Category[];
 
-  @ApiProperty({ description: 'Category details', required: false })
+  @ApiProperty({ 
+    description: 'Category details', 
+    required: false,
+    type: String,
+  })
   @Column('text', { nullable: true })
   details?: string;
 
@@ -65,44 +71,55 @@ export class Category extends CoreEntity {
   @Column('json', { nullable: true })
   image?: Attachment;
 
-  @ApiProperty({ description: 'Category icon', required: false })
+  @ApiProperty({ 
+    description: 'Category icon', 
+    required: false,
+    type: String,
+  })
   @Column({ nullable: true })
   icon?: string;
 
-  // TODO: Uncomment when Type module is developed
-  // @ApiProperty({ type: () => Type, description: 'Category type' })
-  // @ManyToOne(() => Type)
-  // @JoinColumn({ name: 'type_id' })
-  // type?: Type;
-
-  @ApiProperty({ description: 'Type ID', example: 1 })
+  @ApiProperty({ 
+    description: 'Type ID', 
+    example: 1,
+    type: Number,
+  })
   @Column()
   type_id: number;
 
-  // TODO: Uncomment when Product module is developed
-  // @ApiProperty({
-  //   type: () => [Product],
-  //   description: 'Products in this category',
-  // })
-  // @OneToMany(() => Product, (product) => product.category)
-  // products?: Product[];
-
-  @ApiProperty({ description: 'Language code', default: 'en' })
+  @ApiProperty({ 
+    description: 'Language code', 
+    default: 'en',
+    type: String,
+  })
   @Column({ default: 'en' })
   language: string;
 
-  @ApiProperty({ description: 'Translated languages', type: [String] })
+  @ApiProperty({ 
+    description: 'Translated languages', 
+    type: [String],
+    example: ['en', 'es', 'fr'],
+  })
   @Column('simple-array', { nullable: true })
   translated_languages: string[];
 
-  @ApiProperty({ description: 'Products count', required: false })
+  @ApiProperty({ 
+    description: 'Products count', 
+    required: false,
+    type: Number,
+    example: 42,
+  })
   products_count?: number;
 
-  @ApiProperty({ description: 'Creation timestamp' })
+  @ApiProperty({ description: 'Soft delete timestamp', required: false, type: Date })
+  @DeleteDateColumn()
+  deleted_at?: Date;
+
+  @ApiProperty({ description: 'Creation timestamp', type: Date })
   @CreateDateColumn()
   created_at: Date;
 
-  @ApiProperty({ description: 'Last update timestamp' })
+  @ApiProperty({ description: 'Last update timestamp', type: Date })
   @UpdateDateColumn()
   updated_at: Date;
 }
