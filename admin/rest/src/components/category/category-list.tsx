@@ -13,6 +13,7 @@ import { Routes } from '@/config/routes';
 import LanguageSwitcher from '@/components/ui/lang-action/action';
 import { NoDataFound } from '@/components/icons/no-data-found';
 import { siteSettings } from '@/settings/site.settings';
+import { getValidImageSrc } from '@/utils/get-valid-image-src';
 
 export type IProps = {
   categories: Category[] | undefined;
@@ -84,7 +85,10 @@ const CategoryList = ({
           <div className="flex items-center">
             <div className="relative aspect-square h-10 w-10 shrink-0 overflow-hidden rounded border border-border-200/80 bg-gray-100 me-2.5">
               <Image
-                src={image?.thumbnail ?? siteSettings.product.placeholder}
+                src={getValidImageSrc(
+                  image?.thumbnail,
+                  siteSettings.product.placeholder
+                )}
                 alt={name}
                 fill
                 priority={true}
@@ -142,16 +146,13 @@ const CategoryList = ({
     },
     {
       title: t('table:table-item-group'),
-      dataIndex: 'type',
-      key: 'type',
+      dataIndex: 'type_id',
+      key: 'type_id',
       align: 'center',
       width: 120,
-      render: (type: any) => (
-        <div
-          className="overflow-hidden truncate whitespace-nowrap"
-          title={type?.name}
-        >
-          {type?.name}
+      render: (type_id: any) => (
+        <div className="overflow-hidden truncate whitespace-nowrap">
+          {type_id || '-'}
         </div>
       ),
     },
