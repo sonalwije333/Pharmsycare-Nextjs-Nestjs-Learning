@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { PaginationArgs } from 'src/common/dto/pagination-args.dto';
-import { IsOptional, IsString, IsNumber, IsEnum } from 'class-validator';
+import { IsOptional, IsString, IsNumber, IsEnum, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 import { SortOrder } from 'src/common/enums/enums';
 import { Category } from '../entities/category.entity';
@@ -71,6 +71,15 @@ export class GetCategoriesDto extends PaginationArgs {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @ApiProperty({
+    description: 'How to join search conditions',
+    enum: ['and', 'or'],
+    required: false,
+  })
+  @IsOptional()
+  @IsIn(['and', 'or', 'AND', 'OR'])
+  searchJoin?: string;
 
   @ApiProperty({ 
     required: false, 
