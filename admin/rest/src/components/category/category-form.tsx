@@ -64,7 +64,7 @@ function SelectTypes({
 }) {
   const { locale } = useRouter();
   const { t } = useTranslation();
-  const { types, loading } = useTypesQuery({ language: locale });
+  const { types, loading, error } = useTypesQuery({ language: locale });
   return (
     <div className="mb-5">
       <Label>{t('form:input-label-types')}</Label>
@@ -72,10 +72,11 @@ function SelectTypes({
         name="type"
         control={control}
         getOptionLabel={(option: any) => option.name}
-        getOptionValue={(option: any) => option.slug}
         options={types!}
         isLoading={loading}
+        isClearable={true}
       />
+      {error && <ValidationError message="Failed to load types" />}
       <ValidationError message={t(errors.type?.message)} />
     </div>
   );
@@ -101,7 +102,7 @@ function SelectCategories({
   });
   useEffect(() => {
     if (type?.slug && dirtyFields?.type) {
-      setValue('parent', []);
+      setValue('parent', null);
     }
   }, [type?.slug]);
   const { categories, loading } = useCategoriesQuery({
@@ -117,7 +118,6 @@ function SelectCategories({
         name="parent"
         control={control}
         getOptionLabel={(option: any) => option.name}
-        getOptionValue={(option: any) => option.id}
         options={categories}
         isClearable={true}
         isLoading={loading}
@@ -232,7 +232,7 @@ export default function CreateOrUpdateCategoriesForm({
       },
       icon: values.icon?.value || '',
       parent: values.parent?.id ?? null,
-      type_id: values.type?.id,
+      type_id: values.type?.id ?? null,
     };
     if (
       !initialValues ||

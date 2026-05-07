@@ -19,30 +19,40 @@ const fuse = new Fuse(types, options);
 export class TypesService {
   private types: Type[] = types;
 
-  getTypes({ text, search }: GetTypesDto) {
+  getTypes({ text, search, language }: GetTypesDto) {
     let data: Type[] = this.types;
+    
+    // Filter by language if provided
+    if (language) {
+      data = data.filter(type => 
+        type.language === language || 
+        (type.translated_languages && type.translated_languages.includes(language))
+      );
+    }
+    
     if (text?.replace(/%/g, '')) {
       data = fuse.search(text)?.map(({ item }) => item);
     }
 
-    if (search) {
-      const parseSearchParams = search.split(';');
+    if (search && search.trim()) {
+      const parseSearchParams = search.split(';').filter(p => p.trim());
       const searchText: any = [];
       for (const searchParam of parseSearchParams) {
         const [key, value] = searchParam.split(':');
-        // TODO: Temp Solution
-        if (key !== 'slug') {
+        if (key && value && key !== 'slug') {
           searchText.push({
             [key]: value,
           });
         }
       }
 
-      data = fuse
-        .search({
-          $and: searchText,
-        })
-        ?.map(({ item }) => item);
+      if (searchText.length > 0) {
+        data = fuse
+          .search({
+            $and: searchText,
+          })
+          ?.map(({ item }) => item);
+      }
     }
 
     return data;

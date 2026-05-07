@@ -59,13 +59,14 @@ export class CreateCategoryDto {
   @IsOptional()
   parent?: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Type ID',
-    required: true,
+    required: false,
     type: Number,
     example: 1,
   })
   @Type(() => Number)
   @IsNumber()
-  type_id: number;
+  @IsOptional()
+  type_id?: number;
 }
