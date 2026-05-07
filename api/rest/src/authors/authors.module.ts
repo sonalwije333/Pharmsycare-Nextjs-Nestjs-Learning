@@ -1,4 +1,3 @@
-// authors/authors.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthorsService } from './authors.service';

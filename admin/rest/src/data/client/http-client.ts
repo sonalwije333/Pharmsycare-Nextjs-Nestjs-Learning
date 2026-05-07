@@ -16,12 +16,30 @@ const Axios = axios.create({
 });
 // Change request data/error
 const AUTH_TOKEN_KEY = process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY ?? 'authToken';
-Axios.interceptors.request.use((config) => {
-  const cookies = Cookies.get(AUTH_TOKEN_KEY);
-  let token = '';
-  if (cookies) {
-    token = JSON.parse(cookies)['token'];
+const AUTH_CRED_FALLBACK_KEY = 'AUTH_CRED';
+
+function extractTokenFromCookieValue(cookieValue?: string): string {
+  if (!cookieValue) return '';
+
+  try {
+    const parsed = JSON.parse(cookieValue);
+    if (typeof parsed?.token === 'string') {
+      return parsed.token;
+    }
+  } catch {
+    // Cookie may contain a raw token string instead of JSON
   }
+
+  return cookieValue;
+}
+
+Axios.interceptors.request.use((config) => {
+  const primaryCookie = Cookies.get(AUTH_TOKEN_KEY);
+  const fallbackCookie = Cookies.get(AUTH_CRED_FALLBACK_KEY);
+  const token =
+    extractTokenFromCookieValue(primaryCookie) ||
+    extractTokenFromCookieValue(fallbackCookie);
+
   // @ts-ignore
   config.headers = {
     ...config.headers,

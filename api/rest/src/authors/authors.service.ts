@@ -1,12 +1,10 @@
-// authors/authors.service.ts
 import {
   Injectable,
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like } from 'typeorm';
-import { plainToClass } from 'class-transformer';
+import { Repository } from 'typeorm';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { Author } from './entities/author.entity';
 import {
@@ -17,8 +15,9 @@ import { GetTopAuthorsDto } from './dto/get-top-authors.dto';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { paginate } from '../common/pagination/paginate';
-import { SortOrder } from 'src/common/dto/generic-conditions.dto';
-import { QueryAuthorsOrderByColumn } from '../common/enums/enums';
+import { SortOrder } from 'src/common/enums/enums';
+import { AuthorOrderByColumn } from 'src/common/enums/author-order-by.enum';
+
 
 @Injectable()
 export class AuthorsService {
@@ -28,10 +27,8 @@ export class AuthorsService {
   ) {}
 
   async create(createAuthorDto: CreateAuthorDto): Promise<Author> {
-    // Generate slug from name
     const slug = this.generateSlug(createAuthorDto.name);
 
-    // Check if author with same slug exists
     const existing = await this.authorRepository.findOne({
       where: { slug },
     });
@@ -40,21 +37,22 @@ export class AuthorsService {
       throw new ConflictException('Author with this name already exists');
     }
 
-    const author = this.authorRepository.create({
+    const authorData: Partial<Author> = {
       ...createAuthorDto,
       slug,
       translated_languages: [createAuthorDto.language || 'en'],
       products_count: 0,
-    });
+    };
 
+    const author = this.authorRepository.create(authorData);
     return this.authorRepository.save(author);
   }
 
-  async getAuthors({
+  async findAll({
     page = 1,
     limit = 30,
     search,
-    orderBy = QueryAuthorsOrderByColumn.CREATED_AT,
+    orderBy = AuthorOrderByColumn.CREATED_AT,
     sortedBy = SortOrder.DESC,
     language,
   }: GetAuthorDto): Promise<AuthorPaginator> {
@@ -79,13 +77,17 @@ export class AuthorsService {
       );
     }
 
-    // Apply ordering
-    const orderColumn =
-      orderBy === QueryAuthorsOrderByColumn.NAME
-        ? 'author.name'
-        : orderBy === QueryAuthorsOrderByColumn.UPDATED_AT
-        ? 'author.updated_at'
-        : 'author.created_at';
+    let orderColumn: string;
+    switch (orderBy) {
+      case AuthorOrderByColumn.NAME:
+        orderColumn = 'author.name';
+        break;
+      case AuthorOrderByColumn.UPDATED_AT:
+        orderColumn = 'author.updated_at';
+        break;
+      default:
+        orderColumn = 'author.created_at';
+    }
 
     const orderDirection = sortedBy === SortOrder.ASC ? 'ASC' : 'DESC';
     queryBuilder.orderBy(orderColumn, orderDirection);
@@ -109,7 +111,7 @@ export class AuthorsService {
     };
   }
 
-  async getAuthorBySlug(slug: string): Promise<Author> {
+  async findOne(slug: string): Promise<Author> {
     const author = await this.authorRepository.findOne({
       where: { slug },
     });
@@ -137,7 +139,6 @@ export class AuthorsService {
       throw new NotFoundException(`Author with ID ${id} not found`);
     }
 
-    // Update fields
     if (updateAuthorDto.name) {
       author.name = updateAuthorDto.name;
       author.slug = this.generateSlug(updateAuthorDto.name);
@@ -145,22 +146,18 @@ export class AuthorsService {
 
     if (updateAuthorDto.bio !== undefined) author.bio = updateAuthorDto.bio;
     if (updateAuthorDto.born !== undefined) author.born = updateAuthorDto.born;
-    if (updateAuthorDto.death !== undefined)
-      author.death = updateAuthorDto.death;
-    if (updateAuthorDto.languages !== undefined)
-      author.languages = updateAuthorDto.languages;
-    if (updateAuthorDto.quote !== undefined)
-      author.quote = updateAuthorDto.quote;
-    if (updateAuthorDto.is_approved !== undefined)
-      author.is_approved = updateAuthorDto.is_approved;
-    if (updateAuthorDto.image !== undefined)
-      author.image = updateAuthorDto.image;
-    if (updateAuthorDto.cover_image !== undefined)
-      author.cover_image = updateAuthorDto.cover_image;
-    if (updateAuthorDto.socials !== undefined)
-      author.socials = updateAuthorDto.socials;
+    if (updateAuthorDto.death !== undefined) author.death = updateAuthorDto.death;
+    if (updateAuthorDto.languages !== undefined) author.languages = updateAuthorDto.languages;
+    if (updateAuthorDto.quote !== undefined) author.quote = updateAuthorDto.quote;
+    if (updateAuthorDto.is_approved !== undefined) author.is_approved = updateAuthorDto.is_approved;
+    if (updateAuthorDto.image !== undefined) author.image = updateAuthorDto.image;
+    if (updateAuthorDto.cover_image !== undefined) author.cover_image = updateAuthorDto.cover_image;
+    if (updateAuthorDto.socials !== undefined) author.socials = updateAuthorDto.socials;
+    if (updateAuthorDto.shop_id !== undefined) author.shop_id = updateAuthorDto.shop_id;
+    
     if (updateAuthorDto.language !== undefined) {
       author.language = updateAuthorDto.language;
+      author.translated_languages ??= [];
       if (!author.translated_languages.includes(updateAuthorDto.language)) {
         author.translated_languages.push(updateAuthorDto.language);
       }
@@ -178,7 +175,7 @@ export class AuthorsService {
       throw new NotFoundException(`Author with ID ${id} not found`);
     }
 
-    await this.authorRepository.remove(author);
+    await this.authorRepository.delete(id);
 
     return {
       success: true,
