@@ -70,8 +70,6 @@ export class CategoriesService {
       .createQueryBuilder('category')
       .leftJoinAndSelect('category.parent', 'parent');
 
-    queryBuilder.leftJoinAndSelect('category.type', 'type');
-
     if (search) {
       const searchTokens = search
         .split(';')
@@ -180,8 +178,9 @@ export class CategoriesService {
     }
 
     if (key === 'type.slug' || key === 'type') {
+      // Type is now a simple foreign key reference, filter by type_id
       return {
-        clause: 'type.slug = :value',
+        clause: 'category.type_id = :value',
         parameters: { value },
       };
     }

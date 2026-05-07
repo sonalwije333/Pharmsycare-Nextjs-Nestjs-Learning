@@ -40,11 +40,13 @@ Axios.interceptors.request.use((config) => {
     extractTokenFromCookieValue(primaryCookie) ||
     extractTokenFromCookieValue(fallbackCookie);
 
-  // @ts-ignore
-  config.headers = {
-    ...config.headers,
-    Authorization: `Bearer ${token}`,
-  };
+  if (token) {
+    // @ts-ignore
+    config.headers = {
+      ...config.headers,
+      Authorization: `Bearer ${token}`,
+    };
+  }
   return config;
 });
 
