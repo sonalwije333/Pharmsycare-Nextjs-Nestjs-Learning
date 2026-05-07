@@ -1,4 +1,3 @@
-// become-seller/become-seller.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BecomeSellerController } from './become-seller.controller';

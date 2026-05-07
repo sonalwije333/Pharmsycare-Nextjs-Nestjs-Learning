@@ -1,4 +1,3 @@
-// become-seller/become-seller.controller.ts
 import {
   Body,
   Controller,
@@ -9,13 +8,10 @@ import {
   Delete,
   UseGuards,
   ParseIntPipe,
-  HttpCode,
-  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse,
   ApiBearerAuth,
   ApiBody,
   ApiParam,
@@ -52,15 +48,13 @@ export class BecomeSellerController {
   })
   @ApiCreatedResponse({
     description: 'Configuration created successfully',
-    type: BecomeSeller,
+    type: () => BecomeSeller,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
   @ApiBody({ type: CreateBecomeSellerDto })
-  create(
-    @Body() createBecomeSellerDto: CreateBecomeSellerDto,
-  ): Promise<BecomeSeller> {
+  create(@Body() createBecomeSellerDto: CreateBecomeSellerDto): Promise<BecomeSeller> {
     return this.becomeSellerService.create(createBecomeSellerDto);
   }
 
@@ -72,7 +66,7 @@ export class BecomeSellerController {
   })
   @ApiOkResponse({
     description: 'Configuration retrieved successfully',
-    type: BecomeSeller,
+    type: () => BecomeSeller,
   })
   findAll(): Promise<BecomeSeller> {
     return this.becomeSellerService.findAll();
@@ -82,13 +76,17 @@ export class BecomeSellerController {
   @Public()
   @ApiOperation({
     summary: 'Get become seller configuration by ID',
-    description:
-      'Retrieve a specific become seller configuration by ID (Public)',
+    description: 'Retrieve a specific become seller configuration by ID (Public)',
   })
-  @ApiParam({ name: 'id', description: 'Configuration ID', type: Number })
+  @ApiParam({ 
+    name: 'id', 
+    description: 'Configuration ID', 
+    type: Number,
+    example: 1,
+  })
   @ApiOkResponse({
     description: 'Configuration retrieved successfully',
-    type: BecomeSeller,
+    type: () => BecomeSeller,
   })
   @ApiNotFoundResponse({ description: 'Configuration not found' })
   findOne(@Param('id', ParseIntPipe) id: number): Promise<BecomeSeller> {
@@ -101,10 +99,15 @@ export class BecomeSellerController {
     summary: 'Update become seller configuration',
     description: 'Update become seller configuration by ID (Admin only)',
   })
-  @ApiParam({ name: 'id', description: 'Configuration ID', type: Number })
+  @ApiParam({ 
+    name: 'id', 
+    description: 'Configuration ID', 
+    type: Number,
+    example: 1,
+  })
   @ApiOkResponse({
     description: 'Configuration updated successfully',
-    type: BecomeSeller,
+    type: () => BecomeSeller,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiNotFoundResponse({ description: 'Configuration not found' })
@@ -120,10 +123,14 @@ export class BecomeSellerController {
   @Roles(Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Delete become seller configuration',
-    description:
-      'Permanently delete a become seller configuration by ID (Admin only)',
+    description: 'Soft delete a become seller configuration by ID (Admin only)',
   })
-  @ApiParam({ name: 'id', description: 'Configuration ID', type: Number })
+  @ApiParam({ 
+    name: 'id', 
+    description: 'Configuration ID', 
+    type: Number,
+    example: 1,
+  })
   @ApiOkResponse({
     description: 'Configuration deleted successfully',
     type: CoreMutationOutput,

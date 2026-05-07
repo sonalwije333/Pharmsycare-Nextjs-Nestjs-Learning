@@ -1,4 +1,3 @@
-// become-seller/become-seller.service.ts
 import {
   Injectable,
   NotFoundException,
@@ -6,12 +5,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { plainToClass } from 'class-transformer';
 import { BecomeSeller } from './entities/become-seller.entity';
 import { CreateBecomeSellerDto } from './dto/create-become-seller.dto';
 import { UpdateBecomeSellerDto } from './dto/update-become-seller.dto';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
-import becomeSellerJson from '@db/become-seller.json';
 
 @Injectable()
 export class BecomeSellerService {
@@ -20,24 +17,24 @@ export class BecomeSellerService {
     private becomeSellerRepository: Repository<BecomeSeller>,
   ) {}
 
-  async create(
-    createBecomeSellerDto: CreateBecomeSellerDto,
-  ): Promise<BecomeSeller> {
-    // Check if configuration already exists
+  async create(createBecomeSellerDto: CreateBecomeSellerDto): Promise<BecomeSeller> {
     const existing = await this.becomeSellerRepository.findOne({
       where: { language: createBecomeSellerDto.language || 'en' },
     });
 
+    // If a configuration already exists for the requested language,
+    // merge the incoming data into the existing record and save (idempotent).
     if (existing) {
-      throw new ConflictException(
-        'Become seller configuration already exists for this language',
-      );
+      existing.page_options = createBecomeSellerDto.page_options ?? existing.page_options;
+      existing.commissions = createBecomeSellerDto.commissions ?? existing.commissions;
+      existing.language = createBecomeSellerDto.language ?? existing.language;
+
+      return this.becomeSellerRepository.save(existing);
     }
 
-    // Transform DTO to entity format
     const becomeSeller = this.becomeSellerRepository.create({
-      page_options: createBecomeSellerDto.page_options as any,
-      commissions: createBecomeSellerDto.commissions as any,
+      page_options: createBecomeSellerDto.page_options,
+      commissions: createBecomeSellerDto.commissions,
       language: createBecomeSellerDto.language || 'en',
     });
 
@@ -45,30 +42,27 @@ export class BecomeSellerService {
   }
 
   async findAll(): Promise<BecomeSeller> {
-    // Get the default language configuration (usually English)
     const becomeSeller = await this.becomeSellerRepository.findOne({
       where: { language: 'en' },
     });
 
     if (!becomeSeller) {
-      // If no configuration exists, return empty object
       return {
         id: 0,
         page_options: {
-          page_options: {
-            banner: null,
-            sellingStepsTitle: '',
-            sellingStepsDescription: '',
-            sellingStepsItem: [],
-            purposeTitle: '',
-            purposeDescription: '',
-            purposeItems: [],
-            commissionTitle: '',
-            commissionDescription: '',
-            faqTitle: '',
-            faqDescription: '',
-            faqItems: [],
-          },
+          // Provide an empty Attachment-shaped object to satisfy the type
+          banner: ({ thumbnail: '', original: '', file_name: '' } as any),
+          sellingStepsTitle: '',
+          sellingStepsDescription: '',
+          sellingStepsItem: [],
+          purposeTitle: '',
+          purposeDescription: '',
+          purposeItems: [],
+          commissionTitle: '',
+          commissionDescription: '',
+          faqTitle: '',
+          faqDescription: '',
+          faqItems: [],
         },
         commissions: [],
         language: 'en',
@@ -98,15 +92,32 @@ export class BecomeSellerService {
     id: number,
     updateBecomeSellerDto: UpdateBecomeSellerDto,
   ): Promise<BecomeSeller> {
-    const becomeSeller = await this.findOne(id);
+    let becomeSeller: BecomeSeller;
 
-    // Update fields with type assertion to handle the mismatch
+    try {
+      becomeSeller = await this.findOne(id);
+    } catch (err) {
+      // If not found by id, try to locate by language from payload (if provided)
+      if (updateBecomeSellerDto.language) {
+        const found = await this.becomeSellerRepository.findOne({
+          where: { language: updateBecomeSellerDto.language },
+        });
+        if (!found) {
+          // rethrow original not found error
+          throw err;
+        }
+        becomeSeller = found;
+      } else {
+        throw err;
+      }
+    }
+
     if (updateBecomeSellerDto.page_options) {
-      becomeSeller.page_options = updateBecomeSellerDto.page_options as any;
+      becomeSeller.page_options = updateBecomeSellerDto.page_options;
     }
 
     if (updateBecomeSellerDto.commissions) {
-      becomeSeller.commissions = updateBecomeSellerDto.commissions as any;
+      becomeSeller.commissions = updateBecomeSellerDto.commissions;
     }
 
     if (updateBecomeSellerDto.language) {
@@ -119,36 +130,11 @@ export class BecomeSellerService {
   async remove(id: number): Promise<CoreMutationOutput> {
     const becomeSeller = await this.findOne(id);
 
-    await this.becomeSellerRepository.remove(becomeSeller);
+    await this.becomeSellerRepository.softDelete(id);
 
     return {
       success: true,
       message: `Become seller configuration with ID ${id} deleted successfully`,
     };
-  }
-
-  // Helper method to initialize default data from JSON
-  async initializeDefaultData(): Promise<void> {
-    const count = await this.becomeSellerRepository.count();
-
-    if (count === 0) {
-      try {
-        // Parse JSON data
-        const defaultData = plainToClass(BecomeSeller, becomeSellerJson as any);
-
-        // Create default configuration
-        await this.becomeSellerRepository.save({
-          ...defaultData,
-          language: 'en',
-        });
-
-        console.log('✅ Default become seller configuration initialized');
-      } catch (error) {
-        console.error(
-          '❌ Failed to initialize default become seller data:',
-          error.message,
-        );
-      }
-    }
   }
 }
