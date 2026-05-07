@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { CoreEntity } from 'src/common/entities/core.entity';
-import { User } from './user.entity';
+import type { User } from './user.entity';
 
 @Entity('profiles')
 export class Profile extends CoreEntity {
@@ -50,8 +50,8 @@ export class Profile extends CoreEntity {
   @Column({ nullable: true })
   contact?: string;
 
-  @ApiProperty({ type: () => User, description: 'Associated user' })
-  @OneToOne(() => User, (user) => user.profile)
+  @ApiProperty({ type: () => require('./user.entity').User, description: 'Associated user' })
+  @OneToOne(() => require('./user.entity').User, (user: User) => user.profile)
   customer?: User;
 
   @ApiProperty({ description: 'Creation timestamp' })

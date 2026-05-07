@@ -1,5 +1,4 @@
-// attributes/dto/create-attribute.dto.ts
-import { ApiProperty, PickType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsNotEmpty,
@@ -9,57 +8,46 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Attribute } from '../entities/attribute.entity';
 
 export class AttributeValueDto {
-  @ApiProperty({
-    description: 'Attribute value ID',
-    example: 1,
-    required: false,
-  })
+  @ApiProperty({ description: 'Attribute value ID', example: 1, required: false, type: Number })
   @IsNumber()
   @IsOptional()
   id?: number;
 
-  @ApiProperty({
-    description: 'Attribute value',
-    example: 'Red',
-    required: true,
-  })
+  @ApiProperty({ description: 'Attribute value', example: 'Red', required: true, type: String })
   @IsString()
   @IsNotEmpty()
   value: string;
 
-  @ApiProperty({
-    description: 'Meta information (e.g., color code)',
-    example: '#FF0000',
-    required: false,
-  })
+  @ApiProperty({ description: 'Meta information (e.g., color code)', example: '#FF0000', required: false, type: String })
   @IsString()
   @IsOptional()
   meta?: string;
 
-  @ApiProperty({
-    description: 'Language code',
-    example: 'en',
-    required: false,
-    default: 'en',
-  })
+  @ApiProperty({ description: 'Language code', example: 'en', required: false, default: 'en', type: String })
   @IsString()
   @IsOptional()
-  language?: string;
+  language?: string = 'en';
 }
 
-export class CreateAttributeDto extends PickType(Attribute, [
-  'name',
-  'shop_id',
-  'language',
-] as const) {
-  @ApiProperty({
-    description: 'Attribute values',
-    type: [AttributeValueDto],
-    required: true,
-  })
+export class CreateAttributeDto {
+  @ApiProperty({ description: 'Attribute name', example: 'Color', type: String })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty({ description: 'Shop ID', example: '1', type: String })
+  @IsString()
+  @IsNotEmpty()
+  shop_id: string;
+
+  @ApiProperty({ description: 'Language code', example: 'en', required: false, default: 'en', type: String })
+  @IsString()
+  @IsOptional()
+  language?: string = 'en';
+
+  @ApiProperty({ description: 'Attribute values', type: () => [AttributeValueDto], required: true })
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => AttributeValueDto)

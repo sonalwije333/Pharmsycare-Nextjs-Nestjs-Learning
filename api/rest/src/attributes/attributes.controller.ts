@@ -1,4 +1,3 @@
-// attributes/attributes.controller.ts
 import {
   Controller,
   Get,
@@ -9,14 +8,11 @@ import {
   Delete,
   Query,
   UseGuards,
-  HttpCode,
-  HttpStatus,
   ParseIntPipe,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse,
   ApiBearerAuth,
   ApiBody,
   ApiParam,
@@ -37,9 +33,10 @@ import { Attribute } from './entities/attribute.entity';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Permission } from '../common/enums/enums';
+import { Permission, SortOrder } from '../common/enums/enums';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Public } from '../common/decorators/public.decorator';
+import { AttributeOrderByColumn } from 'src/common/enums/attribute-order-by.enum';
 
 @ApiTags('🏷️ Attributes')
 @Controller('attributes')
@@ -56,7 +53,7 @@ export class AttributesController {
   })
   @ApiCreatedResponse({
     description: 'Attribute created successfully',
-    type: Attribute,
+    type: () => Attribute,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
@@ -74,10 +71,8 @@ export class AttributesController {
   })
   @ApiOkResponse({
     description: 'Attributes retrieved successfully',
-    type: [Attribute],
+    type: () => [Attribute],
   })
-  @ApiQuery({ name: 'shop_id', required: false, type: Number })
-  @ApiQuery({ name: 'language', required: false, type: String })
   findAll(@Query() args: GetAttributesArgs): Promise<Attribute[]> {
     return this.attributesService.findAll(args);
   }
@@ -92,13 +87,13 @@ export class AttributesController {
     name: 'param',
     description: 'Attribute ID or slug',
     example: '1 or color',
+    type: String,
   })
   @ApiOkResponse({
     description: 'Attribute retrieved successfully',
-    type: Attribute,
+    type: () => Attribute,
   })
   @ApiNotFoundResponse({ description: 'Attribute not found' })
-  @ApiQuery({ name: 'language', required: false, type: String })
   findOne(
     @Param('param') param: string,
     @Query() args: GetAttributeArgs,
@@ -112,10 +107,10 @@ export class AttributesController {
     summary: 'Update attribute',
     description: 'Update attribute information by ID (Admin/Store Owner only)',
   })
-  @ApiParam({ name: 'id', description: 'Attribute ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Attribute ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Attribute updated successfully',
-    type: Attribute,
+    type: () => Attribute,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiNotFoundResponse({ description: 'Attribute not found' })
@@ -132,10 +127,9 @@ export class AttributesController {
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
   @ApiOperation({
     summary: 'Delete attribute',
-    description:
-      'Permanently delete an attribute by ID (Admin/Store Owner only)',
+    description: 'Soft delete an attribute by ID (Admin/Store Owner only)',
   })
-  @ApiParam({ name: 'id', description: 'Attribute ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Attribute ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Attribute deleted successfully',
     type: CoreMutationOutput,

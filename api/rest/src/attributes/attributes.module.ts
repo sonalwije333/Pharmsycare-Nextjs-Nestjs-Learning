@@ -1,4 +1,3 @@
-// attributes/attributes.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AttributesService } from './attributes.service';
@@ -7,9 +6,7 @@ import { Attribute } from './entities/attribute.entity';
 import { AttributeValue } from './entities/attribute-value.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Attribute, AttributeValue]), // Add this line
-  ],
+  imports: [TypeOrmModule.forFeature([Attribute, AttributeValue])],
   controllers: [AttributesController],
   providers: [AttributesService],
   exports: [AttributesService],

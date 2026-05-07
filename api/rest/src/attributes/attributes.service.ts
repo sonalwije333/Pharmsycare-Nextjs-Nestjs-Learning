@@ -1,4 +1,3 @@
-// attributes/attributes.service.ts
 import {
   Injectable,
   NotFoundException,
@@ -6,16 +5,15 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-  CreateAttributeDto,
-  AttributeValueDto,
-} from './dto/create-attribute.dto';
+import { CreateAttributeDto, AttributeValueDto } from './dto/create-attribute.dto';
 import { UpdateAttributeDto } from './dto/update-attribute.dto';
 import { GetAttributesArgs } from './dto/get-attributes.dto';
 import { Attribute } from './entities/attribute.entity';
 import { AttributeValue } from './entities/attribute-value.entity';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
-import { SortOrder } from 'src/common/dto/generic-conditions.dto';
+import { SortOrder } from 'src/common/enums/enums';
+import { AttributeOrderByColumn } from 'src/common/enums/attribute-order-by.enum';
+
 
 @Injectable()
 export class AttributesService {
@@ -27,25 +25,44 @@ export class AttributesService {
   ) {}
 
   async create(createAttributeDto: CreateAttributeDto): Promise<Attribute> {
-    // Check if attribute with same name exists in shop
+    const language = createAttributeDto.language || 'en';
+    
+    // Check if attribute exists
     const existing = await this.attributeRepository.findOne({
       where: {
         name: createAttributeDto.name,
         shop_id: createAttributeDto.shop_id,
-        language: createAttributeDto.language || 'en',
+        language: language,
       },
+      relations: ['values'],
     });
 
+    // If exists, update values and return
     if (existing) {
-      throw new ConflictException(
-        'Attribute with this name already exists in this shop',
-      );
+      if (createAttributeDto.values && createAttributeDto.values.length > 0) {
+        // Delete old values
+        await this.attributeValueRepository.delete({ attribute_id: existing.id });
+        
+        // Create new values
+        const values = createAttributeDto.values.map((val) =>
+          this.attributeValueRepository.create({
+            value: val.value,
+            meta: val.meta,
+            language: val.language || 'en',
+            shop_id: parseInt(existing.shop_id),
+            attribute_id: existing.id,
+            translated_languages: [val.language || 'en'],
+          }),
+        );
+        
+        await this.attributeValueRepository.save(values);
+      }
+      return this.findOne(existing.id.toString());
     }
 
-    // Generate slug from name
+    // Create new attribute
     const slug = this.generateSlug(createAttributeDto.name);
 
-    // Create new attribute
     const attribute = this.attributeRepository.create({
       name: createAttributeDto.name,
       shop_id: createAttributeDto.shop_id,
@@ -56,7 +73,6 @@ export class AttributesService {
 
     const savedAttribute = await this.attributeRepository.save(attribute);
 
-    // Create attribute values
     if (createAttributeDto.values && createAttributeDto.values.length > 0) {
       const values = createAttributeDto.values.map((val) =>
         this.attributeValueRepository.create({
@@ -96,14 +112,30 @@ export class AttributesService {
       );
     }
 
-    // Apply ordering
-    if (args.orderBy && args.orderBy.length > 0) {
-      const [orderBy] = args.orderBy;
-      const column = orderBy.column.toLowerCase();
+    const orderByClause =
+      args.orderBy && args.orderBy.length > 0
+        ? args.orderBy[0]
+        : args.column
+          ? {
+              column: args.column,
+              order: args.order || SortOrder.DESC,
+            }
+          : null;
 
-      // Convert SortOrder enum to string literal expected by TypeORM
-      const orderDirection = orderBy.order === SortOrder.ASC ? 'ASC' : 'DESC';
-      queryBuilder.orderBy(`attribute.${column}`, orderDirection);
+    if (orderByClause) {
+      let column: string;
+      switch (orderByClause.column) {
+        case AttributeOrderByColumn.NAME:
+          column = 'attribute.name';
+          break;
+        case AttributeOrderByColumn.UPDATED_AT:
+          column = 'attribute.updated_at';
+          break;
+        default:
+          column = 'attribute.created_at';
+      }
+      const orderDirection = orderByClause.order === SortOrder.ASC ? 'ASC' : 'DESC';
+      queryBuilder.orderBy(column, orderDirection);
     } else {
       queryBuilder.orderBy('attribute.created_at', 'DESC');
     }
@@ -112,14 +144,15 @@ export class AttributesService {
   }
 
   async findOne(param: string, language?: string): Promise<Attribute> {
-    const isId = !isNaN(Number(param));
+    const normalizedParam = this.normalizeIdOrSlugParam(param);
+    const isId = !isNaN(Number(normalizedParam));
 
     const queryBuilder = this.attributeRepository
       .createQueryBuilder('attribute')
       .leftJoinAndSelect('attribute.values', 'values')
       .where(isId ? 'attribute.id = :id' : 'attribute.slug = :slug', {
-        id: isId ? Number(param) : undefined,
-        slug: isId ? undefined : param,
+        id: isId ? Number(normalizedParam) : undefined,
+        slug: isId ? undefined : normalizedParam,
       });
 
     if (language) {
@@ -132,21 +165,57 @@ export class AttributesService {
       );
     }
 
-    const attribute = await queryBuilder.getOne();
+    let attribute = await queryBuilder.getOne();
+
+    // If the incoming value is not numeric but starts with a number
+    // (e.g. "1 or color" from Swagger placeholder-style input),
+    // try resolving by the leading id as a fallback.
+    if (!attribute && !isId) {
+      const leadingId = normalizedParam.match(/^\d+/)?.[0];
+      if (leadingId) {
+        const fallbackQuery = this.attributeRepository
+          .createQueryBuilder('attribute')
+          .leftJoinAndSelect('attribute.values', 'values')
+          .where('attribute.id = :id', { id: Number(leadingId) });
+
+        if (language) {
+          fallbackQuery.andWhere(
+            '(attribute.language = :language OR attribute.translated_languages LIKE :languageLike)',
+            {
+              language,
+              languageLike: `%${language}%`,
+            },
+          );
+        }
+
+        attribute = await fallbackQuery.getOne();
+      }
+    }
 
     if (!attribute) {
       throw new NotFoundException(
-        `Attribute with ${isId ? 'ID' : 'slug'} ${param} not found`,
+        `Attribute with ${isId ? 'ID' : 'slug'} ${normalizedParam} not found`,
       );
     }
 
     return attribute;
   }
 
-  async update(
-    id: number,
-    updateAttributeDto: UpdateAttributeDto,
-  ): Promise<Attribute> {
+  private normalizeIdOrSlugParam(param: string): string {
+    if (!param) return param;
+
+    const trimmed = param.trim();
+
+    // Swagger examples sometimes get pasted literally as "1 or color".
+    const placeholderLike = /^\d+\s+or\s+/i;
+    if (placeholderLike.test(trimmed)) {
+      return trimmed.split(/\s+or\s+/i)[0].trim();
+    }
+
+    return trimmed;
+  }
+
+  async update(id: number, updateAttributeDto: UpdateAttributeDto): Promise<Attribute> {
     const attribute = await this.attributeRepository.findOne({
       where: { id },
       relations: ['values'],
@@ -156,7 +225,6 @@ export class AttributesService {
       throw new NotFoundException(`Attribute with ID ${id} not found`);
     }
 
-    // Update fields
     if (updateAttributeDto.name) {
       attribute.name = updateAttributeDto.name;
       attribute.slug = this.generateSlug(updateAttributeDto.name);
@@ -168,21 +236,16 @@ export class AttributesService {
 
     if (updateAttributeDto.language) {
       attribute.language = updateAttributeDto.language;
-      if (
-        !attribute.translated_languages.includes(updateAttributeDto.language)
-      ) {
+      if (!attribute.translated_languages.includes(updateAttributeDto.language)) {
         attribute.translated_languages.push(updateAttributeDto.language);
       }
     }
 
     await this.attributeRepository.save(attribute);
 
-    // Update values if provided
     if (updateAttributeDto.values) {
-      // Delete existing values
-      await this.attributeValueRepository.delete({ attribute_id: id });
+      await this.attributeValueRepository.softDelete({ attribute_id: id });
 
-      // Create new values
       const newValues = updateAttributeDto.values.map((val) =>
         this.attributeValueRepository.create({
           value: val.value,
@@ -209,7 +272,7 @@ export class AttributesService {
       throw new NotFoundException(`Attribute with ID ${id} not found`);
     }
 
-    await this.attributeRepository.remove(attribute);
+    await this.attributeRepository.softDelete(id);
 
     return {
       success: true,

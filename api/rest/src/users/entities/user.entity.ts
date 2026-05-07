@@ -14,7 +14,7 @@ import {
 import { Exclude } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 import { Address } from 'src/addresses/entities/address.entity';
-import { Profile } from './profile.entity';
+import type { Profile } from './profile.entity';
 import { Permission } from '../../common/enums/enums';
 import { Question } from 'src/questions/entities/question.entity';
 import { Refund } from 'src/refunds/entities/refund.entity';
@@ -43,8 +43,8 @@ export class User {
   @Column({ default: true })
   is_active: boolean;
 
-  @ApiProperty({ type: () => Profile, description: 'User profile' })
-  @OneToOne(() => Profile, (profile) => profile.customer, {
+  @ApiProperty({ type: () => require('./profile.entity').Profile, description: 'User profile' })
+  @OneToOne(() => require('./profile.entity').Profile, (profile: Profile) => profile.customer, {
     cascade: true,
     eager: false,
   })
