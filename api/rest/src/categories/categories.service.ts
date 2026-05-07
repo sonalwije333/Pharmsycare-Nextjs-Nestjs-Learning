@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Brackets, In, Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import {
   GetCategoriesDto,
@@ -59,6 +59,7 @@ export class CategoriesService {
     page = 1,
     limit = 30,
     search,
+    searchJoin,
     parent,
     language,
     type_id,
@@ -69,11 +70,44 @@ export class CategoriesService {
       .createQueryBuilder('category')
       .leftJoinAndSelect('category.parent', 'parent');
 
+    queryBuilder.leftJoinAndSelect('category.type', 'type');
+
     if (search) {
-      queryBuilder.andWhere(
-        '(category.name LIKE :search OR category.details LIKE :search)',
-        { search: `%${search}%` },
-      );
+      const searchTokens = search
+        .split(';')
+        .map((token) => token.trim())
+        .filter(Boolean);
+
+      if (searchTokens.length > 0) {
+        searchTokens.forEach((token, index) => {
+          const [rawKey, ...rawValueParts] = token.split(':');
+          const key = rawKey?.trim();
+          const value = rawValueParts.join(':').trim();
+          const condition =
+            key && value ? this.buildSearchCondition(key, value) : null;
+
+          if (!condition) {
+            return;
+          }
+
+          if (index === 0) {
+            queryBuilder.andWhere(condition.clause, condition.parameters);
+            return;
+          }
+
+          if (searchJoin?.toLowerCase() === 'or') {
+            queryBuilder.orWhere(condition.clause, condition.parameters);
+            return;
+          }
+
+          queryBuilder.andWhere(condition.clause, condition.parameters);
+        });
+      } else {
+        queryBuilder.andWhere(
+          '(category.name LIKE :search OR category.details LIKE :search)',
+          { search: `%${search}%` },
+        );
+      }
     }
 
     if (parent !== undefined && parent !== null) {
@@ -131,6 +165,51 @@ export class CategoriesService {
       last_page: Math.ceil(total / limit),
       from,
       to,
+    };
+  }
+
+  private buildSearchCondition(
+    key: string,
+    value: string,
+  ): { clause: string; parameters: Record<string, string> } | null {
+    if (key === 'name') {
+      return {
+        clause: '(category.name LIKE :value OR category.details LIKE :value)',
+        parameters: { value: `%${value}%` },
+      };
+    }
+
+    if (key === 'type.slug' || key === 'type') {
+      return {
+        clause: 'type.slug = :value',
+        parameters: { value },
+      };
+    }
+
+    if (key === 'type_id') {
+      return {
+        clause: 'category.type_id = :value',
+        parameters: { value },
+      };
+    }
+
+    if (key === 'parent') {
+      if (value === 'null' || value === '') {
+        return {
+          clause: 'category.parent_id IS NULL',
+          parameters: {},
+        };
+      }
+
+      return {
+        clause: 'category.parent_id = :value',
+        parameters: { value },
+      };
+    }
+
+    return {
+      clause: '(category.name LIKE :value OR category.details LIKE :value)',
+      parameters: { value: `%${value}%` },
     };
   }
 
@@ -212,22 +291,42 @@ export class CategoriesService {
   async remove(id: number): Promise<CoreMutationOutput> {
     const category = await this.categoryRepository.findOne({
       where: { id },
-      relations: ['children'],
     });
 
     if (!category) {
       throw new NotFoundException(`Category with ID ${id} not found`);
     }
 
-    if (category.children && category.children.length > 0) {
-      throw new ConflictException('Cannot delete category with subcategories');
+    const idsToDeleteSet = new Set<number>([id]);
+    let parentIds: number[] = [id];
+
+    while (parentIds.length > 0) {
+      const children = await this.categoryRepository.find({
+        select: ['id'],
+        where: {
+          parent_id: In(parentIds),
+        },
+      });
+
+      // filter out any ids we've already collected to avoid cycles/repeats
+      const childIds = children
+        .map((child) => child.id)
+        .filter((childId) => !idsToDeleteSet.has(childId));
+
+      if (childIds.length === 0) {
+        break;
+      }
+
+      childIds.forEach((cid) => idsToDeleteSet.add(cid));
+      parentIds = childIds;
     }
 
-    await this.categoryRepository.softDelete(id);
+    const idsToDelete = Array.from(idsToDeleteSet);
+    await this.categoryRepository.softDelete(idsToDelete);
 
     return {
       success: true,
-      message: `Category with ID ${id} deleted successfully`,
+      message: `Category with ID ${id} and subcategories deleted successfully`,
     };
   }
 

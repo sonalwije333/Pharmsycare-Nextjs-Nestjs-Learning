@@ -12,6 +12,7 @@ import {
 import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
 import { CoreEntity } from '../../common/entities/core.entity';
 import { Attachment } from '../../common/entities/attachment.entity';
+import { Type } from 'src/types/entities/type.entity';
 
 @Entity('categories')
 export class Category extends CoreEntity {
@@ -54,6 +55,11 @@ export class Category extends CoreEntity {
   @ApiHideProperty()
   @OneToMany(() => Category, (category) => category.parent)
   children?: Category[];
+
+  @ApiHideProperty()
+  @ManyToOne(() => Type, { nullable: true })
+  @JoinColumn({ name: 'type_id' })
+  type?: Type;
 
   @ApiProperty({ 
     description: 'Category details', 
