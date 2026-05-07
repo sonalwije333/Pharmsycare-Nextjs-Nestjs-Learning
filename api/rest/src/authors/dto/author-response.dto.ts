@@ -1,14 +1,13 @@
-// authors/dto/author-response.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { Author } from '../entities/author.entity';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 
 export class AuthorResponse {
-  @ApiProperty({ type: Author })
+  @ApiProperty({ type: () => Author, description: 'Author data' })
   author: Author;
 }
 
 export class AuthorMutationResponse extends CoreMutationOutput {
-  @ApiProperty({ type: Author, required: false })
+  @ApiProperty({ type: () => Author, required: false, description: 'Updated author data' })
   author?: Author;
 }

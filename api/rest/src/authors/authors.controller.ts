@@ -1,4 +1,3 @@
-// authors/authors.controller.ts
 import {
   Body,
   Controller,
@@ -9,14 +8,11 @@ import {
   Put,
   Query,
   UseGuards,
-  HttpCode,
-  HttpStatus,
   ParseIntPipe,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse,
   ApiBearerAuth,
   ApiBody,
   ApiParam,
@@ -37,9 +33,10 @@ import { CreateAuthorDto } from './dto/create-author.dto';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Permission } from '../common/enums/enums';
+import { Permission, SortOrder } from '../common/enums/enums';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Public } from '../common/decorators/public.decorator';
+
 
 @ApiTags('✍️ Authors')
 @Controller('authors')
@@ -56,13 +53,13 @@ export class AuthorsController {
   })
   @ApiCreatedResponse({
     description: 'Author created successfully',
-    type: Author,
+    type: () => Author,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
   @ApiBody({ type: CreateAuthorDto })
-  createAuthor(@Body() createAuthorDto: CreateAuthorDto): Promise<Author> {
+  create(@Body() createAuthorDto: CreateAuthorDto): Promise<Author> {
     return this.authorsService.create(createAuthorDto);
   }
 
@@ -76,8 +73,8 @@ export class AuthorsController {
     description: 'Authors retrieved successfully',
     type: AuthorPaginator,
   })
-  async getAuthors(@Query() query: GetAuthorDto): Promise<AuthorPaginator> {
-    return this.authorsService.getAuthors(query);
+  findAll(@Query() query: GetAuthorDto): Promise<AuthorPaginator> {
+    return this.authorsService.findAll(query);
   }
 
   @Get(':slug')
@@ -90,14 +87,15 @@ export class AuthorsController {
     name: 'slug',
     description: 'Author slug',
     example: 'kaity-lerry',
+    type: String,
   })
   @ApiOkResponse({
     description: 'Author retrieved successfully',
-    type: Author,
+    type: () => Author,
   })
   @ApiNotFoundResponse({ description: 'Author not found' })
-  async getAuthorBySlug(@Param('slug') slug: string): Promise<Author> {
-    return this.authorsService.getAuthorBySlug(slug);
+  findOne(@Param('slug') slug: string): Promise<Author> {
+    return this.authorsService.findOne(slug);
   }
 
   @Put(':id')
@@ -106,10 +104,10 @@ export class AuthorsController {
     summary: 'Update author',
     description: 'Update author information by ID (Admin/Store Owner only)',
   })
-  @ApiParam({ name: 'id', description: 'Author ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Author ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Author updated successfully',
-    type: Author,
+    type: () => Author,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiNotFoundResponse({ description: 'Author not found' })
@@ -125,9 +123,9 @@ export class AuthorsController {
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
   @ApiOperation({
     summary: 'Delete author',
-    description: 'Permanently delete an author by ID (Admin/Store Owner only)',
+    description: 'Soft delete an author by ID (Admin/Store Owner only)',
   })
-  @ApiParam({ name: 'id', description: 'Author ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Author ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Author deleted successfully',
     type: CoreMutationOutput,
@@ -138,20 +136,20 @@ export class AuthorsController {
   }
 }
 
-@ApiTags('✍️ Authors - Top Authors')
-@Controller('top-authors')
+@ApiTags('✍️ Authors')
+@Controller('authors')
 @Public()
 export class TopAuthorsController {
   constructor(private authorsService: AuthorsService) {}
 
-  @Get()
+  @Get('top')
   @ApiOperation({
     summary: 'Get top authors',
-    description: 'Retrieve list of top authors by rating/popularity (Public)',
+    description: 'Retrieve list of top authors by products count (Public)',
   })
   @ApiOkResponse({
     description: 'Top authors retrieved successfully',
-    type: [Author],
+    type: () => [Author],
   })
   getTopAuthors(@Query() query: GetTopAuthorsDto): Promise<Author[]> {
     return this.authorsService.getTopAuthors(query);
