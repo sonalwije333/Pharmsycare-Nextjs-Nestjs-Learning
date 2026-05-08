@@ -9,15 +9,30 @@ import { UsersService } from 'src/users/users.service';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(private usersService: UsersService) {
     super({
-      // Robust extractor: handles headers like "Bearer <token>" and
-      // accidental duplicates like "Bearer Bearer <token>" that some
-      // Swagger clients produce when the user pastes the full "Bearer <token>".
+      // Robust extractor for Swagger/manual auth input.
       jwtFromRequest: (req: any) => {
-        const header = req?.headers?.authorization;
-        if (!header) return null;
-        // Remove all occurrences of the literal "Bearer" (case-insensitive)
-        // then trim to obtain the raw token value.
-        return header.replace(/Bearer\s+/gi, '').trim();
+        const headerValue = req?.headers?.authorization;
+        if (!headerValue || typeof headerValue !== 'string') return null;
+
+        let token = headerValue.trim();
+
+        // Remove repeated "Bearer " prefixes (Swagger users often paste the full value).
+        token = token.replace(/^(?:Bearer\s+)+/i, '').trim();
+
+        // Remove accidental surrounding quotes.
+        token = token.replace(/^"|"$/g, '').replace(/^'|'$/g, '').trim();
+
+        // Support accidentally pasted JSON auth response.
+        if (token.startsWith('{') && token.endsWith('}')) {
+          try {
+            const parsed = JSON.parse(token);
+            token = parsed?.token || parsed?.accessToken || '';
+          } catch {
+            return null;
+          }
+        }
+
+        return token || null;
       },
       ignoreExpiration: false,
       secretOrKey: jwtConfig.secret,
@@ -25,10 +40,25 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: any) {
-    const user = await this.usersService.findOne(payload.sub);
+    let user = null;
+
+    const userId = Number(payload?.sub);
+    if (Number.isFinite(userId)) {
+      try {
+        user = await this.usersService.findOne(userId);
+      } catch {
+        user = null;
+      }
+    }
+
+    if (!user && payload?.email) {
+      user = await this.usersService.findByEmail(payload.email);
+    }
+
     if (!user) {
       throw new UnauthorizedException();
     }
+
     return user;
   }
 }
