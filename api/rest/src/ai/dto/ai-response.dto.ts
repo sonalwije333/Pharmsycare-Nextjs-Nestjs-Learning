@@ -1,18 +1,20 @@
-// ai/dto/ai-response.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
+import { AiStatus } from 'src/common/enums/ai-status.enum';
 
 export class AiResponseDto {
   @ApiProperty({
     description: 'AI generation status',
-    enum: ['success', 'failed'],
-    example: 'success',
+    enum: AiStatus,
+    example: AiStatus.SUCCESS,
+    type: String,
   })
-  status: 'success' | 'failed';
+  status: AiStatus;
 
   @ApiProperty({
     description: 'Generated content from AI',
     example: 'This is a dummy response for dummy API.',
     required: false,
+    type: String,
   })
   result?: string;
 
@@ -20,6 +22,7 @@ export class AiResponseDto {
     description: 'Error message if generation failed',
     example: 'Failed to generate description',
     required: false,
+    type: String,
   })
   error?: string;
 }
