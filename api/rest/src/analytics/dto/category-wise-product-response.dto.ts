@@ -1,4 +1,3 @@
-// analytics/dto/category-wise-product-response.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { CoreEntity } from 'src/common/entities/core.entity';
 
@@ -7,6 +6,7 @@ export class CategoryWiseProductResponseDto extends CoreEntity {
     description: 'Total revenue for category',
     example: 5000.0,
     required: false,
+    type: Number,
   })
   totalRevenue?: number;
 
@@ -14,6 +14,7 @@ export class CategoryWiseProductResponseDto extends CoreEntity {
     description: 'Category name',
     example: 'Electronics',
     required: false,
+    type: String,
   })
   category_name?: string;
 
@@ -21,6 +22,7 @@ export class CategoryWiseProductResponseDto extends CoreEntity {
     description: 'Shop name',
     example: 'Tech Store',
     required: false,
+    type: String,
   })
   shop_name?: string;
 
@@ -28,6 +30,7 @@ export class CategoryWiseProductResponseDto extends CoreEntity {
     description: 'Product count in category',
     example: 25,
     required: false,
+    type: Number,
   })
   product_count?: number;
 }
