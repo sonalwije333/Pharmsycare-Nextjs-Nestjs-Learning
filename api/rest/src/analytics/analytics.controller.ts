@@ -1,9 +1,7 @@
-// analytics/analytics.controller.ts
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse,
   ApiBearerAuth,
   ApiOkResponse,
   ApiUnauthorizedResponse,
@@ -30,16 +28,15 @@ export class AnalyticsController {
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
   @ApiOperation({
     summary: 'Get analytics overview',
-    description:
-      'Retrieve comprehensive analytics including revenue, orders, and statistics (Admin/Store Owner only)',
+    description: 'Retrieve comprehensive analytics including revenue, orders, and statistics (Admin/Store Owner only)',
   })
   @ApiOkResponse({
     description: 'Analytics retrieved successfully',
-    type: AnalyticsResponseDto,
+    type: () => AnalyticsResponseDto,
   })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  analytics(): Promise<AnalyticsResponseDto> {
+  findAll(): Promise<AnalyticsResponseDto> {
     return this.analyticsService.findAll();
   }
 }
@@ -55,16 +52,15 @@ export class CategoryWiseProductController {
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
   @ApiOperation({
     summary: 'Get category wise products',
-    description:
-      'Retrieve product statistics grouped by category (Admin/Store Owner only)',
+    description: 'Retrieve product statistics grouped by category (Admin/Store Owner only)',
   })
   @ApiOkResponse({
     description: 'Category wise products retrieved successfully',
-    type: [CategoryWiseProductResponseDto],
+    type: () => [CategoryWiseProductResponseDto],
   })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  categoryWiseProduct(): Promise<CategoryWiseProductResponseDto[]> {
+  findAllCategoryWiseProduct(): Promise<CategoryWiseProductResponseDto[]> {
     return this.analyticsService.findAllCategoryWiseProduct();
   }
 }
@@ -80,16 +76,15 @@ export class LowStockProductsController {
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
   @ApiOperation({
     summary: 'Get low stock products',
-    description:
-      'Retrieve products with low inventory levels (Admin/Store Owner only)',
+    description: 'Retrieve products with low inventory levels (Admin/Store Owner only)',
   })
   @ApiOkResponse({
     description: 'Low stock products retrieved successfully',
-    type: [Product],
+    type: () => [Product],
   })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  lowStockProducts(): Promise<Product[]> {
+  findAllLowStockProducts(): Promise<Product[]> {
     return this.analyticsService.findAllLowStockProducts();
   }
 }
@@ -105,16 +100,15 @@ export class TopRateProductController {
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
   @ApiOperation({
     summary: 'Get top rated products',
-    description:
-      'Retrieve products with highest ratings (Admin/Store Owner only)',
+    description: 'Retrieve products with highest ratings (Admin/Store Owner only)',
   })
   @ApiOkResponse({
     description: 'Top rated products retrieved successfully',
-    type: [TopRateProductResponseDto],
+    type: () => [TopRateProductResponseDto],
   })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  topRateProduct(): Promise<TopRateProductResponseDto[]> {
+  findAllTopRateProduct(): Promise<TopRateProductResponseDto[]> {
     return this.analyticsService.findAllTopRateProduct();
   }
 }
