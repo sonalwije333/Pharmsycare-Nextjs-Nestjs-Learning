@@ -1,5 +1,4 @@
-// addresses/dto/create-address.dto.ts
-import { ApiProperty, PickType } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsNotEmpty,
   IsString,
@@ -10,14 +9,14 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { Address } from '../entities/address.entity';
-import { AddressType } from '../../common/enums/enums';
+import { AddressType } from 'src/common/enums/address-type.enum';
 
-// Define UserAddressDto FIRST before using it
+
 export class UserAddressDto {
   @ApiProperty({
     description: 'Street address',
     example: '123 Main St',
+    type: String,
   })
   @IsString()
   @IsNotEmpty()
@@ -26,6 +25,7 @@ export class UserAddressDto {
   @ApiProperty({
     description: 'Country',
     example: 'United States',
+    type: String,
   })
   @IsString()
   @IsNotEmpty()
@@ -34,6 +34,7 @@ export class UserAddressDto {
   @ApiProperty({
     description: 'City',
     example: 'New York',
+    type: String,
   })
   @IsString()
   @IsNotEmpty()
@@ -42,6 +43,7 @@ export class UserAddressDto {
   @ApiProperty({
     description: 'State',
     example: 'NY',
+    type: String,
   })
   @IsString()
   @IsNotEmpty()
@@ -50,20 +52,46 @@ export class UserAddressDto {
   @ApiProperty({
     description: 'ZIP/Postal code',
     example: '10001',
+    type: String,
   })
   @IsString()
   @IsNotEmpty()
   zip: string;
 }
 
-export class CreateAddressDto extends PickType(Address, [
-  'title',
-  'type',
-  'default',
-] as const) {
+export class CreateAddressDto {
+  @ApiProperty({
+    description: 'Address title',
+    example: 'Home',
+    type: String,
+  })
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @ApiProperty({
+    description: 'Address type',
+    enum: AddressType,
+    example: AddressType.SHIPPING,
+  })
+  @IsEnum(AddressType)
+  @IsNotEmpty()
+  type: AddressType;
+
+  @ApiProperty({
+    description: 'Set as default address',
+    example: false,
+    type: Boolean,
+    default: false,
+  })
+  @IsBoolean()
+  @IsOptional()
+  default?: boolean = false;
+
   @ApiProperty({
     description: 'Customer ID to associate address with',
     example: 1,
+    type: Number,
     required: true,
   })
   @IsNumber()

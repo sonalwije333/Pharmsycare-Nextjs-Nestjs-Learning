@@ -1,4 +1,3 @@
-// addresses/addresses.service.ts
 import {
   Injectable,
   NotFoundException,
@@ -6,12 +5,14 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateAddressDto, UserAddressDto } from './dto/create-address.dto';
+import { CreateAddressDto } from './dto/create-address.dto';
 import { UpdateAddressDto } from './dto/update-address.dto';
 import { GetAddressesDto, AddressPaginator } from './dto/get-addresses.dto';
 import { Address } from './entities/address.entity';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { paginate } from 'src/common/pagination/paginate';
+import { SortOrder } from 'src/common/enums/enums';
+import { AddressOrderByColumn } from 'src/common/enums/address-type.enum';
 
 @Injectable()
 export class AddressesService {
@@ -23,7 +24,6 @@ export class AddressesService {
   async create(createAddressDto: CreateAddressDto): Promise<Address> {
     const { customer_id, address, ...rest } = createAddressDto;
 
-    // If this is set as default, unset other default addresses for this customer
     if (rest.default) {
       await this.addressesRepository.update(
         { customer_id, default: true },
@@ -46,8 +46,8 @@ export class AddressesService {
     customer_id,
     type,
     text,
-    sortedBy = 'created_at',
-    orderBy = 'DESC',
+    orderBy = AddressOrderByColumn.CREATED_AT,
+    sortedBy = SortOrder.DESC,
   }: GetAddressesDto): Promise<AddressPaginator> {
     const query = this.addressesRepository
       .createQueryBuilder('address')
@@ -68,7 +68,20 @@ export class AddressesService {
       );
     }
 
-    query.orderBy(`address.${sortedBy}`, orderBy as 'ASC' | 'DESC');
+    let orderColumn: string;
+    switch (orderBy) {
+      case AddressOrderByColumn.TITLE:
+        orderColumn = 'address.title';
+        break;
+      case AddressOrderByColumn.UPDATED_AT:
+        orderColumn = 'address.updated_at';
+        break;
+      default:
+        orderColumn = 'address.created_at';
+    }
+
+    const orderDirection = sortedBy === SortOrder.ASC ? 'ASC' : 'DESC';
+    query.orderBy(orderColumn, orderDirection);
     query.skip((page - 1) * limit).take(limit);
 
     const [data, total] = await query.getManyAndCount();
@@ -76,7 +89,6 @@ export class AddressesService {
     const url = `/address?limit=${limit}`;
     const paginationInfo = paginate(total, page, limit, data.length, url);
 
-    // Map the pagination info to match AddressPaginator interface
     return {
       data,
       current_page: paginationInfo.current_page,
@@ -98,8 +110,8 @@ export class AddressesService {
       limit = 30,
       page = 1,
       type,
-      sortedBy = 'created_at',
-      orderBy = 'DESC',
+      orderBy = AddressOrderByColumn.CREATED_AT,
+      sortedBy = SortOrder.DESC,
     }: GetAddressesDto,
   ): Promise<AddressPaginator> {
     const query = this.addressesRepository
@@ -110,7 +122,20 @@ export class AddressesService {
       query.andWhere('address.type = :type', { type });
     }
 
-    query.orderBy(`address.${sortedBy}`, orderBy as 'ASC' | 'DESC');
+    let orderColumn: string;
+    switch (orderBy) {
+      case AddressOrderByColumn.TITLE:
+        orderColumn = 'address.title';
+        break;
+      case AddressOrderByColumn.UPDATED_AT:
+        orderColumn = 'address.updated_at';
+        break;
+      default:
+        orderColumn = 'address.created_at';
+    }
+
+    const orderDirection = sortedBy === SortOrder.ASC ? 'ASC' : 'DESC';
+    query.orderBy(orderColumn, orderDirection);
     query.skip((page - 1) * limit).take(limit);
 
     const [data, total] = await query.getManyAndCount();
@@ -118,7 +143,6 @@ export class AddressesService {
     const url = `/address/my-addresses?limit=${limit}`;
     const paginationInfo = paginate(total, page, limit, data.length, url);
 
-    // Map the pagination info to match AddressPaginator interface
     return {
       data,
       current_page: paginationInfo.current_page,
@@ -147,13 +171,9 @@ export class AddressesService {
     return address;
   }
 
-  async update(
-    id: number,
-    updateAddressDto: UpdateAddressDto,
-  ): Promise<Address> {
+  async update(id: number, updateAddressDto: UpdateAddressDto): Promise<Address> {
     const address = await this.findOne(id);
 
-    // If setting as default, unset other default addresses for this customer
     if (updateAddressDto.default && !address.default) {
       await this.addressesRepository.update(
         { customer_id: address.customer_id, default: true },
@@ -161,10 +181,8 @@ export class AddressesService {
       );
     }
 
-    // Prepare update data
     const updateData: any = { ...updateAddressDto };
 
-    // Handle address field if present
     if (updateAddressDto.address) {
       updateData.address = updateAddressDto.address;
     }
@@ -177,7 +195,7 @@ export class AddressesService {
   async remove(id: number): Promise<CoreMutationOutput> {
     const address = await this.findOne(id);
 
-    await this.addressesRepository.delete(id);
+    await this.addressesRepository.softDelete(id);
 
     return {
       success: true,
@@ -192,13 +210,11 @@ export class AddressesService {
       throw new BadRequestException('Address does not belong to this customer');
     }
 
-    // Unset all default addresses for this customer
     await this.addressesRepository.update(
       { customer_id: customerId, default: true },
       { default: false },
     );
 
-    // Set this address as default
     address.default = true;
     return this.addressesRepository.save(address);
   }
