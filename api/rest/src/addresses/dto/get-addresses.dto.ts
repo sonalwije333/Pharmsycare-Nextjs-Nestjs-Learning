@@ -1,41 +1,43 @@
-// addresses/dto/get-addresses.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { PaginationArgs } from 'src/common/dto/pagination-args.dto';
+import { IsOptional, IsNumber, IsString, IsEnum } from 'class-validator';
+import { Type } from 'class-transformer';
+import { SortOrder } from 'src/common/enums/enums';
 import { Address } from '../entities/address.entity';
+import { AddressOrderByColumn, AddressType } from 'src/common/enums/address-type.enum';
 
-// Add AddressPaginator export
 export class AddressPaginator {
-  @ApiProperty({ type: [Address] })
+  @ApiProperty({ type: () => [Address], description: 'Array of addresses' })
   data: Address[];
 
-  @ApiProperty({ example: 1 })
+  @ApiProperty({ example: 1, type: Number, description: 'Current page number' })
   current_page: number;
 
-  @ApiProperty({ example: 10 })
+  @ApiProperty({ example: 10, type: Number, description: 'Items per page' })
   per_page: number;
 
-  @ApiProperty({ example: 100 })
+  @ApiProperty({ example: 100, type: Number, description: 'Total items count' })
   total: number;
 
-  @ApiProperty({ example: 10 })
+  @ApiProperty({ example: 10, type: Number, description: 'Last page number' })
   last_page: number;
 
-  @ApiProperty({ example: '/address?page=1' })
+  @ApiProperty({ example: '/address?page=1', type: String, description: 'First page URL' })
   first_page_url: string;
 
-  @ApiProperty({ example: '/address?page=10' })
+  @ApiProperty({ example: '/address?page=10', type: String, description: 'Last page URL' })
   last_page_url: string;
 
-  @ApiProperty({ example: '/address?page=2', nullable: true })
+  @ApiProperty({ example: '/address?page=2', nullable: true, type: String, description: 'Next page URL' })
   next_page_url: string | null;
 
-  @ApiProperty({ example: '/address?page=1', nullable: true })
+  @ApiProperty({ example: '/address?page=1', nullable: true, type: String, description: 'Previous page URL' })
   prev_page_url: string | null;
 
-  @ApiProperty({ example: 1 })
+  @ApiProperty({ example: 1, type: Number, description: 'Starting item index' })
   from: number;
 
-  @ApiProperty({ example: 10 })
+  @ApiProperty({ example: 10, type: Number, description: 'Ending item index' })
   to: number;
 }
 
@@ -44,35 +46,49 @@ export class GetAddressesDto extends PaginationArgs {
     description: 'Filter by customer ID',
     required: false,
     example: 1,
+    type: Number,
   })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
   customer_id?: number;
 
   @ApiProperty({
     description: 'Filter by address type',
-    enum: ['billing', 'shipping'],
+    enum: AddressType,
     required: false,
   })
-  type?: string;
+  @IsOptional()
+  @IsEnum(AddressType)
+  type?: AddressType;
 
   @ApiProperty({
     description: 'Search text',
     required: false,
+    type: String,
+    example: 'Home',
   })
+  @IsOptional()
+  @IsString()
   text?: string;
 
   @ApiProperty({
-    description: 'Order by field',
-    enum: ['created_at', 'updated_at', 'title'],
+    description: 'Column to order by',
+    enum: AddressOrderByColumn,
     required: false,
-    default: 'created_at',
+    default: AddressOrderByColumn.CREATED_AT,
   })
-  orderBy?: string;
+  @IsOptional()
+  @IsEnum(AddressOrderByColumn)
+  orderBy?: AddressOrderByColumn = AddressOrderByColumn.CREATED_AT;
 
   @ApiProperty({
     description: 'Sort order',
-    enum: ['ASC', 'DESC'],
+    enum: SortOrder,
     required: false,
-    default: 'DESC',
+    default: SortOrder.DESC,
   })
-  sortedBy?: string;
+  @IsOptional()
+  @IsEnum(SortOrder)
+  sortedBy?: SortOrder = SortOrder.DESC;
 }

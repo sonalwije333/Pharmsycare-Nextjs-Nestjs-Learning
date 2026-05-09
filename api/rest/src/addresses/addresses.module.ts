@@ -1,4 +1,3 @@
-// addresses/addresses.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AddressesService } from './addresses.service';
