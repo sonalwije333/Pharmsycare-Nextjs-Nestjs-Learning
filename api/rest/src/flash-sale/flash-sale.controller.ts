@@ -1,4 +1,3 @@
-// flash-sale/flash-sale.controller.ts
 import {
   Body,
   Controller,
@@ -14,7 +13,6 @@ import {
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse,
   ApiBearerAuth,
   ApiBody,
   ApiParam,
@@ -35,7 +33,7 @@ import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
-import { Permission } from '../common/enums/enums';
+import { Permission, SortOrder } from '../common/enums/enums';
 import { Public } from '../common/decorators/public.decorator';
 
 @ApiTags('⚡ Flash Sales')
@@ -53,15 +51,13 @@ export class FlashSaleController {
   })
   @ApiCreatedResponse({
     description: 'Flash sale created successfully',
-    type: FlashSale,
+    type: () => FlashSale,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
   @ApiBody({ type: CreateFlashSaleDto })
-  createFlashSale(
-    @Body() createFlashSaleDto: CreateFlashSaleDto,
-  ): Promise<FlashSale> {
+  create(@Body() createFlashSaleDto: CreateFlashSaleDto): Promise<FlashSale> {
     return this.flashSaleService.create(createFlashSaleDto);
   }
 
@@ -75,14 +71,11 @@ export class FlashSaleController {
     description: 'Flash sales retrieved successfully',
     type: FlashSalePaginator,
   })
-  @ApiQuery({ name: 'search', required: false })
-  @ApiQuery({ name: 'type', required: false })
-  @ApiQuery({ name: 'sale_status', required: false })
   findAll(@Query() query: GetFlashSaleDto): Promise<FlashSalePaginator> {
-    return this.flashSaleService.findAllFlashSale(query);
+    return this.flashSaleService.findAll(query);
   }
 
-  @Get(':param')
+  @Get(':param((?!products$)[^/]+)')
   @Public()
   @ApiOperation({
     summary: 'Get flash sale by ID or slug',
@@ -92,18 +85,18 @@ export class FlashSaleController {
     name: 'param',
     description: 'Flash sale ID or slug',
     example: '1 or limited-time-offer-act-fast',
+    type: String,
   })
   @ApiOkResponse({
     description: 'Flash sale retrieved successfully',
-    type: FlashSale,
+    type: () => FlashSale,
   })
   @ApiNotFoundResponse({ description: 'Flash sale not found' })
-  @ApiQuery({ name: 'language', required: false })
-  getFlashSale(
+  findOne(
     @Param('param') param: string,
-    @Query('language') language: string,
+    @Query('language') language?: string,
   ): Promise<FlashSale> {
-    return this.flashSaleService.getFlashSale(param, language);
+    return this.flashSaleService.findOne(param, language);
   }
 
   @Put(':id')
@@ -112,10 +105,10 @@ export class FlashSaleController {
     summary: 'Update flash sale',
     description: 'Update flash sale information by ID (Admin only)',
   })
-  @ApiParam({ name: 'id', description: 'Flash sale ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Flash sale ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Flash sale updated successfully',
-    type: FlashSale,
+    type: () => FlashSale,
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiNotFoundResponse({ description: 'Flash sale not found' })
@@ -131,28 +124,26 @@ export class FlashSaleController {
   @Roles(Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Delete flash sale',
-    description: 'Permanently delete a flash sale by ID (Admin only)',
+    description: 'Soft delete a flash sale by ID (Admin only)',
   })
-  @ApiParam({ name: 'id', description: 'Flash sale ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Flash sale ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Flash sale deleted successfully',
     type: CoreMutationOutput,
   })
   @ApiNotFoundResponse({ description: 'Flash sale not found' })
-  deleteFlashSale(
-    @Param('id', ParseIntPipe) id: number,
-  ): Promise<CoreMutationOutput> {
+  remove(@Param('id', ParseIntPipe) id: number): Promise<CoreMutationOutput> {
     return this.flashSaleService.remove(id);
   }
 }
 
-@ApiTags('⚡ Flash Sales - Products')
-@Controller('products-by-flash-sale')
+@ApiTags('⚡ Flash Sales')
+@Controller('flash-sale')
 @Public()
 export class ProductsByFlashSaleController {
   constructor(private flashSaleService: FlashSaleService) {}
 
-  @Get()
+  @Get('products')
   @ApiOperation({
     summary: 'Get products by flash sale',
     description: 'Retrieve paginated list of products by flash sale (Public)',
@@ -163,23 +154,42 @@ export class ProductsByFlashSaleController {
       type: 'object',
       properties: {
         data: { type: 'array', items: { type: 'object' } },
-        current_page: { type: 'number' },
-        per_page: { type: 'number' },
-        total: { type: 'number' },
-        last_page: { type: 'number' },
+        current_page: { type: 'number', example: 1 },
+        per_page: { type: 'number', example: 15 },
+        total: { type: 'number', example: 100 },
+        last_page: { type: 'number', example: 10 },
       },
     },
   })
-  findAll(@Query() query: GetFlashSaleDto): Promise<any> {
+  findAllProducts(@Query() query: GetFlashSaleDto): Promise<any> {
     return this.flashSaleService.findAllProductsByFlashSale(query);
   }
 
-  @Get(':flashSaleId')
+  @Get(':flashSaleId/products')
   @ApiOperation({
     summary: 'Get products by flash sale ID',
     description: 'Retrieve products for a specific flash sale',
   })
-  @ApiParam({ name: 'flashSaleId', description: 'Flash sale ID', type: Number })
+  @ApiParam({ 
+    name: 'flashSaleId', 
+    description: 'Flash sale ID', 
+    type: Number,
+    example: 1,
+  })
+  @ApiOkResponse({
+    description: 'Products retrieved successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        data: { type: 'array', items: { type: 'object' } },
+        flashSale: { type: 'object' },
+        current_page: { type: 'number' },
+        per_page: { type: 'number' },
+        total: { type: 'number' },
+      },
+    },
+  })
+  @ApiNotFoundResponse({ description: 'Flash sale not found' })
   getProductsByFlashSaleId(
     @Param('flashSaleId', ParseIntPipe) flashSaleId: number,
     @Query() query: GetFlashSaleDto,

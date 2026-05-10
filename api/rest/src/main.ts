@@ -31,8 +31,8 @@ async function bootstrap() {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT-Access Token',
-        name: 'JWT',
-        description: 'Enter JWT token',
+        name: 'Authorization',
+        description: 'Enter JWT token (Prefix with "Bearer ")',
         in: 'header',
       },
       'JWT-auth',
@@ -42,8 +42,8 @@ async function bootstrap() {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT-Refresh Token',
-        name: 'Refresh Token',
-        description: 'Enter refresh token',
+        name: 'Authorization',
+        description: 'Enter refresh token (Prefix with "Bearer ")',
         in: 'header',
       },
       'refresh-token',
@@ -51,6 +51,12 @@ async function bootstrap() {
     .build();
     
   const document = SwaggerModule.createDocument(app, config);
+  // Apply JWT-auth as a global security requirement so Swagger 'Try it out' sends Authorization
+  // This ensures endpoints protected with @ApiBearerAuth('JWT-auth') receive the header
+  document.security = document.security || [];
+  if (!document.security.find((s) => Object.prototype.hasOwnProperty.call(s, 'JWT-auth'))) {
+    document.security.push({ 'JWT-auth': [] });
+  }
   SwaggerModule.setup('docs', app, document);
   
   const PORT = process.env.PORT || 5000;
