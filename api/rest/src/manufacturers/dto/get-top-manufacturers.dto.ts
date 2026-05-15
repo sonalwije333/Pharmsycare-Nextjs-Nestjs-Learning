@@ -1,4 +1,3 @@
-// manufacturers/dto/get-top-manufacturers.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsNumber, Min } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -8,7 +7,8 @@ export class GetTopManufacturersDto {
     description: 'Number of manufacturers to return',
     example: 10,
     required: false,
-    default: 10
+    default: 10,
+    type: Number,
   })
   @IsOptional()
   @Type(() => Number)

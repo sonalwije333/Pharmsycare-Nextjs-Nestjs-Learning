@@ -1,5 +1,11 @@
-// manufacturers/manufacturers.service.ts
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  OnModuleInit,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Manufacturer } from './entities/manufacturer.entity';
 import manufacturersJson from '@db/manufacturers.json';
 import { plainToClass } from 'class-transformer';
@@ -13,6 +19,9 @@ import { paginate } from '../common/pagination/paginate';
 import { CreateManufacturerDto } from './dto/create-manufacturer.dto';
 import { UpdateManufacturerDto } from './dto/update-manufacturer.dto';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
+import { SortOrder } from 'src/common/enums/enums';
+import { ManufacturerOrderByColumn } from 'src/common/enums/manufacturer-order-by.enum';
+
 
 const manufacturers = plainToClass(Manufacturer, manufacturersJson);
 
@@ -24,97 +33,124 @@ const options = {
 const fuse = new Fuse(manufacturers, options);
 
 @Injectable()
-export class ManufacturersService {
-  private manufacturers: Manufacturer[] = manufacturers;
+export class ManufacturersService implements OnModuleInit {
+  constructor(
+    @InjectRepository(Manufacturer)
+    private readonly manufacturerRepository: Repository<Manufacturer>,
+  ) {}
 
-  async create(createManufactureDto: CreateManufacturerDto): Promise<Manufacturer> {
-    // Check if manufacturer with same name exists
-    const existingManufacturer = this.manufacturers.find(
-      (m) => m.name.toLowerCase() === createManufactureDto.name.toLowerCase()
+  async onModuleInit(): Promise<void> {
+    const count = await this.manufacturerRepository.count();
+
+    if (count > 0) {
+      return;
+    }
+
+    if (!manufacturers.length) {
+      return;
+    }
+
+    await this.manufacturerRepository.save(
+      manufacturers.map((manufacturer) =>
+        this.manufacturerRepository.create({
+          ...manufacturer,
+          id: undefined,
+        }),
+      ),
     );
+  }
+
+  async create(createManufacturerDto: CreateManufacturerDto): Promise<Manufacturer> {
+    const existingManufacturer = await this.manufacturerRepository.findOne({
+      where: { name: createManufacturerDto.name },
+    });
     
     if (existingManufacturer) {
       throw new ConflictException('Manufacturer with this name already exists');
     }
 
-    // Commented for future use (type-related field)
-    const { type_id, ...manufacturerData } = createManufactureDto;
+    const slug = createManufacturerDto.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-    // Create new manufacturer with generated ID
-    const newManufacturer: Manufacturer = {
-      ...manufacturerData,
-      id: this.manufacturers.length + 1,
-      slug: createManufactureDto.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+    const newManufacturer = this.manufacturerRepository.create({
+      ...createManufacturerDto,
+      slug,
       products_count: 0,
-      is_approved: createManufactureDto.is_approved ?? false,
-      // type: null, // Commented for future use
-      // type_id: createManufactureDto.type_id, // Commented for future use
-    } as Manufacturer;
+      is_approved: createManufacturerDto.is_approved ?? false,
+    });
 
-    this.manufacturers.push(newManufacturer);
-    
-    return newManufacturer;
+    return this.manufacturerRepository.save(newManufacturer);
   }
 
-  async getManufactures({
-    limit,
-    page,
+  async findAll({
+    page = 1,
+    limit = 30,
     search,
     is_approved,
+    orderBy = ManufacturerOrderByColumn.CREATED_AT,
+    sortedBy = SortOrder.DESC,
   }: GetManufacturersDto): Promise<ManufacturerPaginator> {
-    if (!page) page = 1;
-    if (!limit) limit = 30;
-    
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    let data: Manufacturer[] = this.manufacturers;
-    
-    // Filter by approval status if provided
+    const query = this.manufacturerRepository.createQueryBuilder('manufacturer');
+
     if (is_approved !== undefined) {
-      data = data.filter(m => m.is_approved === is_approved);
+      query.andWhere('manufacturer.is_approved = :is_approved', {
+        is_approved,
+      });
     }
     
-    // Search functionality
     if (search) {
       const parseSearchParams = search.split(';');
       for (const searchParam of parseSearchParams) {
         const [key, value] = searchParam.split(':');
         if (key === 'name' && value) {
-          data = fuse.search(value)?.map(({ item }) => item);
-        } else if (key === 'type_id' && value) {
-          // Commented for future use
-          // data = data.filter(m => m.type_id === value);
-        } else {
-          data = data.filter(m => 
-            m.name?.toLowerCase().includes(search.toLowerCase()) ||
-            m.description?.toLowerCase().includes(search.toLowerCase())
-          );
+          query.andWhere('manufacturer.name LIKE :name', { name: `%${value}%` });
+        } else if (key === 'description' && value) {
+          query.andWhere('manufacturer.description LIKE :description', {
+            description: `%${value}%`,
+          });
         }
       }
     }
 
-    const results = data.slice(startIndex, endIndex);
-    const url = `/manufacturers?search=${search}&limit=${limit}`;
+    if (orderBy === ManufacturerOrderByColumn.NAME) {
+      query.orderBy('manufacturer.name', sortedBy.toUpperCase() as 'ASC' | 'DESC');
+    } else if (orderBy === ManufacturerOrderByColumn.UPDATED_AT) {
+      query.orderBy('manufacturer.updated_at', sortedBy.toUpperCase() as 'ASC' | 'DESC');
+    } else {
+      query.orderBy('manufacturer.created_at', sortedBy.toUpperCase() as 'ASC' | 'DESC');
+    }
+
+    const total = await query.getCount();
+    const startIndex = (page - 1) * limit;
+    const endIndex = startIndex + limit;
+    const results = await query.skip(startIndex).take(limit).getMany();
     
+    const url = `/manufacturers?limit=${limit}`;
+    const paginationInfo = paginate(total, page, limit, results.length, url);
+
     return {
       data: results,
-      ...paginate(data.length, page, limit, results.length, url),
+      ...paginationInfo,
+      current_page: page,
+      per_page: limit,
+      total,
+      last_page: Math.ceil(total / limit),
+      from: (page - 1) * limit + 1,
+      to: Math.min(page * limit, total),
     };
   }
 
-  async getTopManufactures({
-    limit = 10,
-  }: GetTopManufacturersDto): Promise<Manufacturer[]> {
-    return this.manufacturers
-      .filter(m => m.is_approved === true)
-      .sort((a, b) => (b.products_count || 0) - (a.products_count || 0))
-      .slice(0, limit);
+  async getTopManufacturers({ limit = 10 }: GetTopManufacturersDto): Promise<Manufacturer[]> {
+    return this.manufacturerRepository.find({
+      where: { is_approved: true },
+      order: { products_count: 'DESC' },
+      take: limit,
+    });
   }
 
-  async getManufacturesBySlug(slug: string): Promise<Manufacturer> {
-    const manufacturer = this.manufacturers.find(
-      (singleManufacture) => singleManufacture.slug === slug
-    );
+  async findOne(slug: string): Promise<Manufacturer> {
+    const manufacturer = await this.manufacturerRepository.findOne({
+      where: { slug },
+    });
     
     if (!manufacturer) {
       throw new NotFoundException(`Manufacturer with slug "${slug}" not found`);
@@ -123,8 +159,10 @@ export class ManufacturersService {
     return manufacturer;
   }
 
-  async getManufacturerById(id: number): Promise<Manufacturer> {
-    const manufacturer = this.manufacturers.find((m) => m.id === id);
+  async findById(id: number): Promise<Manufacturer> {
+    const manufacturer = await this.manufacturerRepository.findOne({
+      where: { id },
+    });
     
     if (!manufacturer) {
       throw new NotFoundException(`Manufacturer with ID ${id} not found`);
@@ -133,38 +171,27 @@ export class ManufacturersService {
     return manufacturer;
   }
 
-  async update(id: number, updateManufacturesDto: UpdateManufacturerDto): Promise<Manufacturer> {
-    const manufacturer = await this.getManufacturerById(id);
+  async update(id: number, updateManufacturerDto: UpdateManufacturerDto): Promise<Manufacturer> {
+    const manufacturer = await this.findById(id);
     
-    // Update manufacturer properties
-    Object.assign(manufacturer, updateManufacturesDto);
+    Object.assign(manufacturer, updateManufacturerDto);
     
-    // Update slug if name changed
-    if (updateManufacturesDto.name) {
-      manufacturer.slug = updateManufacturesDto.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    if (updateManufacturerDto.name) {
+      manufacturer.slug = updateManufacturerDto.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
     }
     
-    // Update approval status
-    if (updateManufacturesDto.is_approved !== undefined) {
-      manufacturer.is_approved = updateManufacturesDto.is_approved;
+    if (updateManufacturerDto.is_approved !== undefined) {
+      manufacturer.is_approved = updateManufacturerDto.is_approved;
     }
     
-    // Update type if provided (commented for future use)
-    // if (updateManufacturesDto.type_id) {
-    //   manufacturer.type_id = updateManufacturesDto.type_id;
-    // }
+    manufacturer.updated_at = new Date();
     
-    return manufacturer;
+    return this.manufacturerRepository.save(manufacturer);
   }
 
   async remove(id: number): Promise<CoreMutationOutput> {
-    const manufacturerIndex = this.manufacturers.findIndex((m) => m.id === id);
-    
-    if (manufacturerIndex === -1) {
-      throw new NotFoundException(`Manufacturer with ID ${id} not found`);
-    }
-    
-    this.manufacturers.splice(manufacturerIndex, 1);
+    await this.findById(id);
+    await this.manufacturerRepository.softDelete(id);
     
     return {
       success: true,

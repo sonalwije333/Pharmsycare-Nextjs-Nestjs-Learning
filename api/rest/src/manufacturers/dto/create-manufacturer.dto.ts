@@ -1,30 +1,57 @@
-// manufacturers/dto/create-manufacturer.dto.ts
-import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { IsOptional, IsString, IsBoolean, IsNumber, IsArray, ValidateNested } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsOptional,
+  IsString,
+  IsBoolean,
+  IsNumber,
+  IsArray,
+  ValidateNested,
+  IsDate,
+} from 'class-validator';
 import { Type } from 'class-transformer';
-import { Manufacturer } from '../entities/manufacturer.entity';
-import { Attachment } from 'src/common/entities/attachment.entity';
-import { ShopSocials } from 'src/settings/entities/setting.entity';
-// import { Type as TypeEntity } from '../../types/entities/type.entity'; // Commented for future use
 
-export class CreateManufacturerDto extends OmitType(Manufacturer, [
-  'id',
-  'cover_image',
-  'description',
-  'image',
-  'name',
-  'products_count',
-  'slug',
-  'socials',
-  // 'type',
-  'type_id',
-  'website',
-  'translated_languages',
-]) {
+class ManufacturerAttachmentDto {
+  @ApiProperty({ required: true, example: 0, type: Number })
+  @IsNumber()
+  id: number;
+
+  @ApiProperty({ required: true, example: '2026-05-15T18:59:29.737Z', type: String })
+  @Type(() => Date)
+  @IsDate()
+  created_at: Date;
+
+  @ApiProperty({ required: true, example: '2026-05-15T18:59:29.737Z', type: String })
+  @Type(() => Date)
+  @IsDate()
+  updated_at: Date;
+
+  @ApiProperty({ required: false, example: 'string', type: String })
+  @IsOptional()
+  @IsString()
+  thumbnail?: string;
+
+  @ApiProperty({ required: false, example: 'string', type: String })
+  @IsOptional()
+  @IsString()
+  original?: string;
+}
+
+class ManufacturerSocialDto {
+  @ApiProperty({ required: true, example: 'string', type: String })
+  @IsString()
+  icon: string;
+
+  @ApiProperty({ required: true, example: 'string', type: String })
+  @IsString()
+  url: string;
+}
+
+export class CreateManufacturerDto {
   @ApiProperty({
     description: 'Shop ID',
     example: '1',
-    required: false
+    required: false,
+    type: String,
   })
   @IsOptional()
   @IsString()
@@ -33,7 +60,8 @@ export class CreateManufacturerDto extends OmitType(Manufacturer, [
   @ApiProperty({
     description: 'Manufacturer name',
     example: 'Too cool publication',
-    required: true
+    required: true,
+    type: String,
   })
   @IsString()
   name: string;
@@ -41,7 +69,8 @@ export class CreateManufacturerDto extends OmitType(Manufacturer, [
   @ApiProperty({
     description: 'Manufacturer description',
     example: 'To publish is to make content available to the general public...',
-    required: false
+    required: false,
+    type: String,
   })
   @IsOptional()
   @IsString()
@@ -50,7 +79,8 @@ export class CreateManufacturerDto extends OmitType(Manufacturer, [
   @ApiProperty({
     description: 'Manufacturer website',
     example: 'https://redq.io/',
-    required: false
+    required: false,
+    type: String,
   })
   @IsOptional()
   @IsString()
@@ -58,81 +88,73 @@ export class CreateManufacturerDto extends OmitType(Manufacturer, [
 
   @ApiProperty({
     description: 'Cover image',
-    type: () => Attachment,
-    required: false
+    type: ManufacturerAttachmentDto,
+    required: false,
   })
   @IsOptional()
   @ValidateNested()
-  @Type(() => Attachment)
-  cover_image?: Attachment;
+  @Type(() => ManufacturerAttachmentDto)
+  cover_image?: ManufacturerAttachmentDto;
 
   @ApiProperty({
     description: 'Manufacturer image/logo',
-    type: () => Attachment,
-    required: false
+    type: ManufacturerAttachmentDto,
+    required: false,
   })
   @IsOptional()
   @ValidateNested()
-  @Type(() => Attachment)
-  image?: Attachment;
+  @Type(() => ManufacturerAttachmentDto)
+  image?: ManufacturerAttachmentDto;
 
   @ApiProperty({
     description: 'Social media links',
-    type: () => ShopSocials,
-    required: false
+    type: ManufacturerSocialDto,
+    required: false,
   })
   @IsOptional()
   @ValidateNested()
-  @Type(() => ShopSocials)
-  socials?: ShopSocials;
+  @Type(() => ManufacturerSocialDto)
+  socials?: ManufacturerSocialDto;
 
   @ApiProperty({
     description: 'Is manufacturer approved',
     example: true,
     required: false,
-    default: false
+    default: false,
+    type: Boolean,
   })
   @IsOptional()
   @IsBoolean()
-  is_approved?: boolean;
+  is_approved?: boolean = false;
 
   @ApiProperty({
     description: 'Type ID (for future use)',
     example: 8,
-    required: false
+    required: false,
+    type: Number,
   })
   @IsOptional()
   @IsNumber()
   type_id?: number;
 
-  // Commented for future use when Type module is created
-  // @ApiProperty({
-  //   description: 'Manufacturer type',
-  //   type: () => TypeEntity,
-  //   required: false
-  // })
-  // @IsOptional()
-  // @ValidateNested()
-  // @Type(() => TypeEntity)
-  // type?: TypeEntity;
-
   @ApiProperty({
     description: 'Language code',
     example: 'en',
-    required: false
+    required: false,
+    type: String,
   })
   @IsOptional()
   @IsString()
-  language?: string;
+  language?: string = 'en';
 
   @ApiProperty({
     description: 'Translated languages',
     example: ['en'],
     type: [String],
-    required: false
+    required: false,
   })
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  translated_languages?: string[];
+  translated_languages?: string[] = ['en'];
 }

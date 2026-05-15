@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
 
 const { i18n } = require('./next-i18next.config');
 
@@ -31,6 +32,12 @@ const nextConfig = {
   },
 
   webpack(config, options) {
+    config.resolve.modules = [
+      path.resolve(__dirname, 'node_modules'),
+      path.resolve(__dirname, '../node_modules'),
+      'node_modules',
+    ];
+
     config.module.rules.push({
       test: /\.graphql$/,
       exclude: /node_modules/,
