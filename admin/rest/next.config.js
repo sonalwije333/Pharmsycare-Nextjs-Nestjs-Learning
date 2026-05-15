@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
 
 const { i18n } = require('./next-i18next.config');
 
@@ -12,6 +13,15 @@ const { i18n } = require('./next-i18next.config');
 const nextConfig = {
   reactStrictMode: true,
   i18n,
+  webpack(config) {
+    config.resolve.modules = [
+      path.resolve(__dirname, 'node_modules'),
+      path.resolve(__dirname, '../node_modules'),
+      'node_modules',
+    ];
+
+    return config;
+  },
   images: {
     domains: [
       'via.placeholder.com',

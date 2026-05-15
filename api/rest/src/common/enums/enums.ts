@@ -80,3 +80,18 @@ export enum QueryFlashSaleOrderByColumn {
   START_DATE = 'start_date',
   END_DATE = 'end_date',
 }
+
+//imports enum  
+
+export enum ImportStatus {
+  PENDING = 'pending',
+  PROCESSING = 'processing',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+}
+
+export enum ImportType {
+  ATTRIBUTES = 'attributes',
+  PRODUCTS = 'products',
+  VARIATION_OPTIONS = 'variation-options',
+}

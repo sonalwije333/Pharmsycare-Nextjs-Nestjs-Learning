@@ -1,4 +1,3 @@
-// manufacturers/manufacturers.controller.ts
 import {
   Body,
   Controller,
@@ -9,18 +8,14 @@ import {
   Put,
   Query,
   UseGuards,
-  HttpCode,
-  HttpStatus,
   ParseIntPipe,
 } from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
-  ApiResponse,
   ApiBearerAuth,
   ApiBody,
   ApiParam,
-  ApiQuery,
   ApiUnauthorizedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
@@ -39,10 +34,10 @@ import { CreateManufacturerDto } from './dto/create-manufacturer.dto';
 import { UpdateManufacturerDto } from './dto/update-manufacturer.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { Roles } from 'src/common/decorators/roles.decorator';
-import { Permission } from "src/common/enums/enums";
+import { Permission, SortOrder } from "src/common/enums/enums";
+
 
 @ApiTags('🏭 Manufacturers')
 @Controller('manufacturers')
@@ -59,14 +54,14 @@ export class ManufacturersController {
   })
   @ApiCreatedResponse({
     description: 'Manufacturer created successfully',
-    type: Manufacturer
+    type: () => Manufacturer
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
   @ApiBody({ type: CreateManufacturerDto })
-  createManufacturer(@Body() createManufactureDto: CreateManufacturerDto) {
-    return this.manufacturersService.create(createManufactureDto);
+  create(@Body() createManufacturerDto: CreateManufacturerDto): Promise<Manufacturer> {
+    return this.manufacturersService.create(createManufacturerDto);
   }
 
   @Get()
@@ -77,13 +72,11 @@ export class ManufacturersController {
   })
   @ApiOkResponse({
     description: 'Manufacturers retrieved successfully',
-    type: ManufacturerPaginator
+    type: () => ManufacturerPaginator
   })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
-  async getManufactures(
-    @Query() query: GetManufacturersDto,
-  ): Promise<ManufacturerPaginator> {
-    return this.manufacturersService.getManufactures(query);
+  findAll(@Query() query: GetManufacturersDto): Promise<ManufacturerPaginator> {
+    return this.manufacturersService.findAll(query);
   }
 
   @Get(':slug')
@@ -92,17 +85,20 @@ export class ManufacturersController {
     summary: 'Get manufacturer by slug',
     description: 'Retrieve manufacturer details by slug'
   })
-  @ApiParam({ name: 'slug', description: 'Manufacturer slug', example: 'too-cool-publication' })
+  @ApiParam({ 
+    name: 'slug', 
+    description: 'Manufacturer slug', 
+    example: 'too-cool-publication',
+    type: String,
+  })
   @ApiOkResponse({
     description: 'Manufacturer retrieved successfully',
-    type: Manufacturer
+    type: () => Manufacturer
   })
   @ApiNotFoundResponse({ description: 'Manufacturer not found' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
-  async getManufactureBySlug(
-    @Param('slug') slug: string,
-  ): Promise<Manufacturer> {
-    return this.manufacturersService.getManufacturesBySlug(slug);
+  findOne(@Param('slug') slug: string): Promise<Manufacturer> {
+    return this.manufacturersService.findOne(slug);
   }
 
   @Put(':id')
@@ -111,10 +107,10 @@ export class ManufacturersController {
     summary: 'Update manufacturer',
     description: 'Update manufacturer by ID (Admin or Store owner only)'
   })
-  @ApiParam({ name: 'id', description: 'Manufacturer ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Manufacturer ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Manufacturer updated successfully',
-    type: Manufacturer
+    type: () => Manufacturer
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiNotFoundResponse({ description: 'Manufacturer not found' })
@@ -124,7 +120,7 @@ export class ManufacturersController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateManufacturerDto: UpdateManufacturerDto,
-  ) {
+  ): Promise<Manufacturer> {
     return this.manufacturersService.update(id, updateManufacturerDto);
   }
 
@@ -132,9 +128,9 @@ export class ManufacturersController {
   @Roles(Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Delete manufacturer',
-    description: 'Delete manufacturer by ID (Admin only)'
+    description: 'Soft delete manufacturer by ID (Admin only)'
   })
-  @ApiParam({ name: 'id', description: 'Manufacturer ID', type: Number })
+  @ApiParam({ name: 'id', description: 'Manufacturer ID', type: Number, example: 1 })
   @ApiOkResponse({
     description: 'Manufacturer deleted successfully',
     type: CoreMutationOutput
@@ -142,19 +138,19 @@ export class ManufacturersController {
   @ApiNotFoundResponse({ description: 'Manufacturer not found' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  remove(@Param('id', ParseIntPipe) id: number) {
+  remove(@Param('id', ParseIntPipe) id: number): Promise<CoreMutationOutput> {
     return this.manufacturersService.remove(id);
   }
 }
 
-@ApiTags('🏭 Top Manufacturers')
-@Controller('top-manufacturers')
+@ApiTags('🏭 Manufacturers')
+@Controller('manufacturers')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiBearerAuth('JWT-auth')
 export class TopManufacturersController {
   constructor(private readonly manufacturersService: ManufacturersService) {}
 
-  @Get()
+  @Get('top')
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Get top manufacturers',
@@ -162,12 +158,10 @@ export class TopManufacturersController {
   })
   @ApiOkResponse({
     description: 'Top manufacturers retrieved successfully',
-    type: [Manufacturer]
+    type: () => [Manufacturer]
   })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
-  async getTopManufactures(
-    @Query() query: GetTopManufacturersDto,
-  ): Promise<Manufacturer[]> {
-    return this.manufacturersService.getTopManufactures(query);
+  getTop(@Query() query: GetTopManufacturersDto): Promise<Manufacturer[]> {
+    return this.manufacturersService.getTopManufacturers(query);
   }
 }

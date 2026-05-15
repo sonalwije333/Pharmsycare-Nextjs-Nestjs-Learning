@@ -5,8 +5,9 @@ import {
   IsNumber,
   IsBoolean,
   IsArray,
-  ValidateNested,
   IsDate,
+  IsObject,
+  Allow,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -91,8 +92,8 @@ export class CreateAuthorDto {
     type: AuthorAttachmentDto,
     required: false,
   })
-  @ValidateNested()
-  @Type(() => AuthorAttachmentDto)
+  @IsObject()
+  @Allow()
   @IsOptional()
   image?: AuthorAttachmentDto;
 
@@ -101,8 +102,8 @@ export class CreateAuthorDto {
     type: AuthorAttachmentDto,
     required: false,
   })
-  @ValidateNested()
-  @Type(() => AuthorAttachmentDto)
+  @IsObject()
+  @Allow()
   @IsOptional()
   cover_image?: AuthorAttachmentDto;
 
@@ -113,8 +114,7 @@ export class CreateAuthorDto {
     required: false,
   })
   @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => AuthorSocialDto)
+  @Allow()
   @IsOptional()
   socials?: AuthorSocialDto[];
 

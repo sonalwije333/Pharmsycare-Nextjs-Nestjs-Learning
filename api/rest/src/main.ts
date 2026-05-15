@@ -57,7 +57,11 @@ async function bootstrap() {
   if (!document.security.find((s) => Object.prototype.hasOwnProperty.call(s, 'JWT-auth'))) {
     document.security.push({ 'JWT-auth': [] });
   }
-  SwaggerModule.setup('docs', app, document);
+  SwaggerModule.setup('docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
   
   const PORT = process.env.PORT || 5000;
   await app.listen(PORT);
