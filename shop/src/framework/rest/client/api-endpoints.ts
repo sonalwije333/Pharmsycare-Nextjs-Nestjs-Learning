@@ -31,7 +31,7 @@ export const API_ENDPOINTS = {
   USERS_RESET_PASSWORD: '/reset-password',
   USERS_CHANGE_PASSWORD: '/change-password',
   USERS_LOGOUT: '/logout',
-  USERS_SUBSCRIBE_TO_NEWSLETTER: '/subscribe-to-newsletter',
+  USERS_SUBSCRIBE_TO_NEWSLETTER: '/newsletters/subscribe',
   USERS_CONTACT_US: '/contact-us',
   USERS_WISHLIST: '/my-wishlists',
   WISHLIST: '/wishlists',

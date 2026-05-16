@@ -1,10 +1,9 @@
-// newsletters/newsletters.module.ts
 import { Module } from '@nestjs/common';
-import { NewslettersController } from './newsletters.controller';
+import { LegacyNewslettersController, NewslettersController } from './newsletters.controller';
 import { NewslettersService } from './newsletters.service';
 
 @Module({
-  controllers: [NewslettersController],
+  controllers: [NewslettersController, LegacyNewslettersController],
   providers: [NewslettersService],
   exports: [NewslettersService],
 })
