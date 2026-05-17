@@ -1,4 +1,3 @@
-// orders/orders.controller.ts
 import {
   Body,
   Controller,
@@ -18,13 +17,13 @@ import {
   ApiBearerAuth,
   ApiBody,
   ApiParam,
+  ApiQuery,
   ApiUnauthorizedResponse,
   ApiForbiddenResponse,
   ApiNotFoundResponse,
   ApiBadRequestResponse,
   ApiOkResponse,
   ApiCreatedResponse,
-  ApiQuery,
 } from '@nestjs/swagger';
 import { CreateOrderStatusDto, UpdateOrderStatusDto } from './dto/create-order-status.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -40,8 +39,9 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { Roles } from '../common/decorators/roles.decorator';
-import { Permission } from "src/common/enums/enums";
+import { Permission, SortOrder } from "src/common/enums/enums";
 import { OrderStatus } from './entities/order-status.entity';
+import { PaymentGatewayType, OrderStatusType, PaymentStatusType, OrderStatusOrderByColumn, OrderFilesOrderByColumn, OrderOrderByColumn } from 'src/common/enums/order-payment.enum';
 
 @ApiTags('📦 Orders')
 @Controller('orders')
@@ -52,14 +52,8 @@ export class OrdersController {
 
   @Post()
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
-  @ApiOperation({
-    summary: 'Create order',
-    description: 'Create a new order'
-  })
-  @ApiCreatedResponse({
-    description: 'Order created successfully',
-    type: Order
-  })
+  @ApiOperation({ summary: 'Create order', description: 'Create a new order' })
+  @ApiCreatedResponse({ description: 'Order created successfully', type: () => Order })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
@@ -70,163 +64,83 @@ export class OrdersController {
 
   @Get()
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
-  @ApiOperation({
-    summary: 'Get all orders',
-    description: 'Retrieve paginated list of orders'
-  })
-  @ApiOkResponse({
-    description: 'Orders retrieved successfully',
-    type: OrderPaginator
-  })
+  @ApiOperation({ summary: 'Get all orders', description: 'Retrieve paginated list of orders' })
+  @ApiOkResponse({ description: 'Orders retrieved successfully', type: () => OrderPaginator })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  async getOrders(@Query() query: GetOrdersDto): Promise<OrderPaginator> {
-    return this.ordersService.getOrders(query);
+  async findAll(@Query() query: GetOrdersDto): Promise<OrderPaginator> {
+    return this.ordersService.findAll(query);
   }
 
   @Get(':id')
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
-  @ApiOperation({
-    summary: 'Get order by ID',
-    description: 'Retrieve order details by ID'
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'Order ID',
-    type: Number,
-    example: 48
-  })
-  @ApiOkResponse({
-    description: 'Order retrieved successfully',
-    type: Order
-  })
+  @ApiOperation({ summary: 'Get order by ID', description: 'Retrieve order details by ID' })
+  @ApiParam({ name: 'id', description: 'Order ID', type: Number, example: 48 })
+  @ApiOkResponse({ description: 'Order retrieved successfully', type: () => Order })
   @ApiNotFoundResponse({ description: 'Order not found' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
-  getOrderById(@Param('id', ParseIntPipe) id: number) {
-    return this.ordersService.getOrderByIdOrTrackingNumber(id);
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Order> {
+    return this.ordersService.findOne(id);
   }
 
-  @Get('tracking-number/:tracking_id')
+  @Get('tracking-number/:trackingNumber')
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
-  @ApiOperation({
-    summary: 'Get order by tracking number',
-    description: 'Retrieve order details by tracking number'
-  })
-  @ApiParam({
-    name: 'tracking_id',
-    description: 'Tracking number',
-    type: Number,
-    example: 20240207303639
-  })
-  @ApiOkResponse({
-    description: 'Order retrieved successfully',
-    type: Order
-  })
+  @ApiOperation({ summary: 'Get order by tracking number', description: 'Retrieve order details by tracking number' })
+  @ApiParam({ name: 'trackingNumber', description: 'Tracking number', type: String, example: '20240207303639' })
+  @ApiOkResponse({ description: 'Order retrieved successfully', type: () => Order })
   @ApiNotFoundResponse({ description: 'Order not found' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
-  getOrderByTrackingNumber(@Param('tracking_id', ParseIntPipe) tracking_id: number) {
-    return this.ordersService.getOrderByIdOrTrackingNumber(tracking_id);
+  async findByTrackingNumber(@Param('trackingNumber') trackingNumber: string): Promise<Order> {
+    return this.ordersService.findByTrackingNumber(trackingNumber);
   }
 
   @Put(':id')
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
-  @ApiOperation({
-    summary: 'Update order',
-    description: 'Update order by ID'
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'Order ID',
-    type: Number,
-    example: 48
-  })
-  @ApiOkResponse({
-    description: 'Order updated successfully',
-    type: Order
-  })
+  @ApiOperation({ summary: 'Update order', description: 'Update order by ID' })
+  @ApiParam({ name: 'id', description: 'Order ID', type: Number, example: 48 })
+  @ApiOkResponse({ description: 'Order updated successfully', type: () => Order })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiNotFoundResponse({ description: 'Order not found' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
   @ApiBody({ type: UpdateOrderDto })
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateOrderDto: UpdateOrderDto) {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateOrderDto: UpdateOrderDto): Promise<Order> {
     return this.ordersService.update(id, updateOrderDto);
   }
 
   @Delete(':id')
   @Roles(Permission.SUPER_ADMIN)
-  @ApiOperation({
-    summary: 'Delete order',
-    description: 'Delete order by ID (Admin only)'
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'Order ID',
-    type: Number,
-    example: 48
-  })
-  @ApiOkResponse({
-    description: 'Order deleted successfully',
-    type: CoreMutationOutput
-  })
+  @ApiOperation({ summary: 'Delete order', description: 'Soft delete order by ID (Admin only)' })
+  @ApiParam({ name: 'id', description: 'Order ID', type: Number, example: 48 })
+  @ApiOkResponse({ description: 'Order deleted successfully', type: CoreMutationOutput })
   @ApiNotFoundResponse({ description: 'Order not found' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  remove(@Param('id', ParseIntPipe) id: number) {
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<CoreMutationOutput> {
     return this.ordersService.remove(id);
   }
 
   @Post('checkout/verify')
   @Roles(Permission.CUSTOMER)
   @HttpCode(200)
-  @ApiOperation({
-    summary: 'Verify checkout',
-    description: 'Verify checkout data before payment'
-  })
-  @ApiOkResponse({
-    description: 'Checkout verified successfully',
-    type: VerifiedCheckoutData
-  })
+  @ApiOperation({ summary: 'Verify checkout', description: 'Verify checkout data before payment' })
+  @ApiOkResponse({ description: 'Checkout verified successfully', type: VerifiedCheckoutData })
   @ApiBadRequestResponse({ description: 'Invalid checkout data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
-  verifyCheckout(@Query() query: CheckoutVerificationDto) {
+  async verifyCheckout(@Body() query: CheckoutVerificationDto): Promise<VerifiedCheckoutData> {
     return this.ordersService.verifyCheckout(query);
   }
 
-  @Post('/payment')
+  @Post('payment')
   @Roles(Permission.CUSTOMER)
   @HttpCode(200)
-  @ApiOperation({
-    summary: 'Submit payment',
-    description: 'Submit payment for order'
-  })
-  @ApiOkResponse({
-    description: 'Payment submitted successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        success: { type: 'boolean', example: true },
-        message: { type: 'string', example: 'Payment processed successfully' }
-      }
-    }
-  })
+  @ApiOperation({ summary: 'Submit payment', description: 'Submit payment for order' })
+  @ApiOkResponse({ description: 'Payment submitted successfully', type: CoreMutationOutput })
   @ApiBadRequestResponse({ description: 'Invalid payment data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiBody({ type: OrderPaymentDto })
-  async submitPayment(@Body() orderPaymentDto: OrderPaymentDto): Promise<void> {
-    const { tracking_number } = orderPaymentDto;
-    const order: Order = await this.ordersService.getOrderByIdOrTrackingNumber(tracking_number);
-    switch (order.payment_gateway.toString().toLowerCase()) {
-      case 'stripe':
-        this.ordersService.stripePay(order);
-        break;
-      case 'paypal':
-        this.ordersService.paypalPay(order);
-        break;
-      default:
-        break;
-    }
-    this.ordersService.processChildrenOrder(order);
+  async submitPayment(@Body() orderPaymentDto: OrderPaymentDto): Promise<CoreMutationOutput> {
+    return this.ordersService.submitPayment(orderPaymentDto);
   }
 }
 
@@ -239,104 +153,60 @@ export class OrderStatusController {
 
   @Post()
   @Roles(Permission.SUPER_ADMIN)
-  @ApiOperation({
-    summary: 'Create order status',
-    description: 'Create a new order status (Admin only)'
-  })
-  @ApiCreatedResponse({
-    description: 'Order status created successfully',
-    type: OrderStatus
-  })
+  @ApiOperation({ summary: 'Create order status', description: 'Create a new order status (Admin only)' })
+  @ApiCreatedResponse({ description: 'Order status created successfully', type: () => OrderStatus })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
   @ApiBody({ type: CreateOrderStatusDto })
-  create(@Body() createOrderStatusDto: CreateOrderStatusDto) {
+  async create(@Body() createOrderStatusDto: CreateOrderStatusDto): Promise<OrderStatus> {
     return this.ordersService.createOrderStatus(createOrderStatusDto);
   }
 
   @Get()
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
-  @ApiOperation({
-    summary: 'Get all order statuses',
-    description: 'Retrieve paginated list of order statuses'
-  })
-  @ApiOkResponse({
-    description: 'Order statuses retrieved successfully',
-    type: OrderStatusPaginator
-  })
+  @ApiOperation({ summary: 'Get all order statuses', description: 'Retrieve paginated list of order statuses' })
+  @ApiOkResponse({ description: 'Order statuses retrieved successfully', type: () => OrderStatusPaginator })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
-  findAll(@Query() query: GetOrderStatusesDto) {
-    return this.ordersService.getOrderStatuses(query);
+  async findAll(@Query() query: GetOrderStatusesDto): Promise<OrderStatusPaginator> {
+    return this.ordersService.findAllOrderStatuses(query);
   }
 
-  @Get(':param')
+  @Get(':slug')
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
-  @ApiOperation({
-    summary: 'Get order status by slug',
-    description: 'Retrieve order status details by slug'
-  })
-  @ApiParam({
-    name: 'param',
-    description: 'Order status slug',
-    example: 'order-received'
-  })
-  @ApiOkResponse({
-    description: 'Order status retrieved successfully',
-    type: OrderStatus
-  })
+  @ApiOperation({ summary: 'Get order status by slug', description: 'Retrieve order status details by slug' })
+  @ApiParam({ name: 'slug', description: 'Order status slug', example: 'order-received', type: String })
+  @ApiOkResponse({ description: 'Order status retrieved successfully', type: () => OrderStatus })
   @ApiNotFoundResponse({ description: 'Order status not found' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
-  findOne(@Param('param') param: string, @Query('language') language: string) {
-    return this.ordersService.getOrderStatus(param, language);
+  async findOne(@Param('slug') slug: string): Promise<OrderStatus> {
+    return this.ordersService.findOrderStatusBySlug(slug);
   }
 
   @Put(':id')
   @Roles(Permission.SUPER_ADMIN)
-  @ApiOperation({
-    summary: 'Update order status',
-    description: 'Update order status by ID (Admin only)'
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'Order status ID',
-    type: Number,
-    example: 1
-  })
-  @ApiOkResponse({
-    description: 'Order status updated successfully',
-    type: OrderStatus
-  })
+  @ApiOperation({ summary: 'Update order status', description: 'Update order status by ID (Admin only)' })
+  @ApiParam({ name: 'id', description: 'Order status ID', type: Number, example: 1 })
+  @ApiOkResponse({ description: 'Order status updated successfully', type: () => OrderStatus })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiNotFoundResponse({ description: 'Order status not found' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
   @ApiBody({ type: UpdateOrderStatusDto })
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.ordersService.update(id, updateOrderDto);
+  async update(@Param('id', ParseIntPipe) id: number, @Body() updateOrderStatusDto: UpdateOrderStatusDto): Promise<OrderStatus> {
+    return this.ordersService.updateOrderStatus(id, updateOrderStatusDto);
   }
 
   @Delete(':id')
   @Roles(Permission.SUPER_ADMIN)
-  @ApiOperation({
-    summary: 'Delete order status',
-    description: 'Delete order status by ID (Admin only)'
-  })
-  @ApiParam({
-    name: 'id',
-    description: 'Order status ID',
-    type: Number,
-    example: 1
-  })
-  @ApiOkResponse({
-    description: 'Order status deleted successfully',
-    type: CoreMutationOutput
-  })
+  @ApiOperation({ summary: 'Delete order status', description: 'Soft delete order status by ID (Admin only)' })
+  @ApiParam({ name: 'id', description: 'Order status ID', type: Number, example: 1 })
+  @ApiOkResponse({ description: 'Order status deleted successfully', type: CoreMutationOutput })
   @ApiNotFoundResponse({ description: 'Order status not found' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.ordersService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number): Promise<CoreMutationOutput> {
+    return this.ordersService.removeOrderStatus(id);
   }
 }
 
@@ -349,45 +219,21 @@ export class OrderFilesController {
 
   @Get()
   @Roles(Permission.SUPER_ADMIN, Permission.CUSTOMER)
-  @ApiOperation({
-    summary: 'Get order files',
-    description: 'Retrieve paginated list of downloadable order files'
-  })
-  @ApiOkResponse({
-    description: 'Order files retrieved successfully',
-    type: OrderFilesPaginator
-  })
+  @ApiOperation({ summary: 'Get order files', description: 'Retrieve paginated list of downloadable order files' })
+  @ApiOkResponse({ description: 'Order files retrieved successfully', type: () => OrderFilesPaginator })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
-  async getOrderFileItems(@Query() query: GetOrderFilesDto): Promise<OrderFilesPaginator> {
-    return this.ordersService.getOrderFileItems(query);
+  async findAll(@Query() query: GetOrderFilesDto): Promise<OrderFilesPaginator> {
+    return this.ordersService.findAllOrderFiles(query);
   }
 
-  @Post('digital_file')
+  @Post('digital-file')
   @Roles(Permission.SUPER_ADMIN, Permission.CUSTOMER)
-  @ApiOperation({
-    summary: 'Get digital file download URL',
-    description: 'Get download URL for digital file'
-  })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        digital_file_id: { type: 'number', example: 76 }
-      }
-    }
-  })
-  @ApiOkResponse({
-    description: 'Download URL retrieved successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        url: { type: 'string', example: 'https://example.com/file.pdf' }
-      }
-    }
-  })
+  @ApiOperation({ summary: 'Get digital file download URL', description: 'Get download URL for digital file' })
+  @ApiBody({ schema: { type: 'object', properties: { digital_file_id: { type: 'number', example: 76 } } } })
+  @ApiOkResponse({ description: 'Download URL retrieved successfully', schema: { type: 'object', properties: { url: { type: 'string', example: 'https://example.com/file.pdf' } } } })
   @ApiNotFoundResponse({ description: 'Digital file not found' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
-  async getDigitalFileDownloadUrl(@Body('digital_file_id', ParseIntPipe) digitalFileId: number) {
+  async getDigitalFileDownloadUrl(@Body('digital_file_id', ParseIntPipe) digitalFileId: number): Promise<{ url: string }> {
     return this.ordersService.getDigitalFileDownloadUrl(digitalFileId);
   }
 }
@@ -401,28 +247,12 @@ export class OrderExportController {
 
   @Get()
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
-  @ApiOperation({
-    summary: 'Export orders',
-    description: 'Get export URL for orders (Admin/Store owner only)'
-  })
-  @ApiQuery({
-    name: 'shop_id',
-    description: 'Shop ID',
-    type: String,
-    required: false
-  })
-  @ApiOkResponse({
-    description: 'Export URL retrieved successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        url: { type: 'string', example: 'https://example.com/orders.xlsx' }
-      }
-    }
-  })
+  @ApiOperation({ summary: 'Export orders', description: 'Get export URL for orders (Admin/Store owner only)' })
+  @ApiQuery({ name: 'shop_id', description: 'Shop ID', type: String, required: false })
+  @ApiOkResponse({ description: 'Export URL retrieved successfully', schema: { type: 'object', properties: { url: { type: 'string', example: 'https://example.com/orders.xlsx' } } } })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  async orderExport(@Query('shop_id') shop_id: string) {
+  async orderExport(@Query('shop_id') shop_id?: string): Promise<{ url: string }> {
     return this.ordersService.exportOrder(shop_id);
   }
 }
@@ -436,29 +266,11 @@ export class DownloadInvoiceController {
 
   @Post()
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
-  @ApiOperation({
-    summary: 'Download invoice',
-    description: 'Get download URL for order invoice'
-  })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        shop_id: { type: 'string', example: '1' }
-      }
-    }
-  })
-  @ApiOkResponse({
-    description: 'Invoice URL retrieved successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        url: { type: 'string', example: 'https://example.com/invoice.pdf' }
-      }
-    }
-  })
+  @ApiOperation({ summary: 'Download invoice', description: 'Get download URL for order invoice' })
+  @ApiBody({ schema: { type: 'object', properties: { shop_id: { type: 'string', example: '1' } } } })
+  @ApiOkResponse({ description: 'Invoice URL retrieved successfully', schema: { type: 'object', properties: { url: { type: 'string', example: 'https://example.com/invoice.pdf' } } } })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
-  async downloadInvoiceUrl(@Body('shop_id') shop_id: string) {
+  async downloadInvoiceUrl(@Body('shop_id') shop_id?: string): Promise<{ url: string }> {
     return this.ordersService.downloadInvoiceUrl(shop_id);
   }
 }
