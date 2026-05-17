@@ -1,7 +1,6 @@
-// orders/orders.module.ts
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
-// import { PaymentModule } from 'src/payment/payment.module'; // Commented for future use
 import {
   DownloadInvoiceController,
   OrderExportController,
@@ -10,9 +9,12 @@ import {
   OrderStatusController,
 } from './orders.controller';
 import { OrdersService } from './orders.service';
+import { Order } from './entities/order.entity';
+import { OrderFiles } from './entities/order.entity';
+import { OrderStatus } from './entities/order-status.entity';
 
 @Module({
-  imports: [AuthModule], // PaymentModule commented for future use
+  imports: [TypeOrmModule.forFeature([Order, OrderFiles, OrderStatus]), AuthModule],
   controllers: [
     OrdersController,
     OrderStatusController,

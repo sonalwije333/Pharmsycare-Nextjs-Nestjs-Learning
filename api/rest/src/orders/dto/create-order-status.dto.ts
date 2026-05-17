@@ -1,27 +1,20 @@
-// orders/dto/create-order-status.dto.ts
-import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { IsString, IsNumber } from 'class-validator';
-import { OrderStatus } from '../entities/order-status.entity';
 
-export class CreateOrderStatusDto extends PickType(OrderStatus, [
-  'name',
-  'color',
-  'serial',
-  'language',
-] as const) {
-  @ApiProperty({ description: 'Order status name', example: 'Order Received' })
+export class CreateOrderStatusDto {
+  @ApiProperty({ description: 'Order status name', example: 'Order Received', type: String })
   @IsString()
   name: string;
 
-  @ApiProperty({ description: 'Status color', example: '#23b848' })
+  @ApiProperty({ description: 'Status color', example: '#23b848', type: String })
   @IsString()
   color: string;
 
-  @ApiProperty({ description: 'Serial number', example: 1 })
+  @ApiProperty({ description: 'Serial number', example: 1, type: Number })
   @IsNumber()
   serial: number;
 
-  @ApiProperty({ description: 'Language', example: 'en' })
+  @ApiProperty({ description: 'Language', example: 'en', type: String })
   @IsString()
   language: string;
 }
