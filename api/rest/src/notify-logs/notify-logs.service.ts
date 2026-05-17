@@ -1,55 +1,61 @@
-// notify-logs/notify-logs.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { NotifyLogs } from './entities/notify-logs.entity';
-import { plainToClass } from 'class-transformer';
-import Fuse from 'fuse.js';
-import { paginate } from 'src/common/pagination/paginate';
-import { GetNotifyLogsDto, NotifyLogsPaginator, QueryReviewsOrderByColumn } from './dto/get-notify-logs.dto';
+import { GetNotifyLogsDto, NotifyLogsPaginator } from './dto/get-notify-logs.dto';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
-import { SortOrder } from 'src/common/dto/generic-conditions.dto';
+import { paginate } from 'src/common/pagination/paginate';
+import { SortOrder } from 'src/common/enums/enums';
+import { NotifyLogsOrderByColumn } from 'src/common/enums/notify-logs-order-by.enum';
 
-const notifyLogs = plainToClass(NotifyLogs, []);
-const options = {
-  keys: ['notify_type', 'notify_text'],
-  threshold: 0.3,
-};
-const fuse = new Fuse(notifyLogs, options);
 
 @Injectable()
 export class NotifyLogsService {
-  private notifyLogs: NotifyLogs[] = notifyLogs;
+  private notifyLogs: NotifyLogs[] = [];
 
-  findAllNotifyLogs({ search, limit, page, receiver, orderBy = QueryReviewsOrderByColumn.CREATED_AT, sortedBy = SortOrder.DESC }: GetNotifyLogsDto): NotifyLogsPaginator {
-    if (!page) page = 1;
-    if (!limit) limit = 10;
-    
+  async findAll({
+    page = 1,
+    limit = 30,
+    search,
+    receiver,
+    is_read,
+    orderBy = NotifyLogsOrderByColumn.CREATED_AT,
+    sortedBy = SortOrder.DESC,
+  }: GetNotifyLogsDto): Promise<NotifyLogsPaginator> {
     let data: NotifyLogs[] = [...this.notifyLogs];
 
     if (receiver) {
       data = data.filter(log => log.receiver === receiver.toString());
     }
 
-    if (search) {
-      const parseSearchParams = search.split(';');
-      for (const searchParam of parseSearchParams) {
-        const [key, value] = searchParam.split(':');
-        if (key === 'notify_type' && value) {
-          data = fuse.search(value)?.map(({ item }) => item);
-        } else if (key === 'is_read' && value) {
-          data = data.filter(log => log.is_read === (value === 'true'));
-        } else {
-          data = data.filter(log => 
-            log.notify_type?.toLowerCase().includes(search.toLowerCase()) ||
-            log.notify_text?.toLowerCase().includes(search.toLowerCase())
-          );
-        }
-      }
+    if (is_read !== undefined) {
+      data = data.filter(log => log.is_read === is_read);
     }
 
-    const sortKey = orderBy === QueryReviewsOrderByColumn.CREATED_AT ? 'created_at' : 'updated_at';
+    if (search) {
+      const searchLower = search.toLowerCase();
+      data = data.filter(log => 
+        log.notify_type?.toLowerCase().includes(searchLower) ||
+        log.notify_text?.toLowerCase().includes(searchLower) ||
+        log.receiver?.toLowerCase().includes(searchLower)
+      );
+    }
+
+    let orderColumn: string;
+    switch (orderBy) {
+      case NotifyLogsOrderByColumn.UPDATED_AT:
+        orderColumn = 'updated_at';
+        break;
+      default:
+        orderColumn = 'created_at';
+    }
+
     data.sort((a, b) => {
-      const aValue = a[sortKey as keyof NotifyLogs];
-      const bValue = b[sortKey as keyof NotifyLogs];
+      const aValue = a[orderColumn as keyof NotifyLogs];
+      const bValue = b[orderColumn as keyof NotifyLogs];
+
+      if (aValue === undefined && bValue === undefined) return 0;
+      if (aValue === undefined) return sortedBy === SortOrder.ASC ? -1 : 1;
+      if (bValue === undefined) return sortedBy === SortOrder.ASC ? 1 : -1;
+
       if (sortedBy === SortOrder.ASC) {
         return aValue > bValue ? 1 : -1;
       } else {
@@ -57,40 +63,50 @@ export class NotifyLogsService {
       }
     });
 
+    const total = data.length;
     const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
+    const endIndex = startIndex + limit;
     const results = data.slice(startIndex, endIndex);
     
-    const url = `/notify-logs?search=${search}&limit=${limit}`;
-    
+    const url = `/notify-logs?limit=${limit}`;
+    const paginationInfo = paginate(total, page, limit, results.length, url);
+
     return {
       data: results,
-      ...paginate(data.length, page, limit, results.length, url),
+      ...paginationInfo,
+      current_page: page,
+      per_page: limit,
+      total,
+      last_page: Math.ceil(total / limit),
+      from: (page - 1) * limit + 1,
+      to: Math.min(page * limit, total),
     };
   }
 
-  getNotifyLog(param: string, language: string): NotifyLogs {
-    const notifyLog = this.notifyLogs.find((p) => p.id === Number(param));
-    
-    if (!notifyLog) {
-      throw new NotFoundException(`Notify log with ID ${param} not found`);
-    }
-    
-    return notifyLog;
-  }
-
-  readNotifyLog(id: number): NotifyLogs {
+  async findOne(id: number): Promise<NotifyLogs> {
     const notifyLog = this.notifyLogs.find((p) => p.id === id);
     
     if (!notifyLog) {
       throw new NotFoundException(`Notify log with ID ${id} not found`);
     }
     
-    notifyLog.is_read = true;
     return notifyLog;
   }
 
-  readAllNotifyLogs(userId: number): CoreMutationOutput {
+  async markAsRead(id: number): Promise<NotifyLogs> {
+    const notifyLog = await this.findOne(id);
+    
+    notifyLog.is_read = true;
+    
+    const index = this.notifyLogs.findIndex(log => log.id === id);
+    if (index !== -1) {
+      this.notifyLogs[index] = notifyLog;
+    }
+    
+    return notifyLog;
+  }
+
+  async markAllAsRead(userId: number): Promise<CoreMutationOutput> {
     const userLogs = this.notifyLogs.filter(log => log.receiver === userId.toString());
     
     if (userLogs.length === 0) {
@@ -107,7 +123,7 @@ export class NotifyLogsService {
     };
   }
 
-  remove(id: number): CoreMutationOutput {
+  async remove(id: number): Promise<CoreMutationOutput> {
     const index = this.notifyLogs.findIndex(log => log.id === id);
     
     if (index === -1) {
@@ -120,5 +136,31 @@ export class NotifyLogsService {
       success: true,
       message: 'Notify log deleted successfully',
     };
+  }
+
+  // Helper method to create a new notification log
+  async createNotifyLog(notifyData: Partial<NotifyLogs>): Promise<NotifyLogs> {
+    const newNotifyLog: NotifyLogs = {
+      id: this.notifyLogs.length + 1,
+      receiver: notifyData.receiver || '',
+      sender: notifyData.sender || 'system',
+      notify_type: notifyData.notify_type || '',
+      notify_receiver_type: notifyData.notify_receiver_type || 'customer',
+      is_read: false,
+      notify_text: notifyData.notify_text || '',
+      created_at: new Date(),
+      updated_at: new Date(),
+    } as NotifyLogs;
+    
+    this.notifyLogs.unshift(newNotifyLog);
+    
+    return newNotifyLog;
+  }
+
+  // Helper method to get unread count for a user
+  async getUnreadCount(receiverId: string): Promise<number> {
+    return this.notifyLogs.filter(log => 
+      log.receiver === receiverId && !log.is_read
+    ).length;
   }
 }

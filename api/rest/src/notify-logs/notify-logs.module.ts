@@ -1,4 +1,3 @@
-// notify-logs/notify-logs.module.ts
 import { Module } from '@nestjs/common';
 import { NotifyLogsController } from './notify-logs.controller';
 import { NotifyLogsService } from './notify-logs.service';
