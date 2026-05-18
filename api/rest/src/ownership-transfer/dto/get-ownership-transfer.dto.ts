@@ -1,61 +1,105 @@
-// ownership-transfer/dto/get-ownership-transfer.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
-import { SortOrder } from 'src/common/dto/generic-conditions.dto';
 import { PaginationArgs } from 'src/common/dto/pagination-args.dto';
-import { Paginator } from 'src/common/dto/paginator.dto';
+import { IsOptional, IsString, IsNumber, IsEnum } from 'class-validator';
+import { Type } from 'class-transformer';
+import { SortOrder } from 'src/common/enums/enums';
 import { OwnershipTransfer } from '../entities/ownership-transfer.entity';
+import { OwnershipTransferOrderByColumn, OwnershipTransferStatus } from 'src/common/enums/ownership-transfer.enum';
 
-export class OwnershipTransferPaginator extends Paginator<OwnershipTransfer> {
-  @ApiProperty({ type: [OwnershipTransfer] })
+export class OwnershipTransferPaginator {
+  @ApiProperty({ type: () => [OwnershipTransfer], description: 'Array of ownership transfers' })
   data: OwnershipTransfer[];
+
+  @ApiProperty({ example: 1, type: Number, description: 'Current page number' })
+  current_page: number;
+
+  @ApiProperty({ example: 30, type: Number, description: 'Items per page' })
+  per_page: number;
+
+  @ApiProperty({ example: 100, type: Number, description: 'Total items count' })
+  total: number;
+
+  @ApiProperty({ example: 10, type: Number, description: 'Last page number' })
+  last_page: number;
+
+  @ApiProperty({ example: '/ownership-transfer?page=1', type: String, description: 'First page URL' })
+  first_page_url: string;
+
+  @ApiProperty({ example: '/ownership-transfer?page=10', type: String, description: 'Last page URL' })
+  last_page_url: string;
+
+  @ApiProperty({ example: '/ownership-transfer?page=2', nullable: true, type: String, description: 'Next page URL' })
+  next_page_url: string | null;
+
+  @ApiProperty({ example: '/ownership-transfer?page=1', nullable: true, type: String, description: 'Previous page URL' })
+  prev_page_url: string | null;
+
+  @ApiProperty({ example: 1, type: Number, description: 'Starting item index' })
+  from: number;
+
+  @ApiProperty({ example: 30, type: Number, description: 'Ending item index' })
+  to: number;
 }
 
 export class GetOwnershipTransferDto extends PaginationArgs {
   @ApiProperty({
     description: 'Order by column',
-    enum: ['CREATED_AT', 'UPDATED_AT', 'TRANSACTION_IDENTIFIER'],
-    required: false
+    enum: OwnershipTransferOrderByColumn,
+    required: false,
+    default: OwnershipTransferOrderByColumn.CREATED_AT,
   })
-  orderBy?: QueryOwnershipTransferOrderByColumn;
+  @IsOptional()
+  @IsEnum(OwnershipTransferOrderByColumn)
+  orderBy?: OwnershipTransferOrderByColumn = OwnershipTransferOrderByColumn.CREATED_AT;
 
   @ApiProperty({
     description: 'Sort order',
     enum: SortOrder,
     required: false,
-    default: SortOrder.DESC
+    default: SortOrder.DESC,
   })
-  sortedBy?: SortOrder;
+  @IsOptional()
+  @IsEnum(SortOrder)
+  sortedBy?: SortOrder = SortOrder.DESC;
 
   @ApiProperty({
     description: 'Search term',
-    required: false
+    required: false,
+    type: String,
+    example: 'pending',
   })
+  @IsOptional()
+  @IsString()
   search?: string;
 
   @ApiProperty({
     description: 'Filter by status',
-    enum: ['pending', 'approved', 'rejected', 'completed'],
-    required: false
+    enum: OwnershipTransferStatus,
+    required: false,
   })
-  status?: string;
+  @IsOptional()
+  @IsEnum(OwnershipTransferStatus)
+  status?: OwnershipTransferStatus;
 
   @ApiProperty({
     description: 'Filter by previous owner ID',
     example: 48,
-    required: false
+    required: false,
+    type: Number,
   })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
   previous_owner_id?: number;
 
   @ApiProperty({
     description: 'Filter by current owner ID',
     example: 49,
-    required: false
+    required: false,
+    type: Number,
   })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
   current_owner_id?: number;
-}
-
-export enum QueryOwnershipTransferOrderByColumn {
-  CREATED_AT = 'CREATED_AT',
-  UPDATED_AT = 'UPDATED_AT',
-  TRANSACTION_IDENTIFIER = 'TRANSACTION_IDENTIFIER',
 }

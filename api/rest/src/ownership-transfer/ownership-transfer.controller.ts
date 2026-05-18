@@ -1,4 +1,3 @@
-// ownership-transfer/ownership-transfer.controller.ts
 import {
   Body,
   Controller,
@@ -36,7 +35,7 @@ import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from "src/common/decorators/roles.decorator";
-import { Permission } from '../common/enums/enums';
+import { Permission, SortOrder } from '../common/enums/enums';
 
 
 @ApiTags('🔄 Ownership Transfer')
@@ -54,13 +53,13 @@ export class OwnershipTransferController {
   })
   @ApiCreatedResponse({
     description: 'Ownership transfer created successfully',
-    type: OwnershipTransfer
+    type: () => OwnershipTransfer
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
   @ApiBody({ type: CreateOwnershipTransferDto })
-  createOwnershipTransfer(@Body() createOwnershipTransferDto: CreateOwnershipTransferDto) {
+  create(@Body() createOwnershipTransferDto: CreateOwnershipTransferDto): Promise<OwnershipTransfer> {
     return this.ownershipTransferService.create(createOwnershipTransferDto);
   }
 
@@ -72,11 +71,11 @@ export class OwnershipTransferController {
   })
   @ApiOkResponse({
     description: 'Ownership transfers retrieved successfully',
-    type: OwnershipTransferPaginator
+    type: () => OwnershipTransferPaginator
   })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  findAll(@Query() query: GetOwnershipTransferDto) {
+  findAll(@Query() query: GetOwnershipTransferDto): Promise<OwnershipTransferPaginator> {
     return this.ownershipTransferService.findAll(query);
   }
 
@@ -89,19 +88,18 @@ export class OwnershipTransferController {
   @ApiParam({
     name: 'param',
     description: 'Ownership transfer ID or transaction identifier',
-    example: '10'
+    example: '10',
+    type: String,
   })
   @ApiOkResponse({
     description: 'Ownership transfer retrieved successfully',
-    type: OwnershipTransfer
+    type: () => OwnershipTransfer
   })
   @ApiNotFoundResponse({ description: 'Ownership transfer not found' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
-  getOwnershipTransfer(
-    @Param('param') param: string,
-    @Query('language') language: string,
-  ) {
-    return this.ownershipTransferService.getOwnershipTransfer(param, language);
+  @ApiForbiddenResponse({ description: 'Insufficient permissions' })
+  findOne(@Param('param') param: string): Promise<OwnershipTransfer> {
+    return this.ownershipTransferService.findOne(param);
   }
 
   @Put(':id')
@@ -119,7 +117,7 @@ export class OwnershipTransferController {
   })
   @ApiOkResponse({
     description: 'Ownership transfer updated successfully',
-    type: OwnershipTransfer
+    type: () => OwnershipTransfer
   })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
   @ApiNotFoundResponse({ description: 'Ownership transfer not found' })
@@ -129,7 +127,7 @@ export class OwnershipTransferController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateOwnershipTransferDto: UpdateOwnershipTransferDto,
-  ) {
+  ): Promise<OwnershipTransfer> {
     return this.ownershipTransferService.update(id, updateOwnershipTransferDto);
   }
 
@@ -138,7 +136,7 @@ export class OwnershipTransferController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Delete ownership transfer',
-    description: 'Delete an ownership transfer by ID (Admin only)'
+    description: 'Soft delete an ownership transfer by ID (Admin only)'
   })
   @ApiParam({
     name: 'id',
@@ -153,7 +151,7 @@ export class OwnershipTransferController {
   @ApiNotFoundResponse({ description: 'Ownership transfer not found' })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  deleteOwnershipTransfer(@Param('id', ParseIntPipe) id: number) {
+  remove(@Param('id', ParseIntPipe) id: number): Promise<CoreMutationOutput> {
     return this.ownershipTransferService.remove(id);
   }
 }
