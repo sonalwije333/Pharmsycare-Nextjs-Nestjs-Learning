@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { PaginationArgs } from 'src/common/dto/pagination-args.dto';
-import { IsOptional, IsString, IsNumber, IsEnum } from 'class-validator';
+import { IsOptional, IsString, IsNumber, IsEnum, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 import { SortOrder } from 'src/common/enums/enums';
 import { Order } from '../entities/order.entity';
@@ -42,6 +42,11 @@ export class OrderPaginator {
 }
 
 export class GetOrdersDto extends PaginationArgs {
+  @ApiProperty({ description: 'Language code', example: 'en', required: false, default: 'en', type: String })
+  @IsOptional()
+  @IsString()
+  language?: string = 'en';
+
   @ApiProperty({ description: 'Tracking number', example: '20240207303639', required: false, type: String })
   @IsOptional()
   @IsString()
@@ -62,6 +67,15 @@ export class GetOrdersDto extends PaginationArgs {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @ApiProperty({
+    description: 'How to join search conditions',
+    enum: ['and', 'or'],
+    required: false,
+  })
+  @IsOptional()
+  @IsIn(['and', 'or', 'AND', 'OR'])
+  searchJoin?: string;
 
   @ApiProperty({ description: 'Order by field', enum: OrderOrderByColumn, required: false, default: OrderOrderByColumn.CREATED_AT })
   @IsOptional()

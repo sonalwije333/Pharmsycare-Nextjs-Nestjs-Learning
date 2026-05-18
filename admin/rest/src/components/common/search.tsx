@@ -86,7 +86,7 @@ const Search: React.FC<SearchProps> = ({
       <label htmlFor="search" className="sr-only">
         {t('form:input-label-search')}
       </label>
-      <button className="absolute top-1/2 -translate-y-1/2 p-2 text-body outline-none start-1 focus:outline-none active:outline-none">
+      <button type="submit" title={t('form:input-label-search')} className="absolute top-1/2 -translate-y-1/2 p-2 text-body outline-none start-1 focus:outline-none active:outline-none">
         <SearchIcon className="h-5 w-5" />
       </button>
       <input
@@ -104,6 +104,7 @@ const Search: React.FC<SearchProps> = ({
         <button
           type="button"
           onClick={clear}
+          title={t('common:text-clear')}
           className="absolute top-1/2 -translate-y-1/2 p-2 text-body outline-none end-1 focus:outline-none active:outline-none"
         >
           <CloseIcon className="h-5 w-5" />

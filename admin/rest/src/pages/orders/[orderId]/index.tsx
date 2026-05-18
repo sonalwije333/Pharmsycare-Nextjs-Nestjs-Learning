@@ -67,16 +67,30 @@ export default function OrderDetailsPage() {
   const {
     handleSubmit,
     control,
+    reset,
 
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: { order_status: order?.order_status ?? '' },
   });
 
+  useEffect(() => {
+    const selectedStatus = ORDER_STATUS.find(
+      (status) => status.status === order?.order_status
+    );
+
+    if (selectedStatus) {
+      reset({ order_status: selectedStatus });
+    }
+  }, [order?.order_status, reset]);
+
   const ChangeStatus = ({ order_status }: FormValues) => {
     updateOrder({
       id: order?.id as string,
-      order_status: order_status?.status as string,
+      status:
+        typeof order_status === 'string'
+          ? order_status
+          : order_status?.status ?? order?.order_status,
     });
   };
   const { price: subtotal } = usePrice(
@@ -120,9 +134,9 @@ export default function OrderDetailsPage() {
 
   const { price: amountDue } = usePrice({ amount: amountPayable });
 
-  const totalItem = order?.products.reduce(
+  const totalItem = (order?.products ?? []).reduce(
     // @ts-ignore
-    (initial = 0, p) => initial + parseInt(p?.pivot?.order_quantity!),
+    (initial = 0, p) => initial + parseInt(p?.pivot?.order_quantity ?? '0'),
     0
   );
 
@@ -267,7 +281,7 @@ export default function OrderDetailsPage() {
                   </p>
                 </div>
               )}
-              data={order?.products!}
+              data={order?.products ?? []}
               rowKey="id"
               scroll={{ x: 300 }}
             />
@@ -351,7 +365,7 @@ export default function OrderDetailsPage() {
 
             <div className="flex flex-col items-start space-y-1 text-sm text-body">
               <span>
-                {formatString(order?.products?.length, t('text-item'))}
+                {formatString(order?.products?.length ?? 0, t('text-item'))}
               </span>
               <span>{order?.delivery_time}</span>
               <span>

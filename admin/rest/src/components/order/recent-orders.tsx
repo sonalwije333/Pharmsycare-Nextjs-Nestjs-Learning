@@ -69,7 +69,7 @@ const RecentOrders = ({
       dataIndex: 'products',
       key: 'products',
       align: 'center',
-      render: (products: Product) => <span>{products.length}</span>,
+      render: (products?: Product[] | null) => <span>{products?.length ?? 0}</span>,
     },
 
     {

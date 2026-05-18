@@ -127,7 +127,7 @@ const OrderList = ({
       dataIndex: 'products',
       key: 'products',
       align: 'center',
-      render: (products: Product) => <span>{products.length}</span>,
+      render: (products?: Product[] | null) => <span>{products?.length ?? 0}</span>,
     },
     {
       // title: t('table:table-item-order-date'),
@@ -222,6 +222,7 @@ const OrderList = ({
                   <button
                     onClick={() => onSubmit(order?.shop_id)}
                     disabled={currentButtonLoading}
+                    title={t('common:text-chat')}
                     className="cursor-pointer text-accent transition-colors duration-300 me-1.5 hover:text-accent-hover"
                   >
                     <ChatIcon width="19" height="20" />

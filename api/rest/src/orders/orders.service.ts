@@ -63,7 +63,10 @@ export class OrdersService {
     let data = await this.orderRepository.find();
 
     if (tracking_number) {
-      data = data.filter(order => order.tracking_number === tracking_number);
+      const trackingNumberLower = tracking_number.toLowerCase();
+      data = data.filter(order =>
+        order.tracking_number?.toLowerCase().includes(trackingNumberLower)
+      );
     }
 
     if (customer_id) {
@@ -135,7 +138,13 @@ export class OrdersService {
 
   async update(id: number, updateOrderDto: UpdateOrderDto): Promise<Order> {
     const order = await this.findOne(id);
-    Object.assign(order, updateOrderDto);
+    const { status, ...rest } = updateOrderDto as UpdateOrderDto & { status?: OrderStatusType };
+    Object.assign(order, rest);
+
+    if (status) {
+      order.order_status = status as OrderStatusType;
+    }
+
     order.updated_at = new Date();
     return this.orderRepository.save(order);
   }

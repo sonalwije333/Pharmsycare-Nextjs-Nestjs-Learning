@@ -156,6 +156,7 @@ const ActionButtons = ({
     <div className="inline-flex items-center w-auto gap-3">
       {showReplyQuestion && (
         <button
+          type="button"
           onClick={handleReplyQuestion}
           className="transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
         >
@@ -164,6 +165,7 @@ const ActionButtons = ({
       )}
       {showMakeAdminButton && (
         <button
+          type="button"
           onClick={handleMakeAdmin}
           className="transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
           title={t('common:text-make-admin')}
@@ -173,6 +175,7 @@ const ActionButtons = ({
       )}
       {showAddWalletPoints && (
         <button
+          type="button"
           onClick={handleAddWalletPoints}
           className="transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
           title={t('common:text-add-wallet-points')}
@@ -183,6 +186,7 @@ const ActionButtons = ({
 
       {changeRefundStatus && (
         <button
+          type="button"
           onClick={handleUpdateRefundStatus}
           className="transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
           title={t('common:text-change-refund-status')}
@@ -193,6 +197,7 @@ const ActionButtons = ({
 
       {editModalView && (
         <button
+          type="button"
           onClick={handleEditModal}
           className="transition duration-200 text-body hover:text-heading focus:outline-none"
           title={t('common:text-edit')}
@@ -203,6 +208,7 @@ const ActionButtons = ({
       {approveButton &&
         (!isShopActive ? (
           <button
+            type="button"
             onClick={() => handleShopStatus(true)}
             className="transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
             title={t('common:text-approve-shop')}
@@ -211,6 +217,7 @@ const ActionButtons = ({
           </button>
         ) : (
           <button
+            type="button"
             onClick={() => handleShopStatus(false)}
             className="text-red-500 transition duration-200 hover:text-red-600 focus:outline-none"
             title={t('common:text-disapprove-shop')}
@@ -223,6 +230,7 @@ const ActionButtons = ({
         role === SUPER_ADMIN &&
         (!isCouponApprove ? (
           <button
+            type="button"
             onClick={() => handleCouponStatus(true)}
             className="ml-3 transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
             title={t('common:text-approve-coupon')}
@@ -231,6 +239,7 @@ const ActionButtons = ({
           </button>
         ) : (
           <button
+            type="button"
             onClick={() => handleCouponStatus(false)}
             className="ml-3 text-red-500 transition duration-200 hover:text-red-600 focus:outline-none"
             title={t('common:text-disapprove-coupon')}
@@ -242,6 +251,7 @@ const ActionButtons = ({
       {termApproveButton &&
         (!isTermsApproved ? (
           <button
+            type="button"
             onClick={() => handleTermsStatus(true)}
             className="transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
             title={t('common:text-approve-shop')}
@@ -250,6 +260,7 @@ const ActionButtons = ({
           </button>
         ) : (
           <button
+            type="button"
             onClick={() => handleTermsStatus(false)}
             className="text-red-500 transition duration-200 hover:text-red-600 focus:outline-none"
             title={t('common:text-disapprove-shop')}
@@ -261,6 +272,7 @@ const ActionButtons = ({
         <>
           {isUserActive ? (
             <button
+              type="button"
               onClick={() => handleUserStatus('ban')}
               className="text-red-500 transition duration-200 hover:text-red-600 focus:outline-none"
               title={t('common:text-ban-user')}
@@ -269,6 +281,7 @@ const ActionButtons = ({
             </button>
           ) : (
             <button
+              type="button"
               onClick={() => handleUserStatus('active')}
               className="transition duration-200 text-accent hover:text-accent focus:outline-none"
               title={t('common:text-activate-user')}
@@ -326,6 +339,7 @@ const ActionButtons = ({
 
       {/* {deleteModalView && (
         <button
+          type="button"
           onClick={handleDelete}
           className="text-red-500 transition duration-200 hover:text-red-600 focus:outline-none"
           title={t('common:text-delete')}
@@ -337,6 +351,7 @@ const ActionButtons = ({
       {flashSaleVendorRequestApproveButton &&
         (isFlashSaleVendorRequestApproved ? (
           <button
+            type="button"
             onClick={() => handleVendorFlashSaleStatus(true)}
             className="transition duration-200 text-red-500 hover:text-red-600 focus:outline-none"
             title="Disapprove request ?"
@@ -345,6 +360,7 @@ const ActionButtons = ({
           </button>
         ) : (
           <button
+            type="button"
             onClick={() => handleVendorFlashSaleStatus(false)}
             className="text-green-500 transition duration-200 hover:text-green-600 focus:outline-none"
             title="Approve request ?"
@@ -364,9 +380,11 @@ const ActionButtons = ({
           rounded="none"
         >
           <button
+            type="button"
             disabled={disabled}
             onClick={handleTransferOwnership}
             className="transition duration-200 text-accent hover:text-accent-hover focus:outline-none"
+            title={t('text-transfer-shop-ownership-status')}
           >
             <ExternalLinkIcon width={20} />
           </button>
