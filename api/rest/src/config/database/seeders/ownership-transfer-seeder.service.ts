@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { OwnershipTransfer } from '../../../ownership-transfer/entities/ownership-transfer.entity';
 import ownershipTransferJson from '@db/ownership-transfer.json';
-import { User } from '../../../users/entities/user.entity';
+import { OwnershipTransferStatus } from 'src/common/enums/ownership-transfer.enum';
 
 type OwnershipTransferSeedUser = {
   id: number;
@@ -22,7 +22,7 @@ type OwnershipTransferSeedItem = {
   current_owner?: OwnershipTransferSeedUser | null;
   message?: string | null;
   created_by: number | string;
-  status: string;
+  status: OwnershipTransferStatus;
   order_info?: OwnershipTransfer['order_info'] | null;
   created_at?: string;
   updated_at?: string;
@@ -59,7 +59,7 @@ export class OwnershipTransferSeederService {
       
       // Log transfer details
       savedTransfers.forEach(transfer => {
-        this.logger.debug(`   - Transfer #${transfer.id}: ${transfer.transaction_identifier} - ${transfer.status} (${transfer.previous_owner?.name} → ${transfer.current_owner?.name})`);
+        this.logger.debug(`   - Transfer #${transfer.id}: ${transfer.transaction_identifier} - ${transfer.status} (previous_owner_id=${transfer.previous_owner_id}, current_owner_id=${transfer.current_owner_id})`);
       });
       
       return savedTransfers;
@@ -124,8 +124,8 @@ export class OwnershipTransferSeederService {
 
     transfer.id = item.id;
     transfer.transaction_identifier = item.transaction_identifier;
-    transfer.previous_owner = this.mapUser(item.previous_owner);
-    transfer.current_owner = this.mapUser(item.current_owner);
+    transfer.previous_owner_id = item.previous_owner?.id ?? null;
+    transfer.current_owner_id = item.current_owner?.id ?? null;
     transfer.message = item.message ?? null;
     transfer.created_by = String(item.created_by);
     transfer.status = item.status;
@@ -143,17 +143,6 @@ export class OwnershipTransferSeederService {
     transfer.updated_at = this.parseDate(item.updated_at);
 
     return transfer;
-  }
-
-  private mapUser(user: OwnershipTransferSeedUser | null | undefined): User {
-    const mappedUser = new User();
-    mappedUser.id = user?.id ?? 0;
-    mappedUser.name = user?.name ?? '';
-    mappedUser.email = user?.email ?? '';
-    mappedUser.is_active = Boolean(user?.is_active);
-    mappedUser.created_at = this.parseDate(user?.created_at);
-    mappedUser.updated_at = this.parseDate(user?.updated_at);
-    return mappedUser;
   }
 
   private parseDate(value?: string): Date {
