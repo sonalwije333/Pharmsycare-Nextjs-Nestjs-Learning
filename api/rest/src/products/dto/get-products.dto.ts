@@ -1,5 +1,5 @@
 // dto/get-products.dto.ts
-import { IsOptional, IsString, IsNumber, Min } from 'class-validator';
+import { IsOptional, IsString, IsNumber, Min, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class GetProductsDto {
@@ -16,6 +16,14 @@ export class GetProductsDto {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @IsOptional()
+  @IsIn(['and', 'or', 'AND', 'OR'])
+  searchJoin?: string;
+
+  @IsOptional()
+  @IsString()
+  with?: string;
 
   @IsOptional()
   @IsString()

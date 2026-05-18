@@ -2,6 +2,7 @@ import Card from '@/components/common/card';
 import Image from 'next/image';
 import { Table } from '@/components/ui/table';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Button from '@/components/ui/button';
 import ErrorMessage from '@/components/ui/error-message';
@@ -69,11 +70,22 @@ export default function OrderDetailsPage() {
   const {
     handleSubmit,
     control,
+    reset,
 
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: { order_status: order?.order_status ?? '' },
   });
+
+  useEffect(() => {
+    const selectedStatus = ORDER_STATUS.find(
+      (status) => status.status === order?.order_status
+    );
+
+    if (selectedStatus) {
+      reset({ order_status: selectedStatus });
+    }
+  }, [order?.order_status, reset]);
 
   async function handleDownloadInvoice() {
     const { data } = await refetch();
@@ -89,7 +101,10 @@ export default function OrderDetailsPage() {
   const ChangeStatus = ({ order_status }: FormValues) => {
     updateOrder({
       id: order?.id as string,
-      order_status: order_status?.status as string,
+      status:
+        typeof order_status === 'string'
+          ? order_status
+          : order_status?.status ?? order?.order_status,
     });
   };
   const { price: subtotal } = usePrice(
@@ -250,7 +265,7 @@ export default function OrderDetailsPage() {
                 </div>
               )}
               //@ts-ignore
-              data={order?.products!}
+              data={order?.products ?? []}
               rowKey="id"
               scroll={{ x: 300 }}
             />
