@@ -1,19 +1,20 @@
-// payment-method/payment-method.module.ts
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
-import { PaymentModule } from 'src/payment/payment.module';
 import {
   PaymentMethodController,
   SavePaymentMethodController,
-  SetDefaultCartController,
+  SetDefaultCardController,
 } from './payment-method.controller';
 import { PaymentMethodService } from './payment-method.service';
+import { PaymentMethod } from './entities/payment-method.entity';
+import { PaymentGateway } from './entities/payment-gateway.entity';
 
 @Module({
-  imports: [AuthModule, PaymentModule],
+  imports: [TypeOrmModule.forFeature([PaymentMethod, PaymentGateway]), AuthModule],
   controllers: [
     PaymentMethodController,
-    SetDefaultCartController,
+    SetDefaultCardController,
     SavePaymentMethodController,
   ],
   providers: [PaymentMethodService],

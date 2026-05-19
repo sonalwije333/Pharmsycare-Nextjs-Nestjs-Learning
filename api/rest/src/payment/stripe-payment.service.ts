@@ -1,24 +1,40 @@
-// payment/stripe-payment.service.ts
-import { Injectable, Logger } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { InjectStripe } from 'nestjs-stripe';
 import Stripe from 'stripe';
-import {
-  CardElementDto,
-  CreatePaymentIntentDto,
-  StripeCreateCustomerDto,
-} from './dto/stripe.dto';
+import { CardElementDto, CreatePaymentIntentDto, StripeCreateCustomerDto } from './dto/stripe.dto';
+import { StripePayment, StripeCustomer } from './entities/stripe.entity';
+import { StripePaymentStatus } from 'src/common/enums/payment.enum';
+
 
 @Injectable()
 export class StripePaymentService {
   private readonly logger = new Logger(StripePaymentService.name);
 
-  constructor(@InjectStripe() private readonly stripeClient: Stripe) {}
+  constructor(
+    @InjectStripe() private readonly stripeClient: Stripe,
+    @InjectRepository(StripePayment)
+    private stripePaymentRepository: Repository<StripePayment>,
+    @InjectRepository(StripeCustomer)
+    private stripeCustomerRepository: Repository<StripeCustomer>,
+  ) {}
 
-  @ApiOperation({ summary: 'Create Stripe customer' })
   async createCustomer(createCustomerDto?: StripeCreateCustomerDto): Promise<Stripe.Customer> {
     try {
-      return await this.stripeClient.customers.create(createCustomerDto);
+      const customer = await this.stripeClient.customers.create(createCustomerDto);
+      
+      // Save to database
+      const stripeCustomer = this.stripeCustomerRepository.create({
+        stripe_customer_id: customer.id,
+        user_id: 0, // Should be set from auth
+        email: customer.email || '',
+        name: customer.name || '',
+        metadata: customer.metadata,
+      });
+      await this.stripeCustomerRepository.save(stripeCustomer);
+      
+      return customer;
     } catch (error) {
       this.logger.error(`Failed to create customer: ${error.message}`);
       throw error;
@@ -30,15 +46,6 @@ export class StripePaymentService {
       return await this.stripeClient.customers.retrieve(id);
     } catch (error) {
       this.logger.error(`Failed to retrieve customer: ${error.message}`);
-      throw error;
-    }
-  }
-
-  async listAllCustomer(): Promise<Stripe.ApiList<Stripe.Customer>> {
-    try {
-      return await this.stripeClient.customers.list();
-    } catch (error) {
-      this.logger.error(`Failed to list customers: ${error.message}`);
       throw error;
     }
   }
@@ -65,18 +72,6 @@ export class StripePaymentService {
     }
   }
 
-  async retrievePaymentMethodByCustomerId(customer: string): Promise<Stripe.PaymentMethod[]> {
-    try {
-      const { data } = await this.stripeClient.customers.listPaymentMethods(customer, {
-        type: 'card',
-      });
-      return data;
-    } catch (error) {
-      this.logger.error(`Failed to retrieve payment methods by customer: ${error.message}`);
-      throw error;
-    }
-  }
-
   async attachPaymentMethodToCustomer(
     method_id: string,
     customer_id: string,
@@ -91,22 +86,25 @@ export class StripePaymentService {
     }
   }
 
-  async detachPaymentMethodFromCustomer(method_id: string): Promise<Stripe.PaymentMethod> {
-    try {
-      return await this.stripeClient.paymentMethods.detach(method_id);
-    } catch (error) {
-      this.logger.error(`Failed to detach payment method: ${error.message}`);
-      throw error;
-    }
-  }
-
   async createPaymentIntent(createPaymentIntentDto: CreatePaymentIntentDto): Promise<Stripe.PaymentIntent> {
     try {
       const paymentIntentPayload: Stripe.PaymentIntentCreateParams = {
-        ...createPaymentIntentDto,
+        amount: createPaymentIntentDto.amount,
         currency: createPaymentIntentDto.currency ?? 'usd',
       };
       const paymentIntent = await this.stripeClient.paymentIntents.create(paymentIntentPayload);
+      
+      // Save to database
+      const stripePayment = this.stripePaymentRepository.create({
+        stripe_payment_intent_id: paymentIntent.id,
+        amount: paymentIntent.amount,
+        currency: paymentIntent.currency,
+        status: paymentIntent.status as StripePaymentStatus,
+        client_secret: paymentIntent.client_secret,
+        user_id: 0, // Should be set from auth
+      });
+      await this.stripePaymentRepository.save(stripePayment);
+      
       return paymentIntent;
     } catch (error) {
       this.logger.error(`Failed to create payment intent: ${error.message}`);
@@ -116,10 +114,37 @@ export class StripePaymentService {
 
   async retrievePaymentIntent(payment_id: string): Promise<Stripe.PaymentIntent> {
     try {
-      return await this.stripeClient.paymentIntents.retrieve(payment_id);
+      const paymentIntent = await this.stripeClient.paymentIntents.retrieve(payment_id);
+      
+      // Update local record
+      await this.stripePaymentRepository.update(
+        { stripe_payment_intent_id: payment_id },
+        { status: paymentIntent.status as StripePaymentStatus }
+      );
+      
+      return paymentIntent;
     } catch (error) {
       this.logger.error(`Failed to retrieve payment intent: ${error.message}`);
       throw error;
     }
+  }
+
+  async getPaymentByIntentId(intentId: string): Promise<StripePayment> {
+    const payment = await this.stripePaymentRepository.findOne({
+      where: { stripe_payment_intent_id: intentId },
+    });
+    
+    if (!payment) {
+      throw new NotFoundException(`Stripe payment with intent ID ${intentId} not found`);
+    }
+    
+    return payment;
+  }
+
+  async getPaymentsByUser(userId: number): Promise<StripePayment[]> {
+    return this.stripePaymentRepository.find({
+      where: { user_id: userId },
+      order: { created_at: 'DESC' },
+    });
   }
 }

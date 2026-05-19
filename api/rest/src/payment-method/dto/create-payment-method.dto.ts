@@ -1,55 +1,68 @@
-// payment-method/dto/create-payment-method.dto.ts
-import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { IsBoolean, IsOptional, IsString, IsNumber } from 'class-validator';
-import { PaymentMethod } from '../entities/payment-method.entity';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsOptional, IsString, IsNumber, IsEnum } from 'class-validator';
+import { PaymentMethodType } from 'src/common/enums/payment-method.enum';
 
-export class CreatePaymentMethodDto extends OmitType(PaymentMethod, [
-  'id',
-  'created_at',
-  'updated_at',
-  'default_card',
-] as const) {
-  @ApiProperty({ description: 'Payment method key', example: 'pm_123456789' })
+
+export class CreatePaymentMethodDto {
+  @ApiProperty({ description: 'Payment method key', example: 'pm_123456789', type: String })
   @IsString()
   method_key: string;
 
-  @ApiProperty({ description: 'Set as default card', example: false, required: false })
+  @ApiProperty({ description: 'Set as default card', example: false, required: false, type: Boolean })
   @IsOptional()
   @IsBoolean()
   default_card?: boolean;
 
-  @ApiProperty({ description: 'Payment gateway ID', required: false })
+  @ApiProperty({ description: 'Payment gateway ID', required: false, type: Number })
   @IsOptional()
   @IsNumber()
   payment_gateway_id?: number;
 
-  @ApiProperty({ description: 'Card fingerprint', required: false })
+  @ApiProperty({ description: 'Card fingerprint', required: false, type: String })
   @IsOptional()
   @IsString()
   fingerprint?: string;
 
-  @ApiProperty({ description: 'Card owner name', required: false })
+  @ApiProperty({ description: 'Card owner name', required: false, type: String })
   @IsOptional()
   @IsString()
   owner_name?: string;
 
-  @ApiProperty({ description: 'Card network', example: 'visa', required: false })
+  @ApiProperty({ description: 'Card network', example: 'visa', required: false, type: String })
   @IsOptional()
   @IsString()
   network?: string;
 
-  @ApiProperty({ description: 'Card type', example: 'credit', required: false })
+  @ApiProperty({ description: 'Card type', enum: PaymentMethodType, required: false })
   @IsOptional()
-  @IsString()
-  type?: string;
+  @IsEnum(PaymentMethodType)
+  type?: PaymentMethodType;
 
-  @ApiProperty({ description: 'Last 4 digits', example: '4242', required: false })
+  @ApiProperty({ description: 'Last 4 digits', example: '4242', required: false, type: String })
   @IsOptional()
   @IsString()
   last4?: string;
 
-  @ApiProperty({ description: 'Expiry date', example: '12/2025', required: false })
+  @ApiProperty({ description: 'Expiry date', example: '12/2025', required: false, type: String })
   @IsOptional()
   @IsString()
   expires?: string;
+
+  @ApiProperty({ description: 'Card origin country', example: 'US', required: false, type: String })
+  @IsOptional()
+  @IsString()
+  origin?: string;
+
+  @ApiProperty({ description: 'Verification check', required: false, type: String })
+  @IsOptional()
+  @IsString()
+  verification_check?: string;
+
+  @ApiProperty({ description: 'User ID', type: Number })
+  @IsNumber()
+  user_id: number;
+
+  @ApiProperty({ description: 'Gateway name', example: 'STRIPE', type: String })
+  @IsString()
+  gateway_name: string;
 }

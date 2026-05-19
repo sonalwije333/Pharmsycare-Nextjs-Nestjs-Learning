@@ -1,33 +1,34 @@
-// payment-intent/entities/payment-intent.entity.ts
 import { ApiProperty } from '@nestjs/swagger';
+import { PaymentGatewayType } from 'src/common/enums/order-payment.enum';
+
 
 export class PaymentIntentInfo {
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, type: String, nullable: true })
   client_secret?: string | null;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, type: String, nullable: true })
   redirect_url?: string | null;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Payment ID' })
   payment_id: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: Boolean, description: 'Is redirect required' })
   is_redirect: boolean;
 }
 
 export class PaymentIntent {
-  @ApiProperty()
+  @ApiProperty({ type: Number, description: 'Payment intent ID' })
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: Number, description: 'Order ID' })
   order_id: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: String, description: 'Tracking number' })
   tracking_number: string;
 
-  @ApiProperty()
-  payment_gateway: string;
+  @ApiProperty({ enum: PaymentGatewayType, description: 'Payment gateway' })
+  payment_gateway: PaymentGatewayType;
 
-  @ApiProperty({ type: PaymentIntentInfo })
+  @ApiProperty({ type: () => PaymentIntentInfo, description: 'Payment intent info' })
   payment_intent_info: PaymentIntentInfo;
 }
