@@ -53,7 +53,7 @@ import { OwnershipTransferSeederService } from './ownership-transfer-seeder.serv
 import { PayPalPayment, PayPalRefund } from 'src/payment/entities/paypal.entity';
 import { StripeCustomer, StripePayment, StripeRefund } from 'src/payment/entities/stripe.entity';
 import { PaymentMethod } from 'src/payment-method/entities/payment-method.entity';
-import { PaymentGateWay } from 'src/payment-method/entities/payment-gateway.entity';
+import { PaymentGateway } from 'src/payment-method/entities/payment-gateway.entity';
 import { PaymentSeederService } from './payment-seeder.service';
 import { PaymentMethodSeederService } from './payment-method-seeder.service';
 
@@ -142,7 +142,7 @@ import { ReviewService } from '../../../reviews/reviews.service';
       StripeCustomer,
       StripeRefund,
       PaymentMethod,
-      PaymentGateWay,
+      PaymentGateway,
       Product,
       Type,
       Tag,

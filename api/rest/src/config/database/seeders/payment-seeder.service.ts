@@ -1,19 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { PayPalPayment, PayPalRefund } from '../../../payment/entities/paypal.entity';
+import { StripePayment, StripeCustomer, StripeRefund } from '../../../payment/entities/stripe.entity';
 import {
-  PayPalPayment,
   PayPalPaymentStatus,
   PayPalPaymentIntent,
-  PayPalRefund,
-} from '../../../payment/entities/paypal.entity';
-import {
-  StripePayment,
   StripePaymentStatus,
   StripePaymentMethodType,
-  StripeCustomer,
-  StripeRefund,
-} from '../../../payment/entities/stripe.entity';
+} from '../../../common/enums/payment.enum';
 import { User } from '../../../users/entities/user.entity';
 import * as paymentIntentData from '../../../db/pickbazar/payment-intent.json';
 import * as paymentMethodData from '../../../db/pickbazar/payment-methods.json';

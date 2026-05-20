@@ -101,3 +101,42 @@ export class PayPalPayment {
   @UpdateDateColumn()
   updated_at: Date;
 }
+
+@Entity('paypal_refunds')
+export class PayPalRefund {
+  @ApiProperty({ description: 'Refund ID', example: 1, type: Number })
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @ApiProperty({ description: 'PayPal refund ID', example: '8YB12345678901234', type: String })
+  @Column({ unique: true })
+  paypal_refund_id: string;
+
+  @ApiProperty({ description: 'PayPal payment ID', type: Number })
+  @Column()
+  paypal_payment_id: number;
+
+  @ApiProperty({ description: 'Refund amount', type: Number })
+  @Column('decimal', { precision: 10, scale: 2 })
+  amount: number;
+
+  @ApiProperty({ description: 'Refund reason', type: String, required: false })
+  @Column({ nullable: true })
+  reason: string;
+
+  @ApiProperty({ description: 'Refund status', type: String, default: 'succeeded' })
+  @Column({ default: 'succeeded' })
+  status: string;
+
+  @ApiProperty({ description: 'Soft delete timestamp', required: false, type: Date })
+  @DeleteDateColumn()
+  deleted_at?: Date;
+
+  @ApiProperty({ description: 'Creation timestamp', type: Date })
+  @CreateDateColumn()
+  created_at: Date;
+
+  @ApiProperty({ description: 'Last update timestamp', type: Date })
+  @UpdateDateColumn()
+  updated_at: Date;
+}

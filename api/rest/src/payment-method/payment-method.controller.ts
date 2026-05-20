@@ -36,7 +36,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { Permission, SortOrder } from 'src/common/enums/enums';
-import { PaymentMethodOrderByColumn, PaymentMethodType } from './enums/payment-method.enum';
+import { PaymentMethodOrderByColumn, PaymentMethodType } from 'src/common/enums/payment-method.enum';
 
 @ApiTags('💳 Payment Methods')
 @Controller('payment-methods')

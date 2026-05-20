@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PaymentMethod } from '../../../payment-method/entities/payment-method.entity';
-import { PaymentGateWay } from '../../../payment-method/entities/payment-gateway.entity';
+import { PaymentGateway } from '../../../payment-method/entities/payment-gateway.entity';
 import * as paymentGatewayData from '../../../db/pickbazar/payment-gateway.json';
 import * as paymentMethodData from '../../../db/pickbazar/payment-methods.json';
 
@@ -13,8 +13,8 @@ export class PaymentMethodSeederService {
   constructor(
     @InjectRepository(PaymentMethod)
     private paymentMethodRepository: Repository<PaymentMethod>,
-    @InjectRepository(PaymentGateWay)
-    private paymentGatewayRepository: Repository<PaymentGateWay>,
+    @InjectRepository(PaymentGateway)
+    private paymentGatewayRepository: Repository<PaymentGateway>,
   ) {}
 
   async seed() {

@@ -12,7 +12,7 @@ export class PaymentGateway extends CoreEntity {
   @Column({ nullable: true })
   customer_id: string;
 
-  @ApiProperty({ description: 'Gateway name', type: String, unique: true })
+  @ApiProperty({ description: 'Gateway name', type: String })
   @Column({ unique: true })
   gateway_name: string;
 
