@@ -16,10 +16,12 @@ export const orderClient = {
   get: ({ id, language }: { id: string; language: string }) => {
     return HttpClient.get<Order>(`${API_ENDPOINTS.ORDERS}/${id}`, {
       language,
+      with: 'refund',
     });
   },
   paginated: ({ tracking_number, ...params }: Partial<OrderQueryOptions>) => {
     return HttpClient.get<OrderPaginator>(API_ENDPOINTS.ORDERS, {
+      with: 'refund',
       searchJoin: 'and',
       ...params,
       search: HttpClient.formatSearchParams({ tracking_number }),

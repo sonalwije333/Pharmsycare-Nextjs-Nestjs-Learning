@@ -32,6 +32,11 @@ export class ShopsService {
       .replace(/^-+|-+$/g, '');
   }
 
+  /** JSON seed data uses 0/1; API query may send boolean — compare consistently. */
+  private asBooleanFlag(value: unknown): boolean {
+    return value === true || value === 1 || value === '1';
+  }
+
   async create(createShopDto: CreateShopDto, userId?: number): Promise<Shop> {
     if (!userId) {
       throw new UnauthorizedException('User not authenticated');
@@ -69,14 +74,17 @@ export class ShopsService {
     page = 1,
     is_active,
     owner_id,
-    sortedBy = 'created_at',
-    orderBy = 'DESC'
+    orderBy = 'created_at',
+    sortedBy = 'DESC',
   }: GetShopsDto): Promise<ShopPaginator> {
     let data: Shop[] = [...this.shops];
     const searchText = search || name;
 
     if (is_active !== undefined) {
-      data = data.filter(shop => shop.is_active === is_active);
+      const wantActive = this.asBooleanFlag(is_active);
+      data = data.filter(
+        (shop) => this.asBooleanFlag(shop.is_active) === wantActive,
+      );
     }
 
     if (owner_id) {
@@ -91,10 +99,13 @@ export class ShopsService {
       data = fuse.search(searchText)?.map(({ item }) => item);
     }
 
+    const sortField = orderBy ?? 'created_at';
+    const sortDirection = (sortedBy ?? 'DESC').toString().toUpperCase();
+
     data.sort((a, b) => {
       let aValue: any, bValue: any;
-      
-      switch (sortedBy) {
+
+      switch (sortField) {
         case 'name':
           aValue = a.name;
           bValue = b.name;
@@ -120,7 +131,7 @@ export class ShopsService {
           bValue = b.created_at;
       }
 
-      if (orderBy === 'ASC') {
+      if (sortDirection === 'ASC') {
         return aValue > bValue ? 1 : -1;
       } else {
         return aValue < bValue ? 1 : -1;
@@ -146,7 +157,9 @@ export class ShopsService {
     limit = 10,
     page = 1,
   }: GetShopsDto): Promise<ShopPaginator> {
-    let data: Shop[] = this.shops.filter(shop => shop.is_active === false);
+    let data: Shop[] = this.shops.filter(
+      (shop) => !this.asBooleanFlag(shop.is_active),
+    );
     const searchText = search || name;
 
     if (searchText) {

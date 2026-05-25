@@ -22,7 +22,11 @@ import { Attachment, OrderStatus, PaymentStatus } from '@/types';
 import { formatAddress } from '@/utils/format-address';
 import { formatString } from '@/utils/format-string';
 import { useIsRTL } from '@/utils/locals';
-import { ORDER_STATUS } from '@/utils/order-status';
+import {
+  getOrderStatusOption,
+  ORDER_STATUS,
+  resolveOrderStatusValue,
+} from '@/utils/order-status';
 import usePrice from '@/utils/use-price';
 import { useAtom } from 'jotai';
 import { useTranslation } from 'next-i18next';
@@ -67,16 +71,28 @@ export default function OrderDetailsPage() {
   const {
     handleSubmit,
     control,
-
+    reset,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: { order_status: order?.order_status ?? '' },
+    defaultValues: {
+      order_status: getOrderStatusOption(order?.order_status) ?? '',
+    },
   });
 
+  useEffect(() => {
+    if (order?.order_status) {
+      reset({
+        order_status: getOrderStatusOption(order.order_status) ?? order.order_status,
+      });
+    }
+  }, [order?.order_status, reset]);
+
   const ChangeStatus = ({ order_status }: FormValues) => {
+    const status = resolveOrderStatusValue(order_status);
+    if (!status || !order?.id) return;
     updateOrder({
-      id: order?.id as string,
-      order_status: order_status?.status as string,
+      id: order.id as string,
+      status,
     });
   };
   const { price: subtotal } = usePrice(

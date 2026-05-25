@@ -27,12 +27,15 @@ import { useRouter } from 'next/router';
 import { Routes } from '@/config/routes';
 import { mapPaginatorData } from '@/framework/utils/data-mappers';
 import { isArray, isObject, isEmpty } from 'lodash';
+import { useUser } from '@/framework/user';
 
 export function useOrders(options?: Partial<OrderQueryOptions>) {
   const { locale } = useRouter();
+  const { me, isAuthorized } = useUser();
 
   const formattedOptions = {
     ...options,
+    ...(isAuthorized && me?.id ? { customer_id: me.id } : {}),
     // language: locale
   };
 
@@ -49,6 +52,7 @@ export function useOrders(options?: Partial<OrderQueryOptions>) {
     ({ queryKey, pageParam }) =>
       client.orders.all(Object.assign({}, queryKey[1], pageParam)),
     {
+      enabled: isAuthorized && Boolean(me?.id),
       getNextPageParam: ({ current_page, last_page }) =>
         last_page > current_page && { page: current_page + 1 },
       refetchOnWindowFocus: false,

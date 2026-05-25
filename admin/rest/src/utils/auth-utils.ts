@@ -17,8 +17,31 @@ export const adminOnly = [SUPER_ADMIN];
 export const ownerOnly = [STORE_OWNER];
 export const ownerAndStaffOnly = [STORE_OWNER, STAFF];
 
+/** Cookie key used for auth — must match NEXT_PUBLIC_AUTH_TOKEN_KEY when set. */
+export function getAuthCookieKey(): string {
+  return process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY ?? AUTH_CRED;
+}
+
+export function getBearerToken(context?: any): string | null {
+  const authCred = context
+    ? parseSSRCookie(context)[getAuthCookieKey()]
+    : Cookie.get(getAuthCookieKey());
+
+  if (!authCred) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(authCred);
+    return parsed?.token ?? null;
+  } catch {
+    // Support raw JWT string stored directly in the cookie.
+    return authCred;
+  }
+}
+
 export function setAuthCredentials(token: string, permissions: any, role: any) {
-  Cookie.set(AUTH_CRED, JSON.stringify({ token, permissions, role }));
+  Cookie.set(getAuthCookieKey(), JSON.stringify({ token, permissions, role }));
 }
 export function setEmailVerified(emailVerified: boolean) {
   Cookie.set(EMAIL_VERIFIED, JSON.stringify({ emailVerified }));
@@ -37,9 +60,9 @@ export function getAuthCredentials(context?: any): {
 } {
   let authCred;
   if (context) {
-    authCred = parseSSRCookie(context)[AUTH_CRED];
+    authCred = parseSSRCookie(context)[getAuthCookieKey()];
   } else {
-    authCred = Cookie.get(AUTH_CRED);
+    authCred = Cookie.get(getAuthCookieKey());
   }
   if (authCred) {
     return JSON.parse(authCred);

@@ -2,6 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import Router from 'next/router';
 import invariant from 'tiny-invariant';
+import { getAuthCookieKey, getBearerToken } from '@/utils/auth-utils';
 
 invariant(
   process.env.NEXT_PUBLIC_REST_API_ENDPOINT,
@@ -14,18 +15,13 @@ const Axios = axios.create({
     'Content-Type': 'application/json',
   },
 });
-// Change request data/error
-const AUTH_TOKEN_KEY = process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY ?? 'authToken';
+// Attach JWT from the same cookie key used at login (AUTH_CRED / NEXT_PUBLIC_AUTH_TOKEN_KEY).
 Axios.interceptors.request.use((config) => {
-  const cookies = Cookies.get(AUTH_TOKEN_KEY);
-  let token = '';
-  if (cookies) {
-    token = JSON.parse(cookies)['token'];
-  }
+  const token = getBearerToken();
   // @ts-ignore
   config.headers = {
     ...config.headers,
-    Authorization: `Bearer ${token}`,
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
   };
   return config;
 });
@@ -40,7 +36,7 @@ Axios.interceptors.response.use(
       (error.response &&
         error.response.data.message === 'PICKBAZAR_ERROR.NOT_AUTHORIZED')
     ) {
-      Cookies.remove(AUTH_TOKEN_KEY);
+      Cookies.remove(getAuthCookieKey());
       Router.reload();
     }
     return Promise.reject(error);

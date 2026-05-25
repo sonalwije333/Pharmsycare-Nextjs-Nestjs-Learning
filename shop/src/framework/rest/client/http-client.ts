@@ -11,9 +11,22 @@ const Axios = axios.create({
     'Content-Type': 'application/json',
   },
 });
+function getShopBearerToken(): string | null {
+  const stored = Cookies.get(AUTH_TOKEN_KEY);
+  if (!stored) {
+    return null;
+  }
+  try {
+    const parsed = JSON.parse(stored);
+    return parsed?.token ?? stored;
+  } catch {
+    return stored;
+  }
+}
+
 // Change request data/error here
 Axios.interceptors.request.use((config) => {
-  const token = Cookies.get(AUTH_TOKEN_KEY);
+  const token = getShopBearerToken();
   if (token) {
     //@ts-ignore
     config.headers = {
