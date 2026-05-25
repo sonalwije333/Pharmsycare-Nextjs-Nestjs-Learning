@@ -88,4 +88,12 @@ export class GetOrdersDto extends PaginationArgs {
   @IsString()
   @IsIn(['and', 'or', 'AND', 'OR'])
   searchJoin?: string;
+
+  @ApiProperty({
+    description: 'Relations to include (comma-separated), e.g. refund',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  with?: string;
 }

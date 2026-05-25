@@ -10,6 +10,7 @@ import {
   Post,
   Put,
   Query,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -42,6 +43,7 @@ import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Permission } from "src/common/enums/enums";
 import { OrderStatus } from './entities/order-status.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @ApiTags('📦 Orders')
 @Controller('orders')
@@ -69,7 +71,12 @@ export class OrdersController {
   }
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(
+    Permission.SUPER_ADMIN,
+    Permission.STORE_OWNER,
+    Permission.STAFF,
+    Permission.CUSTOMER,
+  )
   @ApiOperation({
     summary: 'Get all orders',
     description: 'Retrieve paginated list of orders'
@@ -80,7 +87,22 @@ export class OrdersController {
   })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
   @ApiForbiddenResponse({ description: 'Insufficient permissions' })
-  async getOrders(@Query() query: GetOrdersDto): Promise<OrderPaginator> {
+  async getOrders(
+    @Query() query: GetOrdersDto,
+    @Request() req: { user: User },
+  ): Promise<OrderPaginator> {
+    const user = req.user;
+    const permissions = user?.permissions ?? [];
+    const isCustomerOnly =
+      permissions.includes(Permission.CUSTOMER) &&
+      !permissions.includes(Permission.SUPER_ADMIN) &&
+      !permissions.includes(Permission.STORE_OWNER) &&
+      !permissions.includes(Permission.STAFF);
+
+    if (isCustomerOnly) {
+      query.customer_id = user.id;
+    }
+
     return this.ordersService.getOrders(query);
   }
 

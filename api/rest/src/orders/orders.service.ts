@@ -135,6 +135,7 @@ export class OrdersService {
     shop_id,
     orderBy = 'created_at',
     sortedBy = 'desc',
+    with: withRelations,
   }: GetOrdersDto): Promise<OrderPaginator> {
     if (!page) page = 1;
     if (!limit) limit = 15;
@@ -227,10 +228,17 @@ export class OrdersService {
 
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-    const results = data.slice(startIndex, endIndex);
-    
-    const url = `/orders?search=${search}&limit=${limit}`;
-    
+    let results = data.slice(startIndex, endIndex);
+
+    if (withRelations?.includes('refund')) {
+      results = results.map((order) => ({
+        ...order,
+        refund: (order as Order & { refund?: unknown }).refund ?? null,
+      }));
+    }
+
+    const url = `/orders?search=${search ?? ''}&limit=${limit}`;
+
     return {
       data: results,
       ...paginate(data.length, page, limit, results.length, url),
@@ -323,14 +331,25 @@ export class OrdersService {
       throw new NotFoundException(`Order with ID ${id} not found`);
     }
     
-    // Update order properties
-    this.orders[orderIndex] = {
+    const statusSlug =
+      typeof updateOrderInput.status === 'string'
+        ? updateOrderInput.status
+        : (updateOrderInput.status as OrderStatus | undefined)?.slug;
+
+    const updatedOrder = {
       ...this.orders[orderIndex],
       ...updateOrderInput,
-      status: typeof updateOrderInput.status === 'string' 
-        ? (updateOrderInput.status as any)
-        : updateOrderInput.status,
     } as Order;
+
+    if (statusSlug) {
+      updatedOrder.order_status = statusSlug as OrderStatusType;
+      const statusEntity = this.orderStatus.find((s) => s.slug === statusSlug);
+      if (statusEntity) {
+        updatedOrder.status = statusEntity;
+      }
+    }
+
+    this.orders[orderIndex] = updatedOrder;
     
     return {
       success: true,

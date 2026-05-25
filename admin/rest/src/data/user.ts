@@ -1,4 +1,4 @@
-import { AUTH_CRED } from '@/utils/constants';
+import { getAuthCookieKey } from '@/utils/auth-utils';
 import { Routes } from '@/config/routes';
 import Cookies from 'js-cookie';
 import { useTranslation } from 'next-i18next';
@@ -66,7 +66,7 @@ export const useLogoutMutation = () => {
 
   return useMutation(userClient.logout, {
     onSuccess: () => {
-      Cookies.remove(AUTH_CRED);
+      Cookies.remove(getAuthCookieKey());
       router.replace(Routes.login);
       toast.success(t('common:successfully-logout'), {
         toastId: 'logoutSuccess',

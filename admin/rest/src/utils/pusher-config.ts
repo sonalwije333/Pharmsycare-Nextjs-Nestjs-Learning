@@ -1,14 +1,8 @@
 // Enable pusher logging - don't include this in production
 import Pusher from 'pusher-js';
-import Cookies from 'js-cookie';
+import { getBearerToken } from '@/utils/auth-utils';
 
-// Change request data/error
-const AUTH_TOKEN_KEY = process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY ?? 'authToken';
-const cookies = Cookies.get(AUTH_TOKEN_KEY);
-let token = '';
-if (cookies) {
-  token = JSON.parse(cookies)['token'];
-}
+const token = getBearerToken() ?? '';
 
 if (process.env.NEXT_PUBLIC_PUSHER_DEV_MOOD === 'true') {
   Pusher.logToConsole = true;

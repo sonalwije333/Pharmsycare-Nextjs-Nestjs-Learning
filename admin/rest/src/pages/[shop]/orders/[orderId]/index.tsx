@@ -30,12 +30,17 @@ import { useOrderQuery } from '@/data/order';
 import { Attachment, OrderStatus, PaymentStatus } from '@/types';
 import { DownloadIcon } from '@/components/icons/download-icon';
 import OrderViewHeader from '@/components/order/order-view-header';
-import { ORDER_STATUS } from '@/utils/order-status';
+import {
+  getOrderStatusOption,
+  ORDER_STATUS,
+  resolveOrderStatusValue,
+} from '@/utils/order-status';
 import OrderStatusProgressBox from '@/components/order/order-status-progress-box';
 import { Routes } from '@/config/routes';
 import { useShopQuery } from '@/data/shop';
 import { useMeQuery } from '@/data/user';
 import { useFormatPhoneNumber } from '@/utils/format-phone-number';
+import { useEffect } from 'react';
 
 type FormValues = {
   order_status: any;
@@ -69,11 +74,21 @@ export default function OrderDetailsPage() {
   const {
     handleSubmit,
     control,
-
+    reset,
     formState: { errors },
   } = useForm<FormValues>({
-    defaultValues: { order_status: order?.order_status ?? '' },
+    defaultValues: {
+      order_status: getOrderStatusOption(order?.order_status) ?? '',
+    },
   });
+
+  useEffect(() => {
+    if (order?.order_status) {
+      reset({
+        order_status: getOrderStatusOption(order.order_status) ?? order.order_status,
+      });
+    }
+  }, [order?.order_status, reset]);
 
   async function handleDownloadInvoice() {
     const { data } = await refetch();
@@ -87,9 +102,11 @@ export default function OrderDetailsPage() {
   }
 
   const ChangeStatus = ({ order_status }: FormValues) => {
+    const status = resolveOrderStatusValue(order_status);
+    if (!status || !order?.id) return;
     updateOrder({
-      id: order?.id as string,
-      order_status: order_status?.status as string,
+      id: order.id as string,
+      status,
     });
   };
   const { price: subtotal } = usePrice(
