@@ -14,6 +14,7 @@ import { UserPaginator } from 'src/users/dto/get-users.dto';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import shopsJson from '@db/shops.json';
 import nearShopJson from '@db/near-shop.json';
+import { applyMedicineScopeToShops } from 'src/common/constants/medicine-scope.helpers';
 
 @Injectable()
 export class ShopsService {
@@ -22,8 +23,8 @@ export class ShopsService {
     private readonly shopsRepository: Repository<Shop>,
   ) {}
 
-  private shops: Shop[] = plainToClass(Shop, shopsJson);
-  private nearShops: Shop[] = plainToClass(Shop, nearShopJson);
+  private shops: Shop[] = applyMedicineScopeToShops(plainToClass(Shop, shopsJson));
+  private nearShops: Shop[] = applyMedicineScopeToShops(plainToClass(Shop, nearShopJson));
 
   private generateSlug(name: string): string {
     return name

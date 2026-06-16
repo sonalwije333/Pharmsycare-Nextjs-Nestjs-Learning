@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import client from './client';
 import { API_ENDPOINTS } from './client/api-endpoints';
 import { useRouter } from 'next/router';
+import { filterMedicineTypes } from '@/lib/medicine-scope';
 
 export function useTypes(options?: Partial<TypeQueryOptions>) {
   const { locale } = useRouter();
@@ -17,7 +18,7 @@ export function useTypes(options?: Partial<TypeQueryOptions>) {
     ({ queryKey }) => client.types.all(Object.assign({}, queryKey[1]))
   );
   return {
-    types: data,
+    types: filterMedicineTypes(data),
     isLoading,
     error,
   };

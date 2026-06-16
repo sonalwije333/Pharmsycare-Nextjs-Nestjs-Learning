@@ -9,10 +9,11 @@ import { GetTypesDto, TypePaginator } from './dto/get-types.dto';
 import { UpdateTypeDto } from './dto/update-type.dto';
 import { CoreMutationOutput } from 'src/common/dto/core-mutation-output.dto';
 import typesJson from '@db/types.json';
+import { applyMedicineScopeToTypes } from 'src/common/constants/medicine-scope.helpers';
 
 @Injectable()
 export class TypesService {
-  private types: Type[] = plainToClass(Type, typesJson);
+  private types: Type[] = applyMedicineScopeToTypes(plainToClass(Type, typesJson));
 
   private generateSlug(name: string): string {
     return name

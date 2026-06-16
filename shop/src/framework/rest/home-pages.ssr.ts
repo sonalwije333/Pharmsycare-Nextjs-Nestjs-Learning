@@ -95,22 +95,22 @@ export const getStaticProps: GetStaticProps<
     language: locale,
   };
 
-  // Only prefetch popular products for `book` demo
-  if (pageType === 'book') {
-    await queryClient.prefetchQuery(
-      [API_ENDPOINTS.PRODUCTS_POPULAR, popularProductVariables],
-      ({ queryKey }) =>
-        client.products.popular(queryKey[1] as PopularProductQueryOptions)
-    );
-
-    await queryClient.prefetchQuery(
-      [API_ENDPOINTS.BEST_SELLING_PRODUCTS, popularProductVariables],
-      ({ queryKey }) =>
-        client.products.bestSelling(
-          queryKey[1] as BestSellingProductQueryOptions
-        )
-    );
-  }
+  // Non-medicine book demo prefetch (disabled in medicine-only mode):
+  // if (pageType === 'book') {
+  //   await queryClient.prefetchQuery(
+  //     [API_ENDPOINTS.PRODUCTS_POPULAR, popularProductVariables],
+  //     ({ queryKey }) =>
+  //       client.products.popular(queryKey[1] as PopularProductQueryOptions)
+  //   );
+  //
+  //   await queryClient.prefetchQuery(
+  //     [API_ENDPOINTS.BEST_SELLING_PRODUCTS, popularProductVariables],
+  //     ({ queryKey }) =>
+  //       client.products.bestSelling(
+  //         queryKey[1] as BestSellingProductQueryOptions
+  //       )
+  //   );
+  // }
 
   const categoryVariables = {
     type: pageType,

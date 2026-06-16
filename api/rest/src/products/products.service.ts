@@ -14,10 +14,17 @@ import typesJson from '@db/types.json';
 import popularProductsJson from '../db/pickbazar/popular-products.json';
 import bestSellingProductsJson from '../db/pickbazar/best-selling-products.json';
 import Fuse from 'fuse.js';
+import { applyMedicineScopeToProducts } from '../common/constants/medicine-scope.helpers';
 
-const products = plainToClass(Product, productsJson as object[]) as Product[];
-const popularProducts = plainToClass(Product, popularProductsJson as object[]) as Product[];
-const bestSellingProducts = plainToClass(Product, bestSellingProductsJson as object[]) as Product[];
+const products = applyMedicineScopeToProducts(
+  plainToClass(Product, productsJson as object[]) as Product[],
+);
+const popularProducts = applyMedicineScopeToProducts(
+  plainToClass(Product, popularProductsJson as object[]) as Product[],
+);
+const bestSellingProducts = applyMedicineScopeToProducts(
+  plainToClass(Product, bestSellingProductsJson as object[]) as Product[],
+);
 
 const categorySlugById = new Map<string, string>();
 const categoryTypeSlugByCategorySlug = new Map<string, string>();
