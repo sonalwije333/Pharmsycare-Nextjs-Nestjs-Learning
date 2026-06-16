@@ -104,4 +104,9 @@ export const API_ENDPOINTS = {
   PRESCRIPTIONS: 'prescriptions',
   PRESCRIPTIONS_MY: 'prescriptions/my',
   PRESCRIPTIONS_STATS: 'prescriptions/stats',
+  PRESCRIPTIONS_APPROVE: (id: number | string) => `prescriptions/${id}/approve`,
+  PRESCRIPTIONS_REJECT: (id: number | string) => `prescriptions/${id}/reject`,
+  PRESCRIPTIONS_FULFILL: (id: number | string) => `prescriptions/${id}/fulfill`,
+  PRESCRIPTIONS_ASSIGN_SHOP: (id: number | string) => `prescriptions/${id}/assign-shop`,
+  PRESCRIPTIONS_HISTORY: (id: number | string) => `prescriptions/${id}/history`,
 };

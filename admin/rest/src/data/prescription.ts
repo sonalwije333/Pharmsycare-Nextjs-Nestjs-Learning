@@ -15,5 +15,8 @@ export const prescriptionService = {
   reject: (id: number, reason: string) => prescriptionClient.reject(id, reason),
   assignToShop: (id: number, shopId: number) =>
     prescriptionClient.assignToShop(id, shopId),
+  fulfill: (id: number, adminNotes?: string) =>
+    prescriptionClient.fulfill(id, adminNotes),
+  getHistory: (id: number) => prescriptionClient.getHistory(id),
   getStats: () => prescriptionClient.getStats(),
 };

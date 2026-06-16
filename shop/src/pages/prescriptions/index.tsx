@@ -14,6 +14,7 @@ import { Prescription, PrescriptionStatus } from '@/types';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
 import dayjs from 'dayjs';
+import PrescriptionHistoryTimeline from '@/components/prescription/prescription-history-timeline';
 
 export { getStaticProps } from '@/framework/general.ssr';
 
@@ -179,6 +180,8 @@ export default function MyPrescriptionsPage() {
                       Last updated {dayjs(prescription.processed_at).format('MMM DD, YYYY h:mm A')}
                     </p>
                   ) : null}
+
+                  <PrescriptionHistoryTimeline prescriptionId={prescription.id} />
                 </div>
               </div>
             </div>

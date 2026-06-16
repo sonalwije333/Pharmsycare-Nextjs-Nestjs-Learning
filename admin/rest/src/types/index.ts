@@ -372,6 +372,30 @@ export interface PrescriptionStats {
   total: number;
 }
 
+export enum PrescriptionHistoryAction {
+  UPLOADED = 'uploaded',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
+  FULFILLED = 'fulfilled',
+  EXPIRED = 'expired',
+  STATUS_CHANGED = 'status_changed',
+  ASSIGNED_SHOP = 'assigned_shop',
+  NOTES_UPDATED = 'notes_updated',
+}
+
+export interface PrescriptionHistory {
+  id: number;
+  prescription_id: number;
+  action: PrescriptionHistoryAction;
+  from_status: PrescriptionStatus | null;
+  to_status: PrescriptionStatus | null;
+  notes: string | null;
+  performed_by: number | null;
+  performer_name: string | null;
+  shop_id: number | null;
+  created_at: string;
+}
+
 export interface CreatePrescriptionInput {
   attachment_id: string;
   notes?: string;

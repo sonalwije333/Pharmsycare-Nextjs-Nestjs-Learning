@@ -81,6 +81,16 @@ export default function PrescriptionsPage() {
     }
   };
 
+  const handleFulfill = async (id: number) => {
+    try {
+      await prescriptionService.fulfill(id);
+      toast.success('Prescription marked as fulfilled');
+      await fetchPrescriptions();
+    } catch (error) {
+      toast.error('Fulfillment failed');
+    }
+  };
+
   const handleReject = async () => {
     if (!rejectModal.id || !rejectReason.trim()) {
       toast.error('Please provide a rejection reason');
@@ -178,6 +188,7 @@ export default function PrescriptionsPage() {
                 prescription={prescription}
                 onApprove={handleApprove}
                 onReject={(id) => setRejectModal({ open: true, id })}
+                onFulfill={handleFulfill}
                 onDelete={handleDelete}
               />
             ))}

@@ -69,4 +69,5 @@ export const API_ENDPOINTS = {
   SHOP_MAINTENANCE_EVENT: 'shop-maintenance-event',
   PRESCRIPTIONS: '/prescriptions',
   PRESCRIPTIONS_MY: '/prescriptions/my',
+  PRESCRIPTIONS_HISTORY: (id: number | string) => `/prescriptions/${id}/history`,
 };

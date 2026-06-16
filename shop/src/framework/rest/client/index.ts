@@ -35,6 +35,7 @@ import type {
   PasswordChangeResponse,
   PopularProductQueryOptions,
   Prescription,
+  PrescriptionHistory,
   PrescriptionPaginator,
   GetPrescriptionsQuery,
   Product,
@@ -413,6 +414,8 @@ class Client {
       HttpClient.post<Prescription>(API_ENDPOINTS.PRESCRIPTIONS, input),
     getMy: (query: GetPrescriptionsQuery) =>
       HttpClient.get<PrescriptionPaginator>(API_ENDPOINTS.PRESCRIPTIONS_MY, query),
+    getHistory: (id: number) =>
+      HttpClient.get<PrescriptionHistory[]>(API_ENDPOINTS.PRESCRIPTIONS_HISTORY(id)),
   };
   refundReason = {
     all: ({ type, ...params }: Partial<RefundQueryOptions>) =>
