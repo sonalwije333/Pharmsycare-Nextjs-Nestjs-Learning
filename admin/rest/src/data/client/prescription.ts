@@ -4,6 +4,7 @@ import {
   CreatePrescriptionInput,
   GetPrescriptionsQuery,
   Prescription,
+  PrescriptionHistory,
   PrescriptionPaginator,
   PrescriptionStats,
   UpdatePrescriptionInput,
@@ -54,6 +55,17 @@ export const prescriptionClient = {
     return HttpClient.post<Prescription>(
       API_ENDPOINTS.PRESCRIPTIONS_ASSIGN_SHOP(id),
       { shopId },
+    );
+  },
+  fulfill: (id: number, admin_notes?: string) => {
+    return HttpClient.post<Prescription>(
+      API_ENDPOINTS.PRESCRIPTIONS_FULFILL(id),
+      { admin_notes },
+    );
+  },
+  getHistory: (id: number) => {
+    return HttpClient.get<PrescriptionHistory[]>(
+      API_ENDPOINTS.PRESCRIPTIONS_HISTORY(id),
     );
   },
   getStats: () => {

@@ -36,6 +36,7 @@ import {
   PrescriptionResponseDto,
   PrescriptionPaginatorDto,
 } from './dto/prescription-response.dto';
+import { PrescriptionHistoryResponseDto } from './dto/prescription-history-response.dto';
 import {
   ApprovePrescriptionDto,
 } from './dto/approve-prescription.dto';
@@ -160,6 +161,27 @@ export class PrescriptionsController {
     return this.prescriptionsService.getStats(req.user);
   }
 
+  @Get(':id/history')
+  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF, Permission.CUSTOMER)
+  @ApiOperation({
+    summary: 'Get prescription history',
+    description: 'Retrieve timeline of status changes and actions for a prescription',
+  })
+  @ApiParam({ name: 'id', description: 'Prescription ID', type: Number })
+  @ApiOkResponse({
+    description: 'Prescription history retrieved successfully',
+    type: [PrescriptionHistoryResponseDto],
+  })
+  @ApiNotFoundResponse({ description: 'Prescription not found' })
+  @ApiUnauthorizedResponse({ description: 'Not authenticated' })
+  @ApiForbiddenResponse({ description: 'Insufficient permissions' })
+  async getHistory(
+    @Req() req: any,
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<PrescriptionHistoryResponseDto[]> {
+    return this.prescriptionsService.getHistory(id, req.user);
+  }
+
   @Get(':id')
   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF, Permission.CUSTOMER)
   @ApiOperation({
@@ -278,6 +300,39 @@ export class PrescriptionsController {
     @Body() rejectDto: RejectPrescriptionDto,
   ): Promise<PrescriptionResponseDto> {
     return this.prescriptionsService.reject(id, req.user, rejectDto);
+  }
+
+  @Post(':id/fulfill')
+  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Fulfill prescription',
+    description: 'Mark an approved prescription as fulfilled (Admin/Store/Staff only)',
+  })
+  @ApiParam({ name: 'id', description: 'Prescription ID', type: Number })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        admin_notes: { type: 'string', example: 'Order dispatched' },
+      },
+    },
+    required: false,
+  })
+  @ApiOkResponse({
+    description: 'Prescription fulfilled successfully',
+    type: PrescriptionResponseDto,
+  })
+  @ApiBadRequestResponse({ description: 'Prescription not in approved status' })
+  @ApiNotFoundResponse({ description: 'Prescription not found' })
+  @ApiUnauthorizedResponse({ description: 'Not authenticated' })
+  @ApiForbiddenResponse({ description: 'Insufficient permissions' })
+  async fulfill(
+    @Req() req: any,
+    @Param('id', ParseIntPipe) id: number,
+    @Body('admin_notes') adminNotes?: string,
+  ): Promise<PrescriptionResponseDto> {
+    return this.prescriptionsService.fulfill(id, req.user, adminNotes);
   }
 
   @Post(':id/assign-shop')

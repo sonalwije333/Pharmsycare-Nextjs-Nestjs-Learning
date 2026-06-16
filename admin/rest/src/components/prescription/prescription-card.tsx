@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import Badge from '@/components/ui/badge/badge';
 import Button from '@/components/ui/button';
 import { Prescription, PrescriptionStatus } from '@/types';
+import PrescriptionHistoryTimeline from './prescription-history-timeline';
 
 const statusColor = {
   [PrescriptionStatus.PENDING]: 'bg-yellow-100 text-yellow-800',
@@ -16,6 +17,7 @@ interface PrescriptionCardProps {
   prescription: Prescription;
   onApprove?: (id: number) => void;
   onReject?: (id: number) => void;
+  onFulfill?: (id: number) => void;
   onDelete?: (id: number) => void;
 }
 
@@ -23,6 +25,7 @@ export default function PrescriptionCard({
   prescription,
   onApprove,
   onReject,
+  onFulfill,
   onDelete,
 }: PrescriptionCardProps) {
   return (
@@ -103,6 +106,15 @@ export default function PrescriptionCard({
                 Reject
               </Button>
             ) : null}
+            {onFulfill && prescription.status === PrescriptionStatus.APPROVED ? (
+              <Button
+                variant="outline"
+                size="small"
+                onClick={() => onFulfill(prescription.id)}
+              >
+                Mark fulfilled
+              </Button>
+            ) : null}
             {onDelete ? (
               <Button
                 variant="outline"
@@ -113,6 +125,8 @@ export default function PrescriptionCard({
               </Button>
             ) : null}
           </div>
+
+          <PrescriptionHistoryTimeline prescriptionId={prescription.id} />
         </div>
       </div>
     </div>
