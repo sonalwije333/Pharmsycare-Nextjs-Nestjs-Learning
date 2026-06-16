@@ -12,6 +12,7 @@ import { useTypes } from '@/framework/type';
 import useHomepage from '@/lib/hooks/use-homepage';
 import type { Type } from '@/types';
 import { TYPES_PER_PAGE } from '@/framework/client/variables';
+import { filterMedicineTypes } from '@/lib/medicine-scope';
 
 interface GroupsMenuProps {
   className?: string;
@@ -149,10 +150,15 @@ const GroupsDropdownMenu: React.FC<GroupsDropdownMenuProps> = ({ variant }) => {
   const { types }: any = useTypes({
     limit: TYPES_PER_PAGE,
   });
+  const medicineTypes = filterMedicineTypes(types);
   //FIXME: remove this
   const { homePage }: any = useHomepage();
   return (
-    <GroupsMenu groups={types} defaultGroup={homePage} variant={variant} />
+    <GroupsMenu
+      groups={medicineTypes}
+      defaultGroup={homePage ?? medicineTypes?.[0]}
+      variant={variant}
+    />
   );
 };
 

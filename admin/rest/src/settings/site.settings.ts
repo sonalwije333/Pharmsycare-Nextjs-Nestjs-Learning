@@ -138,12 +138,13 @@ export const siteSettings = {
             label: 'sidebar-nav-item-my-shops',
             icon: 'MyShopIcon',
           },
-          {
-            href: Routes.ownershipTransferRequest.list,
-            label: 'Shop Transfer Request',
-            icon: 'MyShopIcon',
-            permission: adminAndOwnerOnly,
-          },
+          // Non-medicine multi-shop transfer:
+          // {
+          //   href: Routes.ownershipTransferRequest.list,
+          //   label: 'Shop Transfer Request',
+          //   icon: 'MyShopIcon',
+          //   permission: adminAndOwnerOnly,
+          // },
         ],
       },
 
@@ -204,11 +205,12 @@ export const siteSettings = {
             label: 'sidebar-nav-item-manufacturers',
             icon: 'ManufacturersIcon',
           },
-          {
-            href: Routes.author.list,
-            label: 'sidebar-nav-item-authors',
-            icon: 'AuthorIcon',
-          },
+          // Non-medicine (books demo):
+          // {
+          //   href: Routes.author.list,
+          //   label: 'sidebar-nav-item-authors',
+          //   icon: 'AuthorIcon',
+          // },
         ],
       },
 
@@ -349,11 +351,12 @@ export const siteSettings = {
               },
             ],
           },
-          {
-            href: Routes.becomeSeller,
-            label: 'Become a seller Page',
-            icon: 'TermsIcon',
-          },
+          // Non-medicine marketplace onboarding:
+          // {
+          //   href: Routes.becomeSeller,
+          //   label: 'Become a seller Page',
+          //   icon: 'TermsIcon',
+          // },
         ],
       },
 
@@ -454,28 +457,29 @@ export const siteSettings = {
               },
             ],
           },
-          {
-            href: '',
-            label: 'text-flash-sale',
-            icon: 'FlashDealsIcon',
-            childMenu: [
-              {
-                href: Routes.flashSale.list,
-                label: 'text-all-campaigns',
-                icon: 'FlashDealsIcon',
-              },
-              {
-                href: Routes.flashSale.create,
-                label: 'text-new-campaigns',
-                icon: 'FlashDealsIcon',
-              },
-              {
-                href: Routes.vendorRequestForFlashSale.list,
-                label: 'Vendor requests',
-                icon: 'CouponsIcon',
-              },
-            ],
-          },
+          // Non-medicine promo module:
+          // {
+          //   href: '',
+          //   label: 'text-flash-sale',
+          //   icon: 'FlashDealsIcon',
+          //   childMenu: [
+          //     {
+          //       href: Routes.flashSale.list,
+          //       label: 'text-all-campaigns',
+          //       icon: 'FlashDealsIcon',
+          //     },
+          //     {
+          //       href: Routes.flashSale.create,
+          //       label: 'text-new-campaigns',
+          //       icon: 'FlashDealsIcon',
+          //     },
+          //     {
+          //       href: Routes.vendorRequestForFlashSale.list,
+          //       label: 'Vendor requests',
+          //       icon: 'CouponsIcon',
+          //     },
+          //   ],
+          // },
           // {
           //   href: '',
           //   label: 'Newsletter emails',
@@ -707,12 +711,13 @@ export const siteSettings = {
             icon: 'DiaryIcon',
             permissions: adminAndOwnerOnly,
           },
-          {
-            href: (shop: string) => `/${shop}${Routes.author.list}`,
-            label: 'sidebar-nav-item-authors',
-            icon: 'FountainPenIcon',
-            permissions: adminAndOwnerOnly,
-          },
+          // Non-medicine (books):
+          // {
+          //   href: (shop: string) => `/${shop}${Routes.author.list}`,
+          //   label: 'sidebar-nav-item-authors',
+          //   icon: 'FountainPenIcon',
+          //   permissions: adminAndOwnerOnly,
+          // },
         ],
       },
 
@@ -821,33 +826,34 @@ export const siteSettings = {
             icon: 'CouponsIcon',
             permissions: adminAndOwnerOnly,
           },
-          {
-            href: (shop: string) => `/${shop}${Routes.flashSale.list}`,
-            label: 'text-flash-sale',
-            icon: 'UsersIcon',
-            childMenu: [
-              {
-                href: (shop: string) => `/${shop}${Routes.flashSale.list}`,
-                label: 'text-available-flash-deals',
-                icon: 'ProductsIcon',
-                permissions: adminOwnerAndStaffOnly,
-              },
-              {
-                href: (shop: string) =>
-                  `/${shop}${Routes.myProductsInFlashSale}`,
-                label: 'text-my-products-in-deals',
-                icon: 'ProductsIcon',
-                permissions: adminOwnerAndStaffOnly,
-              },
-              {
-                href: (shop: string) =>
-                  `/${shop}${Routes.vendorRequestForFlashSale.list}`,
-                label: 'Ask for enrollment',
-                icon: 'ProductsIcon',
-                permissions: adminOwnerAndStaffOnly,
-              },
-            ],
-          },
+          // Non-medicine promo:
+          // {
+          //   href: (shop: string) => `/${shop}${Routes.flashSale.list}`,
+          //   label: 'text-flash-sale',
+          //   icon: 'UsersIcon',
+          //   childMenu: [
+          //     {
+          //       href: (shop: string) => `/${shop}${Routes.flashSale.list}`,
+          //       label: 'text-available-flash-deals',
+          //       icon: 'ProductsIcon',
+          //       permissions: adminOwnerAndStaffOnly,
+          //     },
+          //     {
+          //       href: (shop: string) =>
+          //         `/${shop}${Routes.myProductsInFlashSale}`,
+          //       label: 'text-my-products-in-deals',
+          //       icon: 'ProductsIcon',
+          //       permissions: adminOwnerAndStaffOnly,
+          //     },
+          //     {
+          //       href: (shop: string) =>
+          //         `/${shop}${Routes.vendorRequestForFlashSale.list}`,
+          //       label: 'Ask for enrollment',
+          //       icon: 'ProductsIcon',
+          //       permissions: adminOwnerAndStaffOnly,
+          //     },
+          //   ],
+          // },
         ],
       },
 
@@ -976,12 +982,13 @@ export const siteSettings = {
             icon: 'DiaryIcon',
             permissions: adminAndOwnerOnly,
           },
-          {
-            href: (shop: string) => `/${shop}${Routes.author.list}`,
-            label: 'sidebar-nav-item-authors',
-            icon: 'FountainPenIcon',
-            permissions: adminAndOwnerOnly,
-          },
+          // Non-medicine (books):
+          // {
+          //   href: (shop: string) => `/${shop}${Routes.author.list}`,
+          //   label: 'sidebar-nav-item-authors',
+          //   icon: 'FountainPenIcon',
+          //   permissions: adminAndOwnerOnly,
+          // },
         ],
       },
 
@@ -1090,33 +1097,34 @@ export const siteSettings = {
             icon: 'CouponsIcon',
             permissions: adminOwnerAndStaffOnly,
           },
-          {
-            href: (shop: string) => `/${shop}${Routes.flashSale.list}`,
-            label: 'text-flash-sale',
-            icon: 'UsersIcon',
-            childMenu: [
-              {
-                href: (shop: string) => `/${shop}${Routes.flashSale.list}`,
-                label: 'text-available-flash-deals',
-                icon: 'ProductsIcon',
-                permissions: adminOwnerAndStaffOnly,
-              },
-              {
-                href: (shop: string) =>
-                  `/${shop}${Routes.myProductsInFlashSale}`,
-                label: 'text-my-products-in-deals',
-                icon: 'ProductsIcon',
-                permissions: adminOwnerAndStaffOnly,
-              },
-              {
-                href: (shop: string) =>
-                  `/${shop}${Routes.vendorRequestForFlashSale.list}`,
-                label: 'See all enrollment request',
-                icon: 'ProductsIcon',
-                permissions: adminOwnerAndStaffOnly,
-              },
-            ],
-          },
+          // Non-medicine promo:
+          // {
+          //   href: (shop: string) => `/${shop}${Routes.flashSale.list}`,
+          //   label: 'text-flash-sale',
+          //   icon: 'UsersIcon',
+          //   childMenu: [
+          //     {
+          //       href: (shop: string) => `/${shop}${Routes.flashSale.list}`,
+          //       label: 'text-available-flash-deals',
+          //       icon: 'ProductsIcon',
+          //       permissions: adminOwnerAndStaffOnly,
+          //     },
+          //     {
+          //       href: (shop: string) =>
+          //         `/${shop}${Routes.myProductsInFlashSale}`,
+          //       label: 'text-my-products-in-deals',
+          //       icon: 'ProductsIcon',
+          //       permissions: adminOwnerAndStaffOnly,
+          //     },
+          //     {
+          //       href: (shop: string) =>
+          //         `/${shop}${Routes.vendorRequestForFlashSale.list}`,
+          //       label: 'See all enrollment request',
+          //       icon: 'ProductsIcon',
+          //       permissions: adminOwnerAndStaffOnly,
+          //     },
+          //   ],
+          // },
         ],
       },
 

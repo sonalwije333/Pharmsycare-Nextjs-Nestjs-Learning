@@ -6,15 +6,15 @@ import { AddressesModule } from './addresses/addresses.module';
 import { AnalyticsModule } from './analytics/analytics.module';
 import { AttributesModule } from './attributes/attributes.module';
 import { AuthModule } from './auth/auth.module';
-import { AuthorsModule } from './authors/authors.module';
+// import { AuthorsModule } from './authors/authors.module'; // Non-medicine (books demo)
 import { CategoriesModule } from './categories/categories.module';
 import { CommonModule } from './common/common.module';
 import { CouponsModule } from './coupons/coupons.module';
 import { DatabaseModule } from './config/database/database.module';
 import { FeedbackModule } from './feedbacks/feedbacks.module';
-import { ImportsModule } from './imports/imports.module';
+// import { ImportsModule } from './imports/imports.module'; // Bulk import tooling
 import { ManufacturersModule } from './manufacturers/manufacturers.module';
-import { NewslettersModule } from './newsletters/newsletters.module';
+// import { NewslettersModule } from './newsletters/newsletters.module'; // Marketing
 import { OrdersModule } from './orders/orders.module';
 import { PaymentIntentModule } from './payment-intent/payment-intent.module';
 import { PaymentMethodModule } from './payment-method/payment-method.module';
@@ -37,15 +37,15 @@ import { WebHookModule } from './web-hook/web-hook.module';
 import { WishlistsModule } from './wishlists/wishlists.module';
 import { WithdrawsModule } from './withdraws/withdraws.module';
 import { ConversationsModule } from './conversations/conversations.module';
-import { AiModule } from './ai/ai.module';
+// import { AiModule } from './ai/ai.module'; // OpenAI product copy (non-core)
 import { FaqsModule } from './faqs/faqs.module';
 import { TermsAndConditionsModule } from './terms-and-conditions/terms-and-conditions.module';
-import { FlashSaleModule } from './flash-sale/flash-sale.module';
+// import { FlashSaleModule } from './flash-sale/flash-sale.module'; // Promo campaigns
 import { RefundPoliciesModule } from './refund-policies/refund-policies.module';
 import { RefundReasonModule } from './refund-reasons/refund-reasons.module';
 import { NotifyLogsModule } from './notify-logs/notify-logs.module';
-import { BecomeSellerModule } from './become-seller/become-seller.module';
-import { OwnershipTransferModule } from './ownership-transfer/ownership-transfer.module';
+// import { BecomeSellerModule } from './become-seller/become-seller.module'; // Marketplace onboarding
+// import { OwnershipTransferModule } from './ownership-transfer/ownership-transfer.module'; // Multi-shop transfer
 import * as Joi from 'joi';
 import { StoreNoticesModule } from './store-notices/store-notices.module';
 import { PrescriptionsModule } from './prescriptions/prescriptions.module';
@@ -89,12 +89,12 @@ import { PrescriptionsModule } from './prescriptions/prescriptions.module';
     SettingsModule,
     CouponsModule,
     AddressesModule,
-    ImportsModule,
+    // ImportsModule,
     AuthModule,
     RefundsModule,
-    AuthorsModule,
+    // AuthorsModule,
     ManufacturersModule,
-    NewslettersModule,
+    // NewslettersModule,
     ReviewModule,
     QuestionsModule,
     WishlistsModule,
@@ -107,15 +107,15 @@ import { PrescriptionsModule } from './prescriptions/prescriptions.module';
     StoreNoticesModule,
     ConversationsModule,
     MessagesModule,
-    AiModule,
+    // AiModule,
     FaqsModule,
     NotifyLogsModule,
     TermsAndConditionsModule,
-    FlashSaleModule,
+    // FlashSaleModule,
     RefundPoliciesModule,
     RefundReasonModule,
-    BecomeSellerModule,
-    OwnershipTransferModule,
+    // BecomeSellerModule,
+    // OwnershipTransferModule,
     PrescriptionsModule,
   ],
   controllers: [],

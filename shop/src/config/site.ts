@@ -2,12 +2,12 @@ import { Routes } from '@/config/routes';
 import { PaymentGateway } from '@/types';
 
 export const siteSettings = {
-  name: 'PickBazar',
+  name: 'PharmSyCare',
   description: '',
   logo: {
     url: '/logo.svg',
-    alt: 'PickBazar',
-    href: '/grocery',
+    alt: 'PharmSyCare',
+    href: '/medicine',
     width: 128,
     height: 40,
   },
@@ -127,13 +127,11 @@ export const siteSettings = {
       label: 'nav-menu-upload-prescription',
     },
     { href: Routes.contactUs, label: 'nav-menu-contact' },
-    {
-      href: Routes.becomeSeller,
-      label: 'Become a seller',
-    },
-    { href: Routes.flashSale, label: 'nav-menu-flash-sale' },
+    // Non-medicine nav (disabled in medicine-only mode):
+    // { href: Routes.becomeSeller, label: 'Become a seller' },
+    // { href: Routes.flashSale, label: 'nav-menu-flash-sale' },
     { href: Routes.manufacturers, label: 'text-manufacturers' },
-    { href: Routes.authors, label: 'text-authors' },
+    // { href: Routes.authors, label: 'text-authors' },
     { href: Routes.help, label: 'nav-menu-faq' },
     { href: Routes.terms, label: 'nav-menu-terms' },
     { href: Routes.customerRefundPolicies, label: 'nav-menu-refund-policy' },
