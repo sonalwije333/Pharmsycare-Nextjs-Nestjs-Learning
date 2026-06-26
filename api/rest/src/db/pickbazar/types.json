@@ -1,0 +1,52 @@
+[
+  {
+    "id": 11,
+    "name": "Medicine",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "slug": "medicine",
+    "banners": [
+      {
+        "id": 117,
+        "title": "Medicine Delivered in 90 Minutes",
+        "type_id": 11,
+        "description": "Get your medicine delivered at your doorsteps all day everyday",
+        "image": {
+          "id": 2297,
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/conversions/Untitled-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/Untitled.png"
+        }
+      }
+    ],
+    "promotional_sliders": [
+      {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/conversions/banner01-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/banner01.png",
+        "id": 2336
+      },
+      {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/conversions/banner02-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/banner02.png",
+        "id": 2337
+      },
+      {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/conversions/banner03-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/banner03.png",
+        "id": 2338
+      },
+      {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/conversions/banner04-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/banner04.png",
+        "id": 2339
+      }
+    ],
+    "settings": {
+      "isHome": false,
+      "productCard": "xenon",
+      "layoutType": "classic"
+    },
+    "icon": "MedicineIcon"
+  }
+]

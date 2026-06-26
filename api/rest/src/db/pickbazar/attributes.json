@@ -1,0 +1,176 @@
+[
+  {
+    "id": 1,
+    "name": "Dosage Form",
+    "shop_id": 11,
+    "language": "en",
+    "translated_languages": ["en"],
+    "slug": "dosage-form",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null
+    },
+    "values": [
+      {
+        "id": 1,
+        "value": "Tablet",
+        "attribute_id": 1,
+        "slug": "tablet",
+        "meta": "Tablet",
+        "language": "en",
+        "translated_languages": ["en"]
+      },
+      {
+        "id": 2,
+        "value": "Capsule",
+        "attribute_id": 1,
+        "slug": "capsule",
+        "meta": "Capsule",
+        "language": "en",
+        "translated_languages": ["en"]
+      },
+      {
+        "id": 3,
+        "value": "Syrup",
+        "attribute_id": 1,
+        "slug": "syrup",
+        "meta": "Syrup",
+        "language": "en",
+        "translated_languages": ["en"]
+      },
+      {
+        "id": 4,
+        "value": "Injection",
+        "attribute_id": 1,
+        "slug": "injection",
+        "meta": "Injection",
+        "language": "en",
+        "translated_languages": ["en"]
+      },
+      {
+        "id": 5,
+        "value": "Ointment",
+        "attribute_id": 1,
+        "slug": "ointment",
+        "meta": "Ointment",
+        "language": "en",
+        "translated_languages": ["en"]
+      },
+      {
+        "id": 6,
+        "value": "Drops",
+        "attribute_id": 1,
+        "slug": "drops",
+        "meta": "Drops",
+        "language": "en",
+        "translated_languages": ["en"]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Strength",
+    "shop_id": 11,
+    "language": "en",
+    "translated_languages": ["en"],
+    "slug": "strength",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null
+    },
+    "values": [
+      {
+        "id": 7,
+        "value": "100 mg",
+        "attribute_id": 2,
+        "slug": "100-mg",
+        "meta": "100mg",
+        "language": "en",
+        "translated_languages": ["en"]
+      },
+      {
+        "id": 8,
+        "value": "250 mg",
+        "attribute_id": 2,
+        "slug": "250-mg",
+        "meta": "250mg",
+        "language": "en",
+        "translated_languages": ["en"]
+      },
+      {
+        "id": 9,
+        "value": "500 mg",
+        "attribute_id": 2,
+        "slug": "500-mg",
+        "meta": "500mg",
+        "language": "en",
+        "translated_languages": ["en"]
+      },
+      {
+        "id": 10,
+        "value": "5 mg/5 ml",
+        "attribute_id": 2,
+        "slug": "5-mg-5-ml",
+        "meta": "5mg/5ml",
+        "language": "en",
+        "translated_languages": ["en"]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Pack Size",
+    "shop_id": 11,
+    "language": "en",
+    "translated_languages": ["en"],
+    "slug": "pack-size",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null
+    },
+    "values": [
+      {
+        "id": 11,
+        "value": "10 Tablets",
+        "attribute_id": 3,
+        "slug": "10-tablets",
+        "meta": "10s",
+        "language": "en",
+        "translated_languages": ["en"]
+      },
+      {
+        "id": 12,
+        "value": "30 Tablets",
+        "attribute_id": 3,
+        "slug": "30-tablets",
+        "meta": "30s",
+        "language": "en",
+        "translated_languages": ["en"]
+      },
+      {
+        "id": 13,
+        "value": "100 ml Bottle",
+        "attribute_id": 3,
+        "slug": "100-ml-bottle",
+        "meta": "100ml",
+        "language": "en",
+        "translated_languages": ["en"]
+      },
+      {
+        "id": 14,
+        "value": "1 Strip",
+        "attribute_id": 3,
+        "slug": "1-strip",
+        "meta": "1 Strip",
+        "language": "en",
+        "translated_languages": ["en"]
+      }
+    ]
+  }
+]

@@ -1,0 +1,88 @@
+[
+  {
+    "id": 18,
+    "name": "MediCure",
+    "slug": "medicure",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "products_count": 13,
+    "is_approved": 1,
+    "description": null,
+    "website": null,
+    "socials": [
+      {
+        "icon": "FacebookIcon",
+        "url": "https://www.facebook.com/redqinc/"
+      },
+      {
+        "icon": "TwitterIcon",
+        "url": "https://twitter.com/RedqTeam"
+      },
+      {
+        "icon": "YouTubeIcon",
+        "url": "https://www.youtube.com/channel/UCjld1tyVHRNy_pe3ROLiLhw"
+      }
+    ],
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2065/conversions/Medicine-logo1-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2065/Medicine-logo1.png",
+      "id": 2065
+    },
+    "cover_image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2066/conversions/medicine-banner-1-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2066/medicine-banner-1.png",
+      "id": 2066
+    },
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null
+    }
+  },
+  {
+    "id": 19,
+    "name": "HealTech",
+    "slug": "healtech",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "products_count": 12,
+    "is_approved": 1,
+    "description": null,
+    "website": null,
+    "socials": [
+      {
+        "icon": "FacebookIcon",
+        "url": "https://www.facebook.com/redqinc/"
+      },
+      {
+        "icon": "TwitterIcon",
+        "url": "https://twitter.com/RedqTeam"
+      },
+      {
+        "icon": "YouTubeIcon",
+        "url": "https://www.youtube.com/channel/UCjld1tyVHRNy_pe3ROLiLhw"
+      }
+    ],
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2064/conversions/Medicine-logo2-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2064/Medicine-logo2.png",
+      "id": 2064
+    },
+    "cover_image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2067/conversions/medicine-banner-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2067/medicine-banner.png",
+      "id": 2067
+    },
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null
+    }
+  }
+]

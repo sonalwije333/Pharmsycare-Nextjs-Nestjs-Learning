@@ -1,0 +1,72 @@
+[
+  {
+    "id": 3,
+    "title": "Limited-Time Offer: Act Fast! 🔥",
+    "slug": "limited-time-offer-act-fast",
+    "description": "Don't miss out on our incredible Limited-Time Offer sale! We've slashed prices on a wide range of products for a brief period, giving you the perfect opportunity to grab those items you've had your eye on. Whether it's the latest fashion trends, cutting-edge electronics, or home essentials, this sale has something for everyone. But remember, time is of the essence – these discounts won't be around for long. So, hurry and fill your cart with fantastic deals while they last. It's the ultimate chance to upgrade your lifestyle without breaking the bank. Shop now and make the most of this exclusive offer before it vanishes!",
+    "start_date": "2023-10-31 06:49:59",
+    "end_date": "2024-11-29 18:00:00",
+    "sale_status": 1,
+    "type": "percentage",
+    "rate": 50,
+    "sale_builder": {
+      "data_type": "handpick_category",
+      "product_ids": []
+    },
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2289/conversions/Group-1000003746-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2289/Group-1000003746.png",
+      "id": 2292,
+      "file_name": "Group-1000003746.png"
+    },
+    "cover_image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2291/conversions/Group-1000003746-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2291/Group-1000003746.png",
+      "id": 2294,
+      "file_name": "Group-1000003746.png"
+    },
+    "language": "en",
+    "deleted_at": null,
+    "created_at": "2023-10-16T06:53:42.000000Z",
+    "updated_at": "2023-10-16T06:53:42.000000Z",
+    "translated_languages": [
+      "en"
+    ],
+    "products": []
+  },
+  {
+    "id": 1,
+    "title": "Limited time discounts.",
+    "slug": "limited-time-discounts",
+    "description": "Offer a discount on a specific product or category of products for a limited time. This creates a sense of urgency and encourages customers to make quick purchases.",
+    "start_date": "2023-10-16 06:40:17",
+    "end_date": "2024-11-29 18:00:00",
+    "sale_status": 1,
+    "type": "fixed_rate",
+    "rate": 10,
+    "sale_builder": {
+      "data_type": "handpicked_products",
+      "product_ids": []
+    },
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2285/conversions/2-92206549-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2285/2-92206549.png",
+      "id": 2288,
+      "file_name": "2-92206549.png"
+    },
+    "cover_image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2286/conversions/4-954757967-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2286/4-954757967.png",
+      "id": 2289,
+      "file_name": "4-954757967.png"
+    },
+    "language": "en",
+    "deleted_at": null,
+    "created_at": "2023-10-16T06:46:21.000000Z",
+    "updated_at": "2023-10-16T06:46:21.000000Z",
+    "translated_languages": [
+      "en"
+    ],
+    "products": []
+  }
+]

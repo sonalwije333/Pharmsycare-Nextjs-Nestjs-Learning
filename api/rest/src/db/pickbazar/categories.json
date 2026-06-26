@@ -1,0 +1,772 @@
+[
+  {
+    "id": 186,
+    "name": "Baby Care",
+    "slug": "baby-care",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "parent": null,
+    "children": [],
+    "products_count": null,
+    "details": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2101/conversions/Baby-care-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2101/Baby-care.png",
+      "id": 2102
+    },
+    "icon": "Feeders",
+    "type_id": 11,
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "language": "en",
+      "translated_languages": [
+        "en"
+      ],
+      "slug": "medicine",
+      "banners": [
+        {
+          "id": 117,
+          "title": "Medicine Delivered in 90 Minutes",
+          "type_id": 11,
+          "description": "Get your medicine delivered at your doorsteps all day everyday",
+          "image": {
+            "id": 2297,
+            "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/conversions/Untitled-thumbnail.jpg",
+            "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/Untitled.png"
+          }
+        }
+      ],
+      "promotional_sliders": [
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/conversions/banner01-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/banner01.png",
+          "id": 2336
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/conversions/banner02-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/banner02.png",
+          "id": 2337
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/conversions/banner03-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/banner03.png",
+          "id": 2338
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/conversions/banner04-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/banner04.png",
+          "id": 2339
+        }
+      ],
+      "settings": {
+        "isHome": false,
+        "productCard": "xenon",
+        "layoutType": "classic"
+      },
+      "icon": "MedicineIcon"
+    }
+  },
+  {
+    "id": 187,
+    "name": "First Aid Kit",
+    "slug": "first-aid-kit",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "parent": null,
+    "children": [],
+    "products_count": null,
+    "details": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2100/conversions/Medicine-%26-first-aid-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2100/Medicine-%26-first-aid.png",
+      "id": 2101
+    },
+    "icon": "FirstAidKit",
+    "type_id": 11,
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "language": "en",
+      "translated_languages": [
+        "en"
+      ],
+      "slug": "medicine",
+      "banners": [
+        {
+          "id": 117,
+          "title": "Medicine Delivered in 90 Minutes",
+          "type_id": 11,
+          "description": "Get your medicine delivered at your doorsteps all day everyday",
+          "image": {
+            "id": 2297,
+            "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/conversions/Untitled-thumbnail.jpg",
+            "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/Untitled.png"
+          }
+        }
+      ],
+      "promotional_sliders": [
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/conversions/banner01-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/banner01.png",
+          "id": 2336
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/conversions/banner02-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/banner02.png",
+          "id": 2337
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/conversions/banner03-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/banner03.png",
+          "id": 2338
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/conversions/banner04-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/banner04.png",
+          "id": 2339
+        }
+      ],
+      "settings": {
+        "isHome": false,
+        "productCard": "xenon",
+        "layoutType": "classic"
+      },
+      "icon": "MedicineIcon"
+    }
+  },
+  {
+    "id": 188,
+    "name": "Oral",
+    "slug": "oral-mdc",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "parent": null,
+    "children": [],
+    "products_count": null,
+    "details": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2099/conversions/Oral-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2099/Oral.png",
+      "id": 2100
+    },
+    "icon": "OralCare",
+    "type_id": 11,
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "language": "en",
+      "translated_languages": [
+        "en"
+      ],
+      "slug": "medicine",
+      "banners": [
+        {
+          "id": 117,
+          "title": "Medicine Delivered in 90 Minutes",
+          "type_id": 11,
+          "description": "Get your medicine delivered at your doorsteps all day everyday",
+          "image": {
+            "id": 2297,
+            "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/conversions/Untitled-thumbnail.jpg",
+            "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/Untitled.png"
+          }
+        }
+      ],
+      "promotional_sliders": [
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/conversions/banner01-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/banner01.png",
+          "id": 2336
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/conversions/banner02-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/banner02.png",
+          "id": 2337
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/conversions/banner03-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/banner03.png",
+          "id": 2338
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/conversions/banner04-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/banner04.png",
+          "id": 2339
+        }
+      ],
+      "settings": {
+        "isHome": false,
+        "productCard": "xenon",
+        "layoutType": "classic"
+      },
+      "icon": "MedicineIcon"
+    }
+  },
+  {
+    "id": 205,
+    "name": "Beauty care",
+    "slug": "beauty-care",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "parent": null,
+    "children": [],
+    "products_count": null,
+    "details": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2161/conversions/Beauty-care-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2161/Beauty-care.jpg",
+      "id": 2164
+    },
+    "icon": "BeautyCare",
+    "type_id": 11,
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "language": "en",
+      "translated_languages": [
+        "en"
+      ],
+      "slug": "medicine",
+      "banners": [
+        {
+          "id": 117,
+          "title": "Medicine Delivered in 90 Minutes",
+          "type_id": 11,
+          "description": "Get your medicine delivered at your doorsteps all day everyday",
+          "image": {
+            "id": 2297,
+            "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/conversions/Untitled-thumbnail.jpg",
+            "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/Untitled.png"
+          }
+        }
+      ],
+      "promotional_sliders": [
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/conversions/banner01-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/banner01.png",
+          "id": 2336
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/conversions/banner02-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/banner02.png",
+          "id": 2337
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/conversions/banner03-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/banner03.png",
+          "id": 2338
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/conversions/banner04-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/banner04.png",
+          "id": 2339
+        }
+      ],
+      "settings": {
+        "isHome": false,
+        "productCard": "xenon",
+        "layoutType": "classic"
+      },
+      "icon": "MedicineIcon"
+    }
+  },
+  {
+    "id": 206,
+    "name": "Contraceptive",
+    "slug": "contraceptive",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "parent": null,
+    "children": [],
+    "products_count": null,
+    "details": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2162/conversions/Contraceptive-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2162/Contraceptive.jpg",
+      "id": 2165
+    },
+    "icon": "Contraceptive",
+    "type_id": 11,
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "language": "en",
+      "translated_languages": [
+        "en"
+      ],
+      "slug": "medicine",
+      "banners": [
+        {
+          "id": 117,
+          "title": "Medicine Delivered in 90 Minutes",
+          "type_id": 11,
+          "description": "Get your medicine delivered at your doorsteps all day everyday",
+          "image": {
+            "id": 2297,
+            "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/conversions/Untitled-thumbnail.jpg",
+            "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/Untitled.png"
+          }
+        }
+      ],
+      "promotional_sliders": [
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/conversions/banner01-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/banner01.png",
+          "id": 2336
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/conversions/banner02-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/banner02.png",
+          "id": 2337
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/conversions/banner03-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/banner03.png",
+          "id": 2338
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/conversions/banner04-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/banner04.png",
+          "id": 2339
+        }
+      ],
+      "settings": {
+        "isHome": false,
+        "productCard": "xenon",
+        "layoutType": "classic"
+      },
+      "icon": "MedicineIcon"
+    }
+  },
+  {
+    "id": 207,
+    "name": "Face and skin care",
+    "slug": "face-and-skin-care",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "parent": null,
+    "children": [],
+    "products_count": null,
+    "details": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2163/conversions/Face-and-skin-care-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2163/Face-and-skin-care.jpg",
+      "id": 2166
+    },
+    "icon": "FaceSkinCare",
+    "type_id": 11,
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "language": "en",
+      "translated_languages": [
+        "en"
+      ],
+      "slug": "medicine",
+      "banners": [
+        {
+          "id": 117,
+          "title": "Medicine Delivered in 90 Minutes",
+          "type_id": 11,
+          "description": "Get your medicine delivered at your doorsteps all day everyday",
+          "image": {
+            "id": 2297,
+            "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/conversions/Untitled-thumbnail.jpg",
+            "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/Untitled.png"
+          }
+        }
+      ],
+      "promotional_sliders": [
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/conversions/banner01-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/banner01.png",
+          "id": 2336
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/conversions/banner02-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/banner02.png",
+          "id": 2337
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/conversions/banner03-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/banner03.png",
+          "id": 2338
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/conversions/banner04-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/banner04.png",
+          "id": 2339
+        }
+      ],
+      "settings": {
+        "isHome": false,
+        "productCard": "xenon",
+        "layoutType": "classic"
+      },
+      "icon": "MedicineIcon"
+    }
+  },
+  {
+    "id": 208,
+    "name": "Feminine hygiene",
+    "slug": "feminine-hygiene",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "parent": null,
+    "children": [],
+    "products_count": null,
+    "details": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2164/conversions/Feminine-hygiene-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2164/Feminine-hygiene.jpg",
+      "id": 2167
+    },
+    "icon": "FeminineHygiene",
+    "type_id": 11,
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "language": "en",
+      "translated_languages": [
+        "en"
+      ],
+      "slug": "medicine",
+      "banners": [
+        {
+          "id": 117,
+          "title": "Medicine Delivered in 90 Minutes",
+          "type_id": 11,
+          "description": "Get your medicine delivered at your doorsteps all day everyday",
+          "image": {
+            "id": 2297,
+            "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/conversions/Untitled-thumbnail.jpg",
+            "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/Untitled.png"
+          }
+        }
+      ],
+      "promotional_sliders": [
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/conversions/banner01-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/banner01.png",
+          "id": 2336
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/conversions/banner02-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/banner02.png",
+          "id": 2337
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/conversions/banner03-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/banner03.png",
+          "id": 2338
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/conversions/banner04-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/banner04.png",
+          "id": 2339
+        }
+      ],
+      "settings": {
+        "isHome": false,
+        "productCard": "xenon",
+        "layoutType": "classic"
+      },
+      "icon": "MedicineIcon"
+    }
+  },
+  {
+    "id": 209,
+    "name": "Health & Protein",
+    "slug": "health-&-protein",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "parent": null,
+    "children": [],
+    "products_count": null,
+    "details": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2165/conversions/Health-%26-Protein-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2165/Health-%26-Protein.jpg",
+      "id": 2168
+    },
+    "icon": "HealthProtein",
+    "type_id": 11,
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "language": "en",
+      "translated_languages": [
+        "en"
+      ],
+      "slug": "medicine",
+      "banners": [
+        {
+          "id": 117,
+          "title": "Medicine Delivered in 90 Minutes",
+          "type_id": 11,
+          "description": "Get your medicine delivered at your doorsteps all day everyday",
+          "image": {
+            "id": 2297,
+            "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/conversions/Untitled-thumbnail.jpg",
+            "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/Untitled.png"
+          }
+        }
+      ],
+      "promotional_sliders": [
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/conversions/banner01-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/banner01.png",
+          "id": 2336
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/conversions/banner02-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/banner02.png",
+          "id": 2337
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/conversions/banner03-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/banner03.png",
+          "id": 2338
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/conversions/banner04-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/banner04.png",
+          "id": 2339
+        }
+      ],
+      "settings": {
+        "isHome": false,
+        "productCard": "xenon",
+        "layoutType": "classic"
+      },
+      "icon": "MedicineIcon"
+    }
+  },
+  {
+    "id": 210,
+    "name": "Health & Wellness",
+    "slug": "health-&-wellness",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "parent": null,
+    "children": [],
+    "products_count": null,
+    "details": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2166/conversions/Health-%26-Wellness-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2166/Health-%26-Wellness.jpg",
+      "id": 2169
+    },
+    "icon": "HealthWellness",
+    "type_id": 11,
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "language": "en",
+      "translated_languages": [
+        "en"
+      ],
+      "slug": "medicine",
+      "banners": [
+        {
+          "id": 117,
+          "title": "Medicine Delivered in 90 Minutes",
+          "type_id": 11,
+          "description": "Get your medicine delivered at your doorsteps all day everyday",
+          "image": {
+            "id": 2297,
+            "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/conversions/Untitled-thumbnail.jpg",
+            "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/Untitled.png"
+          }
+        }
+      ],
+      "promotional_sliders": [
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/conversions/banner01-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/banner01.png",
+          "id": 2336
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/conversions/banner02-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/banner02.png",
+          "id": 2337
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/conversions/banner03-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/banner03.png",
+          "id": 2338
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/conversions/banner04-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/banner04.png",
+          "id": 2339
+        }
+      ],
+      "settings": {
+        "isHome": false,
+        "productCard": "xenon",
+        "layoutType": "classic"
+      },
+      "icon": "MedicineIcon"
+    }
+  },
+  {
+    "id": 211,
+    "name": "Pregnancy",
+    "slug": "pregnancy",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "parent": null,
+    "children": [],
+    "products_count": null,
+    "details": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2169/conversions/Pregnancy-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2169/Pregnancy.jpg",
+      "id": 2172
+    },
+    "icon": "Pregnancy",
+    "type_id": 11,
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "language": "en",
+      "translated_languages": [
+        "en"
+      ],
+      "slug": "medicine",
+      "banners": [
+        {
+          "id": 117,
+          "title": "Medicine Delivered in 90 Minutes",
+          "type_id": 11,
+          "description": "Get your medicine delivered at your doorsteps all day everyday",
+          "image": {
+            "id": 2297,
+            "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/conversions/Untitled-thumbnail.jpg",
+            "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/Untitled.png"
+          }
+        }
+      ],
+      "promotional_sliders": [
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/conversions/banner01-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/banner01.png",
+          "id": 2336
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/conversions/banner02-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/banner02.png",
+          "id": 2337
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/conversions/banner03-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/banner03.png",
+          "id": 2338
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/conversions/banner04-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/banner04.png",
+          "id": 2339
+        }
+      ],
+      "settings": {
+        "isHome": false,
+        "productCard": "xenon",
+        "layoutType": "classic"
+      },
+      "icon": "MedicineIcon"
+    }
+  },
+  {
+    "id": 212,
+    "name": "Sexual wellbeing",
+    "slug": "sexual-wellbeing",
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "parent": null,
+    "children": [],
+    "products_count": null,
+    "details": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2168/conversions/Sexual-wellbeing-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2168/Sexual-wellbeing.jpg",
+      "id": 2171
+    },
+    "icon": "SexualWellbeing",
+    "type_id": 11,
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "language": "en",
+      "translated_languages": [
+        "en"
+      ],
+      "slug": "medicine",
+      "banners": [
+        {
+          "id": 117,
+          "title": "Medicine Delivered in 90 Minutes",
+          "type_id": 11,
+          "description": "Get your medicine delivered at your doorsteps all day everyday",
+          "image": {
+            "id": 2297,
+            "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/conversions/Untitled-thumbnail.jpg",
+            "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2294/Untitled.png"
+          }
+        }
+      ],
+      "promotional_sliders": [
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/conversions/banner01-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2333/banner01.png",
+          "id": 2336
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/conversions/banner02-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2334/banner02.png",
+          "id": 2337
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/conversions/banner03-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2335/banner03.png",
+          "id": 2338
+        },
+        {
+          "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/conversions/banner04-thumbnail.jpg",
+          "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2336/banner04.png",
+          "id": 2339
+        }
+      ],
+      "settings": {
+        "isHome": false,
+        "productCard": "xenon",
+        "layoutType": "classic"
+      },
+      "icon": "MedicineIcon"
+    }
+  }
+]

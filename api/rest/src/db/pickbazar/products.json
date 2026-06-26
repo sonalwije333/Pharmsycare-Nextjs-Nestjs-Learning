@@ -1,0 +1,1738 @@
+[
+  {
+    "id": 971,
+    "name": "PureGrowth Organic Infant Formula",
+    "slug": "puregrowth-organic-infant-formula",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": 3950,
+    "max_price": 4850,
+    "min_price": 4850,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1848/conversions/Baby-care-3-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1848/Baby-care-3.jpg",
+      "id": 1848,
+      "file_name": "Baby-care-3.jpg"
+    },
+    "status": "publish",
+    "price": 4850,
+    "quantity": 876,
+    "unit": "1 pcs",
+    "sku": "324234",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 972,
+    "name": "NutriBlend Pro-Stage Baby Formula",
+    "slug": "nutriblend-pro-stage-baby-formula",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": 3450,
+    "min_price": 3450,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1854/conversions/Baby-care-4-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1854/Baby-care-4.jpg",
+      "id": 1854,
+      "file_name": "Baby-care-4.jpg"
+    },
+    "status": "publish",
+    "price": 3450,
+    "quantity": 344,
+    "unit": "1 pcs",
+    "sku": "44232",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 973,
+    "name": "HappyNights Overnight Comfort Diapers",
+    "slug": "happynights-overnight-comfort-diapers-Zsl",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "variable",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": null,
+    "min_price": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1859/conversions/Baby-care-1-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1859/Baby-care-1.jpg",
+      "id": 1859,
+      "file_name": "Baby-care-1.jpg"
+    },
+    "status": "publish",
+    "price": null,
+    "quantity": 1107,
+    "unit": "6 pcs",
+    "sku": null,
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 974,
+    "name": "SafeGuard Complete Home Safety Kit",
+    "slug": "safeguard-complete-home-safety-kit",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": 4950,
+    "max_price": 6500,
+    "min_price": 6500,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1864/conversions/medicine-%26-first-aid-5-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1864/medicine-%26-first-aid-5.jpg",
+      "id": 1864,
+      "file_name": "medicine-%26-first-aid-5.jpg"
+    },
+    "status": "publish",
+    "price": 6500,
+    "quantity": 345,
+    "unit": "1 pcs",
+    "sku": "42344",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 975,
+    "name": "SafetyGuard Pro First Aid Kit",
+    "slug": "safetyguard-pro-first-aid-kit",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": 3950,
+    "max_price": 4950,
+    "min_price": 4950,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1869/conversions/medicine-%26-first-aid-6-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1869/medicine-%26-first-aid-6.jpg",
+      "id": 1869,
+      "file_name": "medicine-%26-first-aid-6.jpg"
+    },
+    "status": "publish",
+    "price": 4950,
+    "quantity": 534,
+    "unit": "1 pcs",
+    "sku": "123445",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 976,
+    "name": "ShieldMax Ultra Respirator Mask",
+    "slug": "shieldmax-ultra-respirator-mask",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "variable",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": null,
+    "min_price": null,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1874/conversions/medicine-%26-first-aid-4-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1874/medicine-%26-first-aid-4.jpg",
+      "id": 1874,
+      "file_name": "medicine-%26-first-aid-4.jpg"
+    },
+    "status": "publish",
+    "price": null,
+    "quantity": 3093,
+    "unit": "35 pcs",
+    "sku": null,
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 977,
+    "name": "HealGuardian Injury Relief Elixir",
+    "slug": "healguardian-injury-relief-elixir",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": 1650,
+    "min_price": 1650,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1883/conversions/medicine-%26-first-aid-2-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1883/medicine-%26-first-aid-2.jpg",
+      "id": 1883,
+      "file_name": "medicine-%26-first-aid-2.jpg"
+    },
+    "status": "publish",
+    "price": 1650,
+    "quantity": 675,
+    "unit": "1 pcs",
+    "sku": "67857",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 978,
+    "name": "PureTender Baby Bliss Nourishing Oil",
+    "slug": "puretender-baby-bliss-nourishing-oil",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": 950,
+    "max_price": 1850,
+    "min_price": 1850,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1888/conversions/Baby-care-5-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1888/Baby-care-5.jpg",
+      "id": 1888,
+      "file_name": "Baby-care-5.jpg"
+    },
+    "status": "publish",
+    "price": 1850,
+    "quantity": 764,
+    "unit": "1 pcs",
+    "sku": "654667",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 979,
+    "name": "NurtureMama Premium Postnatal Formula",
+    "slug": "nurturemama-premium-postnatal-formula",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": 2450,
+    "min_price": 2450,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1890/conversions/Mother-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1890/Mother.jpg",
+      "id": 1890,
+      "file_name": "Mother.jpg"
+    },
+    "status": "publish",
+    "price": 2450,
+    "quantity": 253,
+    "unit": "1 pcs",
+    "sku": "234345",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 980,
+    "name": "MomCare Soothing Postpartum Balm",
+    "slug": "momcare-soothing-postpartum-balm",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": 1350,
+    "min_price": 1350,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1895/conversions/Mother-2-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1895/Mother-2.jpg",
+      "id": 1895,
+      "file_name": "Mother-2.jpg"
+    },
+    "status": "publish",
+    "price": 1350,
+    "quantity": 653,
+    "unit": "1 pcs",
+    "sku": "432456",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1045,
+    "name": "NaptimeNurtures Diaper",
+    "slug": "naptimenurtures-diaper",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": 1550,
+    "max_price": 1750,
+    "min_price": 1750,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2241/conversions/Baby-care-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2241/Baby-care.jpg",
+      "id": 2244,
+      "file_name": "Baby-care.jpg"
+    },
+    "status": "publish",
+    "price": 1750,
+    "quantity": 24,
+    "unit": "1 pcs",
+    "sku": "276237568336",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1046,
+    "name": "Baby Joy Haven Body Oil",
+    "slug": "baby-joy-haven-body-oil",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": 2500,
+    "max_price": 2650,
+    "min_price": 2650,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2243/conversions/Baby-care-6-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2243/Baby-care-6.jpg",
+      "id": 2246,
+      "file_name": "Baby-care-6.jpg"
+    },
+    "status": "publish",
+    "price": 2650,
+    "quantity": 548,
+    "unit": "1pcs",
+    "sku": "8765656454",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1047,
+    "name": "Injection",
+    "slug": "injection",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": 650,
+    "min_price": 650,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2245/conversions/medicine-%26-first-aid-3-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2245/medicine-%26-first-aid-3.jpg",
+      "id": 2248,
+      "file_name": "medicine-%26-first-aid-3.jpg"
+    },
+    "status": "publish",
+    "price": 650,
+    "quantity": 565,
+    "unit": "1 pcs",
+    "sku": "65465464",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1048,
+    "name": "The Recover Capsules",
+    "slug": "the-recover-capsules",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": 1850,
+    "min_price": 1850,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2246/conversions/medicine-%26-first-aid-1-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2246/medicine-%26-first-aid-1.jpg",
+      "id": 2249,
+      "file_name": "medicine-%26-first-aid-1.jpg"
+    },
+    "status": "publish",
+    "price": 1850,
+    "quantity": 256,
+    "unit": "1 pcs",
+    "sku": "8698996",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1049,
+    "name": "The Recover Capsules Pro-100mg",
+    "slug": "the-recover-capsules-pro-100mg",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": 2750,
+    "max_price": 3250,
+    "min_price": 3250,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2248/conversions/medicine-%26-first-aid-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2248/medicine-%26-first-aid.jpg",
+      "id": 2251,
+      "file_name": "medicine-%26-first-aid.jpg"
+    },
+    "status": "publish",
+    "price": 3250,
+    "quantity": 586,
+    "unit": "1 pcs",
+    "sku": "66786786",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1050,
+    "name": "ContraCare X",
+    "slug": "contracare-x",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": 280,
+    "min_price": 280,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2252/conversions/Contraceptive-1-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2252/Contraceptive-1.jpg",
+      "id": 2255,
+      "file_name": "Contraceptive-1.jpg"
+    },
+    "status": "publish",
+    "price": 280,
+    "quantity": 266,
+    "unit": "1 pcs",
+    "sku": "58636386",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1052,
+    "name": "SafeGard Rx",
+    "slug": "safegard-rx",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": 350,
+    "max_price": 520,
+    "min_price": 520,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2256/conversions/Contraceptive-3-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2256/Contraceptive-3.jpg",
+      "id": 2259,
+      "file_name": "Contraceptive-3.jpg"
+    },
+    "status": "publish",
+    "price": 520,
+    "quantity": 22,
+    "unit": "1 pcs",
+    "sku": "245258",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1053,
+    "name": "Pill Prudence",
+    "slug": "pill-prudence",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": 480,
+    "min_price": 480,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2257/conversions/Contraceptive-4-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2257/Contraceptive-4.jpg",
+      "id": 2260,
+      "file_name": "Contraceptive-4.jpg"
+    },
+    "status": "publish",
+    "price": 480,
+    "quantity": 557,
+    "unit": "1 pcs",
+    "sku": "5285788",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1054,
+    "name": "Pill Point Pro",
+    "slug": "pill-point-pro",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": 320,
+    "min_price": 320,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2250/conversions/Contraceptive-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2250/Contraceptive.jpg",
+      "id": 2253,
+      "file_name": "Contraceptive.jpg"
+    },
+    "status": "publish",
+    "price": 320,
+    "quantity": 885,
+    "unit": "1 pcs",
+    "sku": "55858",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1056,
+    "name": "Beauty Verse Facewash",
+    "slug": "beauty-verse-facewash",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": 750,
+    "max_price": 890,
+    "min_price": 890,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2261/conversions/snacks2-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2261/snacks2.jpg",
+      "id": 2264,
+      "file_name": "snacks2.jpg"
+    },
+    "status": "publish",
+    "price": 890,
+    "quantity": 253,
+    "unit": "1 pcs",
+    "sku": "535555",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1057,
+    "name": "Flawless Finesse Face Scrub",
+    "slug": "flawless-finesse-face-scrub",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": 1250,
+    "min_price": 1250,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2264/conversions/snacks3-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2264/snacks3.jpg",
+      "id": 2267,
+      "file_name": "snacks3.jpg"
+    },
+    "status": "publish",
+    "price": 1250,
+    "quantity": 553,
+    "unit": "1 pcs",
+    "sku": "585858886",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1058,
+    "name": "Velvet Visage Face Cream",
+    "slug": "velvet-visage-face-cream",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": 1550,
+    "min_price": 1550,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2265/conversions/snacks4-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2265/snacks4.jpg",
+      "id": 2268,
+      "file_name": "snacks4.jpg"
+    },
+    "status": "publish",
+    "price": 1550,
+    "quantity": 35,
+    "unit": "1 Pcs",
+    "sku": "963225",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1059,
+    "name": "Serene Skin Studio Face Scrub",
+    "slug": "serene-skin-studio-face-scrub",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": 1200,
+    "max_price": 1450,
+    "min_price": 1450,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2267/conversions/vegetables10-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2267/vegetables10.jpg",
+      "id": 2270,
+      "file_name": "vegetables10.jpg"
+    },
+    "status": "publish",
+    "price": 1450,
+    "quantity": 96,
+    "unit": "1 pcs",
+    "sku": "9652",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1062,
+    "name": "Femo Care Feminine Wash",
+    "slug": "femo-care-feminine-wash",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": 1150,
+    "max_price": 1250,
+    "min_price": 1250,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2280/conversions/snacks10-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2280/snacks10.jpg",
+      "id": 2283,
+      "file_name": "snacks10.jpg"
+    },
+    "status": "publish",
+    "price": 1250,
+    "quantity": 522,
+    "unit": "1 pcs",
+    "sku": "53278963",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1063,
+    "name": "Joolly Female Feminine Wash",
+    "slug": "joolly-female-feminine-wash",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": null,
+    "max_price": 1150,
+    "min_price": 1150,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2300/conversions/snacks11-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2300/snacks11.jpg",
+      "id": 2303,
+      "file_name": "snacks11.jpg"
+    },
+    "status": "publish",
+    "price": 1150,
+    "quantity": 258,
+    "unit": "1 pcs",
+    "sku": "8668976897",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1065,
+    "name": "Splash Cleansing Wash",
+    "slug": "splash-cleansing-wash",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 11,
+      "name": "Sethma Pharmacy",
+      "slug": "medicine",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/conversions/Medicine-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1786/Medicine.jpg",
+        "id": 1786,
+        "file_name": "Medicine.jpg"
+      }
+    },
+    "sale_price": 950,
+    "max_price": 1100,
+    "min_price": 1100,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2304/conversions/Mother-1-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2304/Mother-1.jpg",
+      "id": 2307,
+      "file_name": "Mother-1.jpg"
+    },
+    "status": "publish",
+    "price": 1100,
+    "quantity": 285,
+    "unit": "1 pcs",
+    "sku": "53278678",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1070,
+    "name": "Splash Cleansing Wash",
+    "slug": "splash-cleansing-wash-2",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 12,
+      "name": "noaw",
+      "slug": "noaw",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2448/conversions/Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2448/Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep.jpg",
+        "id": 2451,
+        "file_name": "Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep.jpg"
+      }
+    },
+    "sale_price": 950,
+    "max_price": 1100,
+    "min_price": 1100,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2304/conversions/Mother-1-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2304/Mother-1.jpg",
+      "id": 2307,
+      "file_name": "Mother-1.jpg"
+    },
+    "status": "publish",
+    "price": 1100,
+    "quantity": 284,
+    "unit": "1 pcs",
+    "sku": "53278678",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1071,
+    "name": "Joolly Female Feminine Wash",
+    "slug": "joolly-female-feminine-wash-2",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 12,
+      "name": "noaw",
+      "slug": "noaw",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2448/conversions/Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2448/Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep.jpg",
+        "id": 2451,
+        "file_name": "Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep.jpg"
+      }
+    },
+    "sale_price": 0,
+    "max_price": 1150,
+    "min_price": 1150,
+    "image": {
+      "id": 2303,
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2300/snacks11.jpg",
+      "file_name": "snacks11.jpg",
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2300/conversions/snacks11-thumbnail.jpg"
+    },
+    "status": "publish",
+    "price": 1150,
+    "quantity": 258,
+    "unit": "1 pcs",
+    "sku": "8668976897",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1072,
+    "name": "Femo Care Feminine Wash",
+    "slug": "femo-care-feminine-wash-2",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 12,
+      "name": "noaw",
+      "slug": "noaw",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2448/conversions/Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2448/Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep.jpg",
+        "id": 2451,
+        "file_name": "Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep.jpg"
+      }
+    },
+    "sale_price": 1150,
+    "max_price": 1250,
+    "min_price": 1250,
+    "image": {
+      "id": 2283,
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2280/snacks10.jpg",
+      "file_name": "snacks10.jpg",
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2280/conversions/snacks10-thumbnail.jpg"
+    },
+    "status": "publish",
+    "price": 1250,
+    "quantity": 522,
+    "unit": "1 pcs",
+    "sku": "53278963",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1073,
+    "name": "Serene Skin Studio Face Scrub",
+    "slug": "serene-skin-studio-face-scrub-2",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 12,
+      "name": "noaw",
+      "slug": "noaw",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2448/conversions/Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2448/Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep.jpg",
+        "id": 2451,
+        "file_name": "Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep.jpg"
+      }
+    },
+    "sale_price": 1200,
+    "max_price": 1450,
+    "min_price": 1450,
+    "image": {
+      "id": 2270,
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2267/vegetables10.jpg",
+      "file_name": "vegetables10.jpg",
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2267/conversions/vegetables10-thumbnail.jpg"
+    },
+    "status": "publish",
+    "price": 1450,
+    "quantity": 96,
+    "unit": "1 pcs",
+    "sku": "9652",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  },
+  {
+    "id": 1074,
+    "name": "Velvet Visage Face Cream",
+    "slug": "velvet-visage-face-cream-2",
+    "type": {
+      "id": 11,
+      "name": "Medicine",
+      "slug": "medicine",
+      "logo": null,
+      "settings": {
+        "isHome": true,
+        "productCard": "helium",
+        "layoutType": "modern",
+        "bestSelling": [],
+        "popularProducts": [],
+        "category": [],
+        "handpickedProducts": [],
+        "newArrival": [],
+        "authors": [],
+        "manufactures": []
+      }
+    },
+    "language": "en",
+    "translated_languages": [
+      "en"
+    ],
+    "product_type": "simple",
+    "shop": {
+      "id": 12,
+      "name": "noaw",
+      "slug": "noaw",
+      "logo": {
+        "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2448/conversions/Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep-thumbnail.jpg",
+        "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2448/Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep.jpg",
+        "id": 2451,
+        "file_name": "Hinh-nen-co-Viet-Nam-hinh-nen-Quoc-ky-Viet-Nam-dep-cho-dien-thoai-dep.jpg"
+      }
+    },
+    "sale_price": 0,
+    "max_price": 1550,
+    "min_price": 1550,
+    "image": {
+      "id": 2268,
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2265/snacks4.jpg",
+      "file_name": "snacks4.jpg",
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/2265/conversions/snacks4-thumbnail.jpg"
+    },
+    "status": "publish",
+    "price": 1550,
+    "quantity": 35,
+    "unit": "1 Pcs",
+    "sku": "963225",
+    "sold_quantity": 0,
+    "in_flash_sale": 0,
+    "visibility": "visibility_public"
+  }
+]

@@ -1,0 +1,222 @@
+[
+  {
+    "id": 971,
+    "name": "PureGrowth Organic Infant Formula",
+    "slug": "puregrowth-organic-infant-formula",
+    "regular_price": 45,
+    "sale_price": 3950,
+    "min_price": 4850,
+    "max_price": 4850,
+    "product_type": "simple",
+    "description": "",
+    "type_id": 11,
+    "type_slug": "medicine",
+    "total_rating": 20,
+    "rating_count": [],
+    "actual_rating": 5,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1848/conversions/Baby-care-3-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1848/Baby-care-3.jpg",
+      "id": 1848,
+      "file_name": "Baby-care-3.jpg"
+    }
+  },
+  {
+    "id": 972,
+    "name": "NutriBlend Pro-Stage Baby Formula",
+    "slug": "nutriblend-pro-stage-baby-formula",
+    "regular_price": 32,
+    "sale_price": null,
+    "min_price": 3450,
+    "max_price": 3450,
+    "product_type": "simple",
+    "description": "",
+    "type_id": 11,
+    "type_slug": "medicine",
+    "total_rating": 19,
+    "rating_count": [],
+    "actual_rating": 4.8,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1854/conversions/Baby-care-4-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1854/Baby-care-4.jpg",
+      "id": 1854,
+      "file_name": "Baby-care-4.jpg"
+    }
+  },
+  {
+    "id": 973,
+    "name": "HappyNights Overnight Comfort Diapers",
+    "slug": "happynights-overnight-comfort-diapers-Zsl",
+    "regular_price": null,
+    "sale_price": null,
+    "min_price": null,
+    "max_price": null,
+    "product_type": "variable",
+    "description": "",
+    "type_id": 11,
+    "type_slug": "medicine",
+    "total_rating": 18,
+    "rating_count": [],
+    "actual_rating": 4.7,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1859/conversions/Baby-care-1-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1859/Baby-care-1.jpg",
+      "id": 1859,
+      "file_name": "Baby-care-1.jpg"
+    }
+  },
+  {
+    "id": 974,
+    "name": "SafeGuard Complete Home Safety Kit",
+    "slug": "safeguard-complete-home-safety-kit",
+    "regular_price": 65,
+    "sale_price": 4950,
+    "min_price": 6500,
+    "max_price": 6500,
+    "product_type": "simple",
+    "description": "",
+    "type_id": 11,
+    "type_slug": "medicine",
+    "total_rating": 17,
+    "rating_count": [],
+    "actual_rating": 4.6,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1864/conversions/medicine-%26-first-aid-5-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1864/medicine-%26-first-aid-5.jpg",
+      "id": 1864,
+      "file_name": "medicine-%26-first-aid-5.jpg"
+    }
+  },
+  {
+    "id": 975,
+    "name": "SafetyGuard Pro First Aid Kit",
+    "slug": "safetyguard-pro-first-aid-kit",
+    "regular_price": 89,
+    "sale_price": 3950,
+    "min_price": 4950,
+    "max_price": 4950,
+    "product_type": "simple",
+    "description": "",
+    "type_id": 11,
+    "type_slug": "medicine",
+    "total_rating": 16,
+    "rating_count": [],
+    "actual_rating": 4.5,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1869/conversions/medicine-%26-first-aid-6-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1869/medicine-%26-first-aid-6.jpg",
+      "id": 1869,
+      "file_name": "medicine-%26-first-aid-6.jpg"
+    }
+  },
+  {
+    "id": 976,
+    "name": "ShieldMax Ultra Respirator Mask",
+    "slug": "shieldmax-ultra-respirator-mask",
+    "regular_price": null,
+    "sale_price": null,
+    "min_price": null,
+    "max_price": null,
+    "product_type": "variable",
+    "description": "",
+    "type_id": 11,
+    "type_slug": "medicine",
+    "total_rating": 15,
+    "rating_count": [],
+    "actual_rating": 4.4,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1874/conversions/medicine-%26-first-aid-4-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1874/medicine-%26-first-aid-4.jpg",
+      "id": 1874,
+      "file_name": "medicine-%26-first-aid-4.jpg"
+    }
+  },
+  {
+    "id": 977,
+    "name": "HealGuardian Injury Relief Elixir",
+    "slug": "healguardian-injury-relief-elixir",
+    "regular_price": 16,
+    "sale_price": null,
+    "min_price": 1650,
+    "max_price": 1650,
+    "product_type": "simple",
+    "description": "",
+    "type_id": 11,
+    "type_slug": "medicine",
+    "total_rating": 14,
+    "rating_count": [],
+    "actual_rating": 4.3,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1883/conversions/medicine-%26-first-aid-2-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1883/medicine-%26-first-aid-2.jpg",
+      "id": 1883,
+      "file_name": "medicine-%26-first-aid-2.jpg"
+    }
+  },
+  {
+    "id": 978,
+    "name": "PureTender Baby Bliss Nourishing Oil",
+    "slug": "puretender-baby-bliss-nourishing-oil",
+    "regular_price": 24,
+    "sale_price": 950,
+    "min_price": 1850,
+    "max_price": 1850,
+    "product_type": "simple",
+    "description": "",
+    "type_id": 11,
+    "type_slug": "medicine",
+    "total_rating": 13,
+    "rating_count": [],
+    "actual_rating": 4.2,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1888/conversions/Baby-care-5-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1888/Baby-care-5.jpg",
+      "id": 1888,
+      "file_name": "Baby-care-5.jpg"
+    }
+  },
+  {
+    "id": 979,
+    "name": "NurtureMama Premium Postnatal Formula",
+    "slug": "nurturemama-premium-postnatal-formula",
+    "regular_price": 24,
+    "sale_price": null,
+    "min_price": 2450,
+    "max_price": 2450,
+    "product_type": "simple",
+    "description": "",
+    "type_id": 11,
+    "type_slug": "medicine",
+    "total_rating": 12,
+    "rating_count": [],
+    "actual_rating": 4.1,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1890/conversions/Mother-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1890/Mother.jpg",
+      "id": 1890,
+      "file_name": "Mother.jpg"
+    }
+  },
+  {
+    "id": 980,
+    "name": "MomCare Soothing Postpartum Balm",
+    "slug": "momcare-soothing-postpartum-balm",
+    "regular_price": 13,
+    "sale_price": null,
+    "min_price": 1350,
+    "max_price": 1350,
+    "product_type": "simple",
+    "description": "",
+    "type_id": 11,
+    "type_slug": "medicine",
+    "total_rating": 11,
+    "rating_count": [],
+    "actual_rating": 4,
+    "image": {
+      "thumbnail": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1895/conversions/Mother-2-thumbnail.jpg",
+      "original": "https://pickbazarlaravel.s3.ap-southeast-1.amazonaws.com/1895/Mother-2.jpg",
+      "id": 1895,
+      "file_name": "Mother-2.jpg"
+    }
+  }
+]

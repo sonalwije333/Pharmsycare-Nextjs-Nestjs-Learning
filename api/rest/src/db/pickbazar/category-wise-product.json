@@ -1,0 +1,68 @@
+[
+  {
+    "category_id": 186,
+    "category_name": "Baby Care",
+    "shop_name": "Sethma Pharmacy",
+    "product_count": 4
+  },
+  {
+    "category_id": 187,
+    "category_name": "First Aid Kit",
+    "shop_name": "Sethma Pharmacy",
+    "product_count": 2
+  },
+  {
+    "category_id": 188,
+    "category_name": "Oral",
+    "shop_name": "Sethma Pharmacy",
+    "product_count": 9
+  },
+  {
+    "category_id": 205,
+    "category_name": "Beauty care",
+    "shop_name": "Sethma Pharmacy",
+    "product_count": 7
+  },
+  {
+    "category_id": 206,
+    "category_name": "Contraceptive",
+    "shop_name": "Sethma Pharmacy",
+    "product_count": 5
+  },
+  {
+    "category_id": 207,
+    "category_name": "Face and skin care",
+    "shop_name": "Sethma Pharmacy",
+    "product_count": 3
+  },
+  {
+    "category_id": 208,
+    "category_name": "Feminine hygiene",
+    "shop_name": "Sethma Pharmacy",
+    "product_count": 1
+  },
+  {
+    "category_id": 209,
+    "category_name": "Health & Protein",
+    "shop_name": "Sethma Pharmacy",
+    "product_count": 8
+  },
+  {
+    "category_id": 210,
+    "category_name": "Health & Wellness",
+    "shop_name": "Sethma Pharmacy",
+    "product_count": 6
+  },
+  {
+    "category_id": 211,
+    "category_name": "Pregnancy",
+    "shop_name": "Sethma Pharmacy",
+    "product_count": 4
+  },
+  {
+    "category_id": 212,
+    "category_name": "Sexual wellbeing",
+    "shop_name": "Sethma Pharmacy",
+    "product_count": 2
+  }
+]
