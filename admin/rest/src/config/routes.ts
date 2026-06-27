@@ -144,6 +144,7 @@ export const Routes = {
   goodsReceivedNotes: '/goods-received-notes',
   goodsReceivedNoteCreate: '/goods-received-notes/create',
   stockMonitoring: '/stock-monitoring',
+  shelfLocations: '/shelf-locations',
   supportTickets: '/support-tickets',
   myStaffs: '/users/my-staffs',
   vendorStaffs: '/users/vendor-staffs',

@@ -190,6 +190,11 @@ export const siteSettings = {
             icon: 'InventoryIcon',
           },
           {
+            href: Routes.shelfLocations,
+            label: 'Shelf Locations',
+            icon: 'ShelfIcon',
+          },
+          {
             href: Routes.category.list,
             label: 'sidebar-nav-item-categories',
             icon: 'CategoriesIcon',

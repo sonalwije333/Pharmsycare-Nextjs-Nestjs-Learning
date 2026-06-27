@@ -235,6 +235,74 @@ export interface SupplierPerformance {
   rating: number;
 }
 
+export interface ShelfLocation {
+  id: number;
+  code: string;
+  name: string;
+  zone: string;
+  aisle: string | null;
+  row_index: number;
+  column_index: number;
+  color: string | null;
+  description: string | null;
+  capacity: number | null;
+  is_active: boolean;
+  product_count?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ShelfLayoutZone {
+  zone: string;
+  shelves: ShelfLocation[];
+}
+
+export interface ShelfLayout {
+  zones: ShelfLayoutZone[];
+  total_shelves: number;
+  total_assigned_products: number;
+}
+
+export interface ProductLocation {
+  shelf_location_id: number;
+  code: string;
+  name: string;
+  zone: string;
+  aisle: string | null;
+  bin: string | null;
+  color: string | null;
+}
+
+export interface ProductLocationResult {
+  product_id: number;
+  name: string;
+  sku: string | null;
+  slug: string | null;
+  image: Attachment | null;
+  quantity: number;
+  in_stock: boolean;
+  location: ProductLocation | null;
+}
+
+export interface CreateShelfLocationInput {
+  code: string;
+  name: string;
+  zone?: string;
+  aisle?: string;
+  row_index?: number;
+  column_index?: number;
+  color?: string;
+  description?: string;
+  capacity?: number;
+  is_active?: boolean;
+}
+
+export interface AssignShelfProductInput {
+  product_id: number;
+  bin?: string;
+  note?: string;
+}
+
 export enum ProcurementStatus {
   ORDERED = 'ordered',
   RECEIVED = 'received',
