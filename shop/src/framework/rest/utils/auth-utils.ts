@@ -4,17 +4,17 @@ import {
   AUTH_CRED, EMAIL_VERIFIED,
   PERMISSIONS,
   STAFF,
-  STORE_OWNER,
+  BRANCH_OWNER,
   SUPER_ADMIN,
   TOKEN,
 } from './constants';
 
-export const allowedRoles = [SUPER_ADMIN, STORE_OWNER, STAFF];
-export const adminAndOwnerOnly = [SUPER_ADMIN, STORE_OWNER];
-export const adminOwnerAndStaffOnly = [SUPER_ADMIN, STORE_OWNER, STAFF];
+export const allowedRoles = [SUPER_ADMIN, BRANCH_OWNER, STAFF];
+export const adminAndOwnerOnly = [SUPER_ADMIN, BRANCH_OWNER];
+export const adminOwnerAndStaffOnly = [SUPER_ADMIN, BRANCH_OWNER, STAFF];
 export const adminOnly = [SUPER_ADMIN];
-export const ownerOnly = [STORE_OWNER];
-export const ownerAndStaffOnly = [STORE_OWNER, STAFF];
+export const ownerOnly = [BRANCH_OWNER];
+export const ownerAndStaffOnly = [BRANCH_OWNER, STAFF];
 
 export function setAuthCredentials(token: string, permissions: any) {
   Cookie.set(AUTH_CRED, JSON.stringify({ token, permissions }));

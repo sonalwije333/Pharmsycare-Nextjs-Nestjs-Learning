@@ -48,7 +48,7 @@ export class RefundsController {
   constructor(private readonly refundsService: RefundsService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER) 
   @ApiOperation({
     summary: 'Create a new refund request',
     description: 'Creates a new refund request (Customer/Admin/Store owner)'
@@ -66,7 +66,7 @@ export class RefundsController {
   }
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @ApiOperation({
     summary: 'Get all refunds',
     description: 'Retrieve paginated list of all refunds with filtering options'
@@ -85,7 +85,7 @@ export class RefundsController {
   }
 
   @Get(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER) 
   @ApiOperation({
     summary: 'Get refund by ID',
     description: 'Retrieve a specific refund by ID'
@@ -102,7 +102,7 @@ export class RefundsController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @ApiOperation({
     summary: 'Update refund',
     description: 'Update an existing refund by ID (Admin/Store owner only)'
@@ -125,7 +125,7 @@ export class RefundsController {
   }
 
   @Put(':id/approve')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Approve refund',
@@ -142,7 +142,7 @@ export class RefundsController {
   }
 
   @Put(':id/reject')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Reject refund',
@@ -159,7 +159,7 @@ export class RefundsController {
   }
 
   @Put(':id/process')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Process refund',

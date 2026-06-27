@@ -15,7 +15,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { STAFF, STORE_OWNER, SUPER_ADMIN } from '@/utils/constants';
+import { STAFF, BRANCH_OWNER, SUPER_ADMIN } from '@/utils/constants';
 import ShopLayout from '@/components/layouts/shop';
 import { useSettingsQuery } from '@/data/settings';
 
@@ -59,7 +59,7 @@ export default function Coupons() {
     setPage(current);
   }
 
-  (role === STAFF || role === STORE_OWNER || role === SUPER_ADMIN) &&
+  (role === STAFF || role === BRANCH_OWNER || role === SUPER_ADMIN) &&
   settings?.options?.enableCoupons
     ? ' '
     : router.replace(Routes.dashboard);

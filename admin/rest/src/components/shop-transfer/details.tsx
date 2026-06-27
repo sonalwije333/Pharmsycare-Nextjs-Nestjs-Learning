@@ -23,7 +23,7 @@ import {
   Withdraw,
 } from '@/types';
 import { getAuthCredentials } from '@/utils/auth-utils';
-import { STORE_OWNER, SUPER_ADMIN } from '@/utils/constants';
+import { BRANCH_OWNER, SUPER_ADMIN } from '@/utils/constants';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import timezone from 'dayjs/plugin/timezone';

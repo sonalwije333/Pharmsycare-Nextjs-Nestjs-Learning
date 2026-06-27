@@ -56,7 +56,7 @@ export class WithdrawsController {
   constructor(private readonly withdrawsService: WithdrawsService) {}
 
   @Post()
-  @Roles(Permission.STORE_OWNER)
+  @Roles(Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Create a withdrawal request',
     description: 'Store owners can request a withdrawal from their shop balance'
@@ -77,7 +77,7 @@ export class WithdrawsController {
   }
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get all withdrawals',
     description: 'Retrieve paginated list of withdrawal requests with filtering'
@@ -99,7 +99,7 @@ export class WithdrawsController {
   }
 
   @Get('my-withdraws')
-  @Roles(Permission.STORE_OWNER)
+  @Roles(Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get my shop withdrawals',
     description: 'Retrieve withdrawal requests for the authenticated store owner'
@@ -117,7 +117,7 @@ export class WithdrawsController {
   }
 
   @Get(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get withdrawal by ID',
     description: 'Retrieve detailed information about a specific withdrawal request'
@@ -200,7 +200,7 @@ export class WithdrawsController {
   }
 
   @Delete(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Delete withdrawal',
     description: 'Delete a pending withdrawal request (Admin or owner only)'

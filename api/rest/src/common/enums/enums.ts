@@ -1,7 +1,7 @@
 // common/enums/enums.ts
 export enum Permission {
   SUPER_ADMIN = 'super_admin',
-  STORE_OWNER = 'store_owner',
+  BRANCH_OWNER = 'branch_owner',
   STAFF = 'staff',
   SUPPLIER = 'supplier',
   CUSTOMER = 'customer'

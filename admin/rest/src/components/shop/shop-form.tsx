@@ -24,7 +24,7 @@ import {
   Attachment,
 } from '@/types';
 import { getAuthCredentials } from '@/utils/auth-utils';
-import { STAFF, STORE_OWNER, SUPER_ADMIN } from '@/utils/constants';
+import { STAFF, BRANCH_OWNER, SUPER_ADMIN } from '@/utils/constants';
 import { getFormattedImage } from '@/utils/get-formatted-image';
 import { getIcon } from '@/utils/get-icon';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -457,7 +457,7 @@ const ShopForm = ({ initialValues }: { initialValues?: Shop }) => {
           </Card>
         </div>
 
-        {permissions?.includes(STORE_OWNER) ? (
+        {permissions?.includes(BRANCH_OWNER) ? (
           <div className="flex flex-wrap pb-8 my-5 border-b border-dashed border-border-base sm:my-8">
             <Description
               title={t('form:form-notification-title')}

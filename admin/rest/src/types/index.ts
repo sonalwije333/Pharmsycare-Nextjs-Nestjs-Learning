@@ -153,7 +153,7 @@ export interface NameAndValueType {
 }
 export enum Permission {
   SuperAdmin = 'super_admin',
-  StoreOwner = 'store_owner',
+  BranchOwner = 'branch_owner',
   Staff = 'staff',
   Supplier = 'supplier',
   Customer = 'customer',

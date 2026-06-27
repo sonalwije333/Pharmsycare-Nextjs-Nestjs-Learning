@@ -58,7 +58,7 @@ export class PrescriptionsController {
   @Roles(
     Permission.CUSTOMER,
     Permission.SUPER_ADMIN,
-    Permission.STORE_OWNER,
+    Permission.BRANCH_OWNER,
     Permission.STAFF,
   )
   @ApiOperation({
@@ -80,7 +80,7 @@ export class PrescriptionsController {
   }
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({
     summary: 'Get all prescriptions',
     description: 'Retrieve paginated list of prescriptions (Admin/Store/Staff only)',
@@ -139,7 +139,7 @@ export class PrescriptionsController {
   }
 
   @Get('stats')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Get prescription statistics',
     description: 'Get counts of prescriptions by status',
@@ -162,7 +162,7 @@ export class PrescriptionsController {
   }
 
   @Get(':id/history')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Get prescription status history',
     description: 'Retrieve chronological status change history for a prescription',
@@ -183,7 +183,7 @@ export class PrescriptionsController {
   }
 
   @Get(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Get prescription by ID',
     description: 'Retrieve a specific prescription by ID',
@@ -203,7 +203,7 @@ export class PrescriptionsController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({
     summary: 'Update prescription',
     description: 'Update prescription information by ID (Admin/Store/Staff only)',
@@ -253,7 +253,7 @@ export class PrescriptionsController {
   }
 
   @Post(':id/approve')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Approve prescription',
@@ -278,7 +278,7 @@ export class PrescriptionsController {
   }
 
   @Post(':id/reject')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Reject prescription',

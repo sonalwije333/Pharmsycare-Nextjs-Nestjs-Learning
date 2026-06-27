@@ -50,7 +50,7 @@ export class AuthorsController {
   constructor(private readonly authorsService: AuthorsService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Create a new author',
     description: 'Creates a new author (Admin/Store Owner only)',
@@ -111,7 +111,7 @@ export class AuthorsController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Update author',
     description: 'Update author information by ID (Admin/Store Owner only)',
@@ -132,7 +132,7 @@ export class AuthorsController {
   }
 
   @Delete(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Delete author',
     description: 'Permanently delete an author by ID (Admin/Store Owner only)',

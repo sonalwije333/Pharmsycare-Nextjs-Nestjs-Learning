@@ -31,7 +31,7 @@ const registrationFormSchema = yup.object().shape({
     .email('form:error-email-format')
     .required('form:error-email-required'),
   password: yup.string().required('form:error-password-required'),
-  permission: yup.string().default('store_owner').oneOf(['store_owner']),
+  permission: yup.string().default('branch_owner').oneOf(['branch_owner']),
 });
 const RegistrationForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -45,7 +45,7 @@ const RegistrationForm = () => {
   } = useForm({
     resolver: yupResolver(registrationFormSchema),
     defaultValues: {
-      permission: Permission.StoreOwner,
+      permission: Permission.BranchOwner,
     },
   });
   const router = useRouter();

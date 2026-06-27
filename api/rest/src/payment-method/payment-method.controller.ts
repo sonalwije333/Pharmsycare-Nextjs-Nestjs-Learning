@@ -48,7 +48,7 @@ export class PaymentMethodController {
   constructor(private readonly paymentMethodService: PaymentMethodService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({ summary: 'Create payment method', description: 'Create a new payment method' })
   @ApiCreatedResponse({ description: 'Payment method created successfully', type: PaymentMethod })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
@@ -59,7 +59,7 @@ export class PaymentMethodController {
   }
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({ summary: 'Get all payment methods', description: 'Retrieve paginated list of payment methods' })
   @ApiOkResponse({ description: 'Payment methods retrieved successfully', type: PaymentMethodPaginator })
   @ApiUnauthorizedResponse({ description: 'Not authenticated' })
@@ -68,7 +68,7 @@ export class PaymentMethodController {
   }
 
   @Get(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({ summary: 'Get payment method by ID', description: 'Retrieve a single payment method by ID' })
   @ApiParam({ name: 'id', description: 'Payment method ID', type: Number })
   @ApiOkResponse({ description: 'Payment method retrieved successfully', type: PaymentMethod })
@@ -79,7 +79,7 @@ export class PaymentMethodController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({ summary: 'Update payment method', description: 'Update payment method by ID' })
   @ApiParam({ name: 'id', description: 'Payment method ID', type: Number })
   @ApiOkResponse({ description: 'Payment method updated successfully', type: PaymentMethod })
@@ -93,7 +93,7 @@ export class PaymentMethodController {
   }
 
   @Delete(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Delete payment method', description: 'Delete payment method by ID' })
   @ApiParam({ name: 'id', description: 'Payment method ID', type: Number })
@@ -114,7 +114,7 @@ export class SavePaymentMethodController {
   constructor(private readonly paymentMethodService: PaymentMethodService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({ summary: 'Save payment method', description: 'Save a new payment method for future use' })
   @ApiCreatedResponse({ description: 'Payment method saved successfully', type: PaymentMethod })
   @ApiBadRequestResponse({ description: 'Invalid input data' })
@@ -134,7 +134,7 @@ export class SetDefaultCartController {
   constructor(private readonly paymentMethodService: PaymentMethodService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({ summary: 'Set default card', description: 'Set a payment method as the default card' })
   @ApiOkResponse({ description: 'Default card set successfully', type: PaymentMethod })
   @ApiBadRequestResponse({ description: 'Invalid payment method ID' })

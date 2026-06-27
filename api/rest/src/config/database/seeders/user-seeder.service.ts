@@ -326,12 +326,15 @@ export class UserSeederService {
 
     const permissionMap = {
       'super_admin': Permission.SUPER_ADMIN,
-      'store_owner': Permission.STORE_OWNER,
+      // Map legacy "store_owner" seed/DB values onto the renamed BRANCH_OWNER role.
+      'store_owner': Permission.BRANCH_OWNER,
+      'branch_owner': Permission.BRANCH_OWNER,
       'staff': Permission.STAFF,
       'supplier': Permission.SUPPLIER,
       'customer': Permission.CUSTOMER,
       'super admin': Permission.SUPER_ADMIN,
-      'store owner': Permission.STORE_OWNER,
+      'store owner': Permission.BRANCH_OWNER,
+      'branch owner': Permission.BRANCH_OWNER,
     };
 
     const permissions = permissionsData

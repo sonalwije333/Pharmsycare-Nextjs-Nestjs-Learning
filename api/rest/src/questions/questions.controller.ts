@@ -104,7 +104,7 @@ export class QuestionController {
 
   @Put(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Update question',
@@ -127,7 +127,7 @@ export class QuestionController {
 
   @Put(':id/answer')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({
     summary: 'Answer a question',
@@ -150,7 +150,7 @@ export class QuestionController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiBearerAuth('JWT-auth')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({

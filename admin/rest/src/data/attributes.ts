@@ -7,7 +7,7 @@ import { API_ENDPOINTS } from './client/api-endpoints';
 import { Attribute, AttributeQueryOptions, GetParams } from '@/types';
 import { attributeClient } from '@/data/client/attribute';
 import { Config } from '@/config';
-import { STORE_OWNER, SUPER_ADMIN } from '@/utils/constants';
+import { BRANCH_OWNER, SUPER_ADMIN } from '@/utils/constants';
 import { getAuthCredentials } from '@/utils/auth-utils';
 
 export const useCreateAttributeMutation = () => {

@@ -52,7 +52,7 @@ export class ShopsController {
   constructor(private readonly shopsService: ShopsService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @ApiOperation({
     summary: 'Create a new shop',
     description: 'Creates a new shop (Admin/Store owner only)'
@@ -108,7 +108,7 @@ export class ShopsController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @ApiOperation({
     summary: 'Update shop',
     description: 'Update an existing shop by ID'
@@ -157,7 +157,7 @@ export class StaffsController {
   constructor(private readonly shopsService: ShopsService) {}
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @ApiOperation({
     summary: 'Get shop staff',
     description: 'Retrieve paginated list of staff for a specific shop'

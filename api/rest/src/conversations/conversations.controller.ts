@@ -50,7 +50,7 @@ export class ConversationsController {
   constructor(private readonly conversationsService: ConversationsService) {}
 
   @Post()
-  @Roles(Permission.CUSTOMER, Permission.STORE_OWNER)
+  @Roles(Permission.CUSTOMER, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Create a new conversation',
     description: 'Creates a new conversation between user and shop',
@@ -74,7 +74,7 @@ export class ConversationsController {
   }
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get all conversations',
     description: 'Retrieve paginated list of all conversations',
@@ -91,7 +91,7 @@ export class ConversationsController {
   ): Promise<ConversationPaginator> {
     // Filter by user if not admin
     if (!user?.permissions?.includes(Permission.SUPER_ADMIN)) {
-      if (user?.permissions?.includes(Permission.STORE_OWNER)) {
+      if (user?.permissions?.includes(Permission.BRANCH_OWNER)) {
         query.shop_id = user.shop_id;
       } else {
         query.user_id = user.id;
@@ -101,7 +101,7 @@ export class ConversationsController {
   }
 
   @Get(':param')
-  @Roles(Permission.CUSTOMER, Permission.STORE_OWNER, Permission.SUPER_ADMIN)
+  @Roles(Permission.CUSTOMER, Permission.BRANCH_OWNER, Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Get conversation by ID',
     description: 'Retrieve conversation details by ID',
@@ -124,7 +124,7 @@ export class ConversationsController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Update conversation',
     description: 'Update conversation information by ID',
@@ -160,7 +160,7 @@ export class ConversationsController {
   }
 
   @Post(':id/mark-read')
-  @Roles(Permission.CUSTOMER, Permission.STORE_OWNER)
+  @Roles(Permission.CUSTOMER, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Mark conversation as read',
     description: 'Mark conversation as read for the current user',

@@ -5,7 +5,7 @@ import { adminOwnerAndStaffOnly, getAuthCredentials } from '@/utils/auth-utils';
 import { useRouter } from 'next/router';
 import { Routes } from '@/config/routes';
 import ShopLayout from '@/components/layouts/shop';
-import { STORE_OWNER, SUPER_ADMIN } from '@/utils/constants';
+import { BRANCH_OWNER, SUPER_ADMIN } from '@/utils/constants';
 import { useSettingsQuery } from '@/data/settings';
 import Loader from '@/components/ui/loader/loader';
 
@@ -20,7 +20,7 @@ export default function CreateCouponPage() {
 
   if (settingsLoading) return <Loader text={t('common:text-loading')} />;
 
-  (role === STORE_OWNER || role === SUPER_ADMIN) &&
+  (role === BRANCH_OWNER || role === SUPER_ADMIN) &&
   settings?.options?.enableCoupons
     ? ' '
     : router.replace(Routes.dashboard);

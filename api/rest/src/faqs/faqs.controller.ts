@@ -47,7 +47,7 @@ export class FaqsController {
   constructor(private faqService: FaqsService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Create a new FAQ',
     description: 'Creates a new FAQ (Admin/Store Owner only)',
@@ -107,7 +107,7 @@ export class FaqsController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Update FAQ',
     description: 'Update FAQ information by ID (Admin/Store Owner only)',

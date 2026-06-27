@@ -40,7 +40,7 @@ export class NotifyLogsController {
   constructor(private notifyLogsService: NotifyLogsService) {}
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Get all notify logs',
     description: 'Retrieve paginated list of notification logs'
@@ -55,7 +55,7 @@ export class NotifyLogsController {
   }
 
   @Get(':param')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Get notify log by ID',
     description: 'Retrieve a single notification log by ID'
@@ -77,7 +77,7 @@ export class NotifyLogsController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Mark notify log as read',
@@ -100,7 +100,7 @@ export class NotifyLogsController {
   }
 
   @Put('read-all/:id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Mark all notify logs as read',

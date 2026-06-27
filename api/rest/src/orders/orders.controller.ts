@@ -51,7 +51,7 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Create order',
     description: 'Create a new order'
@@ -69,7 +69,7 @@ export class OrdersController {
   }
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get all orders',
     description: 'Retrieve paginated list of orders'
@@ -85,7 +85,7 @@ export class OrdersController {
   }
 
   @Get(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Get order by ID',
     description: 'Retrieve order details by ID'
@@ -107,7 +107,7 @@ export class OrdersController {
   }
 
   @Get('tracking-number/:tracking_id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Get order by tracking number',
     description: 'Retrieve order details by tracking number'
@@ -129,7 +129,7 @@ export class OrdersController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Update order',
     description: 'Update order by ID'
@@ -257,7 +257,7 @@ export class OrderStatusController {
   }
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Get all order statuses',
     description: 'Retrieve paginated list of order statuses'
@@ -272,7 +272,7 @@ export class OrderStatusController {
   }
 
   @Get(':param')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Get order status by slug',
     description: 'Retrieve order status details by slug'
@@ -401,7 +401,7 @@ export class OrderExportController {
   constructor(private ordersService: OrdersService) {}
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Export orders',
     description: 'Get export URL for orders (Admin/Store owner only)'
@@ -436,7 +436,7 @@ export class DownloadInvoiceController {
   constructor(private ordersService: OrdersService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Download invoice',
     description: 'Get download URL for order invoice'

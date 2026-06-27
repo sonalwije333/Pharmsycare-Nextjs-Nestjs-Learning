@@ -29,49 +29,49 @@ export class ShelfLocationsController {
   constructor(private readonly shelfLocationsService: ShelfLocationsService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Create a shelf location' })
   create(@Body() dto: CreateShelfLocationDto) {
     return this.shelfLocationsService.create(dto);
   }
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'List shelf locations' })
   findAll(@Query() query: GetShelfLocationsDto) {
     return this.shelfLocationsService.findAll(query);
   }
 
   @Get('layout')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Visual pharmacy floor map grouped by zone' })
   getLayout() {
     return this.shelfLocationsService.getLayout();
   }
 
   @Get('search')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Search medicines and return their shelf location' })
   search(@Query('text') text?: string) {
     return this.shelfLocationsService.searchProductLocations(text);
   }
 
   @Get('locate/:productId')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Locate a single product on the shelf map' })
   locate(@Param('productId', ParseIntPipe) productId: number) {
     return this.shelfLocationsService.locateProduct(productId);
   }
 
   @Get(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Get a shelf location with its products' })
   getShelfProducts(@Param('id', ParseIntPipe) id: number) {
     return this.shelfLocationsService.getShelfProducts(id);
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Update a shelf location' })
   update(
     @Param('id', ParseIntPipe) id: number,
@@ -81,21 +81,21 @@ export class ShelfLocationsController {
   }
 
   @Delete('assignments/:productId')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Remove a product from its shelf' })
   unassign(@Param('productId', ParseIntPipe) productId: number) {
     return this.shelfLocationsService.unassignProduct(productId);
   }
 
   @Delete(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Delete a shelf location' })
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.shelfLocationsService.remove(id);
   }
 
   @Post(':id/assign-product')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Place / move a product onto a shelf' })
   assignProduct(
     @Param('id', ParseIntPipe) id: number,

@@ -30,7 +30,7 @@ export class ProcurementHistoryController {
   @Get()
   @Roles(
     Permission.SUPER_ADMIN,
-    Permission.STORE_OWNER,
+    Permission.BRANCH_OWNER,
     Permission.STAFF,
   )
   @ApiOperation({ summary: 'List procurement history' })
@@ -39,21 +39,21 @@ export class ProcurementHistoryController {
   }
 
   @Get('stats')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Procurement history statistics' })
   getStats() {
     return this.procurementService.getStats();
   }
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({ summary: 'Manually record a procurement entry' })
   create(@Body() dto: CreateProcurementRecordDto) {
     return this.procurementService.create(dto);
   }
 
   @Put(':id/receive')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Mark a procurement entry as received' })
   markReceived(@Param('id', ParseIntPipe) id: number) {
     return this.procurementService.markReceived(id);

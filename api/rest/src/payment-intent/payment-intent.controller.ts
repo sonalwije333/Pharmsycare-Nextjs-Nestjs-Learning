@@ -18,7 +18,7 @@ export class PaymentIntentController {
   constructor(private readonly paymentIntentService: PaymentIntentService) {}
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({ summary: 'Get payment intent', description: 'Retrieve payment intent by tracking number' })
   @ApiOkResponse({ description: 'Payment intent retrieved successfully', type: PaymentIntent })
   async getPaymentIntent(@Query() query: GetPaymentIntentDto) {

@@ -78,11 +78,11 @@ export class BranchesService implements OnModuleInit {
     };
   }
 
-  // Vendors are store-owner users that can be assigned to operate a branch.
+  // Vendors are branch-owner users that can be assigned to operate a branch.
   async getVendors(search?: string): Promise<VendorSummary[]> {
     const query = this.usersRepository
       .createQueryBuilder('user')
-      .where("user.permissions LIKE '%store_owner%'")
+      .where("user.permissions LIKE '%branch_owner%'")
       .orderBy('user.name', 'ASC')
       .take(50);
 

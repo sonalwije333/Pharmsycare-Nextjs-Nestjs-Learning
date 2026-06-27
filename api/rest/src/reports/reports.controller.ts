@@ -47,7 +47,7 @@ export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
   @Post()
-   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER) 
+   @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER) 
   @ApiOperation({
     summary: 'Create a new report',
     description: 'Creates a new report for abusive content or issues'
@@ -102,7 +102,7 @@ export class ReportsController {
   }
 
   @Get('user/:userId')
-   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER) // Uncomment when roles are ready
+   @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER) // Uncomment when roles are ready
   @ApiOperation({
     summary: 'Get reports by user',
     description: 'Retrieve all reports submitted by a specific user'
