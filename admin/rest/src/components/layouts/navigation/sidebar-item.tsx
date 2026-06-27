@@ -8,7 +8,11 @@ import { useTranslation } from 'next-i18next';
 import { ChevronRight } from '@/components/icons/chevron-right';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getAuthCredentials, hasAccess } from '@/utils/auth-utils';
+import {
+  getAuthCredentials,
+  hasAccess,
+  isMenuItemVisible,
+} from '@/utils/auth-utils';
 import AdvancePopover from '@/components/ui/advance-popover';
 import { useWindowSize } from '@/utils/use-window-size';
 import { RESPONSIVE_WIDTH } from '@/utils/constants';
@@ -40,8 +44,10 @@ function SidebarShortItem({
       content={() => (
         <>
           {childMenu?.map((item: any, index: number) => {
-            if (shop && !hasAccess(item?.permissions, currentUserPermissions))
-              return null;
+            const isVisible = shop
+              ? hasAccess(item?.permissions, currentUserPermissions)
+              : isMenuItemVisible(item, currentUserPermissions);
+            if (!isVisible) return null;
             return (
               <div key={index}>
                 <Link
@@ -224,11 +230,10 @@ const SidebarItem = ({
               <div className="pt-2 ltr:pl-5 rtl:pr-5">
                 <div className="space-y-1 border-0 border-l border-dashed border-slate-300 ltr:pl-1 rtl:pr-1">
                   {childMenu?.map((item: any, index: number) => {
-                    if (
-                      shop &&
-                      !hasAccess(item?.permissions, currentUserPermissions)
-                    )
-                      return null;
+                    const isVisible = shop
+                      ? hasAccess(item?.permissions, currentUserPermissions)
+                      : isMenuItemVisible(item, currentUserPermissions);
+                    if (!isVisible) return null;
                     return (
                       <div key={index}>
                         <Link

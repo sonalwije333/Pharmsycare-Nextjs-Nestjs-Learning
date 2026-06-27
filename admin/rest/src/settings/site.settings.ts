@@ -2,6 +2,7 @@ import {
   adminAndOwnerOnly,
   adminOnly,
   adminOwnerAndStaffOnly,
+  adminOwnerStaffSupplier,
   ownerAndStaffOnly,
 } from '@/utils/auth-utils';
 import { Routes } from '@/config/routes';
@@ -64,6 +65,7 @@ export const siteSettings = {
         href: Routes.dashboard,
         label: 'Main',
         icon: 'DashboardIcon',
+        permission: adminOwnerStaffSupplier,
         childMenu: [
           {
             href: Routes.dashboard,
@@ -110,6 +112,7 @@ export const siteSettings = {
         href: '',
         label: 'text-shop-management',
         icon: 'ShopIcon',
+        permission: adminAndOwnerOnly,
         childMenu: [
           {
             href: '',
@@ -178,6 +181,7 @@ export const siteSettings = {
         href: '',
         label: 'text-product-management',
         icon: 'ProductsIcon',
+        permission: adminOwnerAndStaffOnly,
         childMenu: [
           {
             href: '',
@@ -253,6 +257,7 @@ export const siteSettings = {
         href: '',
         label: 'Supplier Management',
         icon: 'SupplierIcon',
+        permission: adminOwnerStaffSupplier,
         childMenu: [
           {
             href: Routes.supplierList,
@@ -291,6 +296,7 @@ export const siteSettings = {
         href: '',
         label: 'text-e-commerce-management',
         icon: 'WithdrawIcon',
+        permission: adminAndOwnerOnly,
         childMenu: [
           {
             href: Routes.reports,
@@ -301,11 +307,13 @@ export const siteSettings = {
             href: Routes.tax.list,
             label: 'sidebar-nav-item-taxes',
             icon: 'TaxesIcon',
+            permission: adminOnly,
           },
           {
             href: Routes.shipping.list,
             label: 'sidebar-nav-item-shippings',
             icon: 'ShippingsIcon',
+            permission: adminOnly,
           },
           {
             href: Routes.withdraw.list,
@@ -351,6 +359,7 @@ export const siteSettings = {
         href: Routes.order.list,
         label: 'text-order-management',
         icon: 'OrdersIcon',
+        permission: adminOwnerAndStaffOnly,
         childMenu: [
           {
             href: Routes.order.list,
@@ -389,6 +398,7 @@ export const siteSettings = {
         href: '',
         label: 'text-page-control',
         icon: 'SettingsIcon',
+        permission: adminOnly,
         childMenu: [
           {
             href: Routes.type.list,
@@ -446,16 +456,19 @@ export const siteSettings = {
             href: Routes.user.list,
             label: 'text-all-users',
             icon: 'UsersIcon',
+            permission: adminOnly,
           },
           {
             href: Routes.adminList,
             label: 'text-admin-list',
             icon: 'AdminListIcon',
+            permission: adminOnly,
           },
           {
             href: '',
             label: 'text-vendors',
             icon: 'VendorsIcon',
+            permission: adminOnly,
             childMenu: [
               {
                 href: Routes.vendorList,
@@ -490,6 +503,7 @@ export const siteSettings = {
             href: Routes.customerList,
             label: 'text-customers',
             icon: 'CustomersIcon',
+            permission: adminOnly,
           },
         ],
       },
@@ -498,6 +512,7 @@ export const siteSettings = {
         href: '',
         label: 'text-feedback-control',
         icon: 'SettingsIcon',
+        permission: adminOwnerAndStaffOnly,
         childMenu: [
           {
             href: Routes.reviews.list,
@@ -521,6 +536,7 @@ export const siteSettings = {
         href: '',
         label: 'text-promotional-management',
         icon: 'SettingsIcon',
+        permission: adminOwnerAndStaffOnly,
         childMenu: [
           {
             href: '',
@@ -573,6 +589,7 @@ export const siteSettings = {
         href: '',
         label: 'text-feature-management',
         icon: 'SettingsIcon',
+        permission: adminOwnerAndStaffOnly,
         childMenu: [
           {
             href: Routes.message.list,
@@ -608,6 +625,7 @@ export const siteSettings = {
         href: '',
         label: 'text-site-management',
         icon: 'SettingsIcon',
+        permission: adminOnly,
         childMenu: [
           {
             href: Routes.settings,

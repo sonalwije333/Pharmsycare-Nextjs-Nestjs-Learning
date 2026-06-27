@@ -15,6 +15,7 @@ import {
   checkIsMaintenanceModeComing,
   checkIsMaintenanceModeStart,
 } from '@/utils/constants';
+import { getAuthCredentials, isMenuItemVisible } from '@/utils/auth-utils';
 
 interface MenuItemsProps {
   [key: string]: {
@@ -34,9 +35,13 @@ const SidebarItemMap = ({ menuItems }: any) => {
   const [miniSidebar, _] = useAtom(miniSidebarInitialValue);
   const { childMenu } = menuItems;
   const { width } = useWindowSize();
+  const { permissions } = getAuthCredentials();
+  const visibleChildMenu = (childMenu ?? []).filter((item: any) =>
+    isMenuItemVisible(item, permissions),
+  );
   return (
     <div className="space-y-2">
-      {childMenu?.map(
+      {visibleChildMenu?.map(
         ({
           href,
           label,
@@ -67,7 +72,10 @@ const SideBarGroup = () => {
   // @ts-ignore
   const [miniSidebar, _] = useAtom(miniSidebarInitialValue);
   const menuItems: MenuItemsProps = siteSettings?.sidebarLinks?.admin;
-  const menuKeys = Object.keys(menuItems);
+  const { permissions } = getAuthCredentials();
+  const menuKeys = Object.keys(menuItems).filter((key) =>
+    isMenuItemVisible(menuItems[key], permissions),
+  );
   const { width } = useWindowSize();
 
   return (

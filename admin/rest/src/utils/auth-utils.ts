@@ -66,6 +66,43 @@ export function hasAccess(
   return false;
 }
 
+/**
+ * Decides whether a sidebar/menu entry should be shown for the current user.
+ *
+ * Rules:
+ * - Super admins can see everything.
+ * - An entry that declares `permission`/`permissions` is hidden unless the user
+ *   has at least one of those roles.
+ * - An entry without any role requirement is visible by default.
+ * - A parent entry (one that has a `childMenu`) is only visible when at least
+ *   one of its (recursively resolved) children is visible, so we never render
+ *   empty groups.
+ */
+export function isMenuItemVisible(
+  menuItem: any,
+  userPermissions: string[] | undefined | null,
+): boolean {
+  if (Array.isArray(userPermissions) && userPermissions.includes(SUPER_ADMIN)) {
+    return true;
+  }
+
+  const requiredRoles = menuItem?.permission ?? menuItem?.permissions;
+  if (requiredRoles && !hasAccess(requiredRoles, userPermissions)) {
+    return false;
+  }
+
+  const children = Array.isArray(menuItem?.childMenu)
+    ? menuItem.childMenu
+    : [];
+  if (children.length > 0) {
+    return children.some((child: any) =>
+      isMenuItemVisible(child, userPermissions),
+    );
+  }
+
+  return true;
+}
+
 export function isAuthenticated(_cookies: any) {
   return (
     !!_cookies[TOKEN] &&
