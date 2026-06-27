@@ -319,7 +319,7 @@ export class AuthService {
 
   private getPrimaryRole(permissions: Permission[] = []): string {
     if (permissions.includes(Permission.SUPER_ADMIN)) return 'super_admin';
-    if (permissions.includes(Permission.STORE_OWNER)) return 'store_owner';
+    if (permissions.includes(Permission.BRANCH_OWNER)) return 'branch_owner';
     if (permissions.includes(Permission.STAFF)) return 'staff';
     if (permissions.includes(Permission.SUPPLIER)) return 'supplier';
     return 'customer';

@@ -34,7 +34,7 @@ export class SupportTicketsController {
   @Roles(
     Permission.CUSTOMER,
     Permission.SUPER_ADMIN,
-    Permission.STORE_OWNER,
+    Permission.BRANCH_OWNER,
     Permission.STAFF,
   )
   @ApiOperation({ summary: 'Submit a support ticket' })
@@ -46,7 +46,7 @@ export class SupportTicketsController {
   @Roles(
     Permission.CUSTOMER,
     Permission.SUPER_ADMIN,
-    Permission.STORE_OWNER,
+    Permission.BRANCH_OWNER,
     Permission.STAFF,
   )
   @ApiOperation({ summary: 'List support tickets (scoped by role)' })
@@ -55,7 +55,7 @@ export class SupportTicketsController {
   }
 
   @Get('my')
-  @Roles(Permission.CUSTOMER, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.CUSTOMER, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'List my support tickets' })
   findMy(@Req() req: any, @Query() query: GetSupportTicketsDto) {
     return this.supportService.findAll(query, {
@@ -65,7 +65,7 @@ export class SupportTicketsController {
   }
 
   @Get('stats')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Support ticket statistics' })
   getStats() {
     return this.supportService.getStats();
@@ -75,7 +75,7 @@ export class SupportTicketsController {
   @Roles(
     Permission.CUSTOMER,
     Permission.SUPER_ADMIN,
-    Permission.STORE_OWNER,
+    Permission.BRANCH_OWNER,
     Permission.STAFF,
   )
   @ApiOperation({ summary: 'Get a support ticket' })
@@ -87,7 +87,7 @@ export class SupportTicketsController {
   @Roles(
     Permission.CUSTOMER,
     Permission.SUPER_ADMIN,
-    Permission.STORE_OWNER,
+    Permission.BRANCH_OWNER,
     Permission.STAFF,
   )
   @ApiOperation({ summary: 'Reply to a support ticket' })
@@ -100,7 +100,7 @@ export class SupportTicketsController {
   }
 
   @Put(':id/status')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Update support ticket status' })
   updateStatus(
     @Param('id', ParseIntPipe) id: number,

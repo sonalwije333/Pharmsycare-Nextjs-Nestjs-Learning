@@ -54,6 +54,8 @@ import { ReorderRequestsModule } from './reorder-requests/reorder-requests.modul
 import { ProcurementHistoryModule } from './procurement-history/procurement-history.module';
 import { GoodsReceivedNotesModule } from './goods-received-notes/goods-received-notes.module';
 import { SupportTicketsModule } from './support-tickets/support-tickets.module';
+import { ShelfLocationsModule } from './shelf-locations/shelf-locations.module';
+import { BranchesModule } from './branches/branches.module';
 
 @Module({
   imports: [
@@ -127,6 +129,8 @@ import { SupportTicketsModule } from './support-tickets/support-tickets.module';
     ProcurementHistoryModule,
     GoodsReceivedNotesModule,
     SupportTicketsModule,
+    ShelfLocationsModule,
+    BranchesModule,
   ],
   controllers: [],
   providers: [],

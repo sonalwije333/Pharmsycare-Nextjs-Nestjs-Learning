@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import ShopLayout from '@/components/layouts/shop';
 import { adminOwnerAndStaffOnly, getAuthCredentials } from '@/utils/auth-utils';
 import { Routes } from '@/config/routes';
-import { STAFF, STORE_OWNER, SUPER_ADMIN } from '@/utils/constants';
+import { STAFF, BRANCH_OWNER, SUPER_ADMIN } from '@/utils/constants';
 import { useSettingsQuery } from '@/data/settings';
 
 export default function UpdateCouponPage() {
@@ -31,7 +31,7 @@ export default function UpdateCouponPage() {
     return <Loader text={t('common:text-loading')} />;
   if (error) return <ErrorMessage message={error.message} />;
 
-  (role === STAFF || role === STORE_OWNER || role === SUPER_ADMIN) &&
+  (role === STAFF || role === BRANCH_OWNER || role === SUPER_ADMIN) &&
   settings?.options?.enableCoupons
     ? ' '
     : router.replace(Routes.dashboard);

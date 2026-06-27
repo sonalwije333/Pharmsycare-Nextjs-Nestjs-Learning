@@ -222,7 +222,7 @@ export class StoreNoticesService {
   async getUsersToNotify({ limit = 10, page = 1 }: GetUsersDto): Promise<UserPaginator> {
     const usersToNotify = this.users.filter(
       (user) =>
-        this.hasPermission(user, Permission.STORE_OWNER) ||
+        this.hasPermission(user, Permission.BRANCH_OWNER) ||
         this.hasPermission(user, Permission.SUPER_ADMIN),
     );
 

@@ -48,7 +48,7 @@ export class RefundPoliciesController {
   constructor(private readonly refundPoliciesService: RefundPoliciesService) {}
 
   @Post()
-  // @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) // Uncomment when roles are ready
+  // @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) // Uncomment when roles are ready
   @ApiOperation({
     summary: 'Create a new refund policy',
     description: 'Creates a new refund policy (Admin/Store owner only)'
@@ -115,7 +115,7 @@ export class RefundPoliciesController {
   }
 
   @Put(':id')
-  // @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) // Uncomment when roles are ready
+  // @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) // Uncomment when roles are ready
   @ApiOperation({
     summary: 'Update refund policy',
     description: 'Update an existing refund policy by ID (Admin/Store owner only)'

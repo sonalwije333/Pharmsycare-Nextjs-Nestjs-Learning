@@ -48,7 +48,7 @@ export class RefundReasonsController {
   constructor(private readonly refundReasonsService: RefundReasonsService) {}
 
   @Post()
-   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+   @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @ApiOperation({
     summary: 'Create a new refund reason',
     description: 'Creates a new refund reason (Admin/Store owner only)'
@@ -114,7 +114,7 @@ export class RefundReasonsController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @ApiOperation({
     summary: 'Update refund reason',
     description: 'Update an existing refund reason by ID (Admin/Store owner only)'

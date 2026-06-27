@@ -40,7 +40,7 @@ export class ImportsController {
   constructor(private readonly importsService: ImportsService) {}
 
   @Post('import-attributes')
-  @Roles(Permission.STORE_OWNER, Permission.SUPER_ADMIN)
+  @Roles(Permission.BRANCH_OWNER, Permission.SUPER_ADMIN)
   @UseInterceptors(FileInterceptor('csv'))
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({ 
@@ -85,7 +85,7 @@ export class ImportsController {
   }
 
   @Post('import-products')
-  @Roles(Permission.STORE_OWNER, Permission.SUPER_ADMIN)
+  @Roles(Permission.BRANCH_OWNER, Permission.SUPER_ADMIN)
   @UseInterceptors(FileInterceptor('csv'))
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({ 
@@ -130,7 +130,7 @@ export class ImportsController {
   }
 
   @Post('import-variation-options')
-  @Roles(Permission.STORE_OWNER, Permission.SUPER_ADMIN)
+  @Roles(Permission.BRANCH_OWNER, Permission.SUPER_ADMIN)
   @UseInterceptors(FileInterceptor('csv'))
   @HttpCode(HttpStatus.ACCEPTED)
   @ApiOperation({ 

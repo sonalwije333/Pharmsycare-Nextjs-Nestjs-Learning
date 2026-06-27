@@ -53,7 +53,7 @@ export class CouponsController {
   constructor(private readonly couponsService: CouponsService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Create a new coupon',
     description: 'Creates a new coupon (Admin/Store Owner only)',
@@ -127,7 +127,7 @@ export class CouponsController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Update coupon',
     description: 'Update coupon information by ID',

@@ -46,7 +46,7 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Create a new category',
     description: 'Creates a new category (Admin/Store Owner only)',
@@ -105,7 +105,7 @@ export class CategoriesController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Update category',
     description: 'Update category information by ID (Admin/Store Owner only)',
@@ -126,7 +126,7 @@ export class CategoriesController {
   }
 
   @Delete(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Delete category',
     description: 'Permanently delete a category by ID (Admin/Store Owner only)',

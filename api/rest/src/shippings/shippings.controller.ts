@@ -52,7 +52,7 @@ export class ShippingsController {
   constructor(private readonly shippingsService: ShippingsService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @ApiOperation({
     summary: 'Create a new shipping method',
     description: 'Creates a new shipping method (Admin/Store owner only)'
@@ -115,7 +115,7 @@ export class ShippingsController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @ApiOperation({
     summary: 'Update shipping method',
     description: 'Update an existing shipping method by ID (Admin/Store owner only)'

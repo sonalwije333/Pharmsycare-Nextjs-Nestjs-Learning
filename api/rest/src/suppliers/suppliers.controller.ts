@@ -32,14 +32,14 @@ export class SuppliersController {
   constructor(private readonly suppliersService: SuppliersService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({ summary: 'Create supplier user and profile' })
   create(@Body() dto: CreateSupplierDto) {
     return this.suppliersService.create(dto);
   }
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'List supplier profiles' })
   findAll(@Query() query: GetUsersDto) {
     return this.suppliersService.findAll(query);
@@ -53,7 +53,7 @@ export class SuppliersController {
   }
 
   @Get('performance')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Supplier performance tracking metrics' })
   getPerformance() {
     return this.suppliersService.getPerformance();
@@ -62,7 +62,7 @@ export class SuppliersController {
   @Get(':id/performance')
   @Roles(
     Permission.SUPER_ADMIN,
-    Permission.STORE_OWNER,
+    Permission.BRANCH_OWNER,
     Permission.STAFF,
     Permission.SUPPLIER,
   )
@@ -72,14 +72,14 @@ export class SuppliersController {
   }
 
   @Get(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF, Permission.SUPPLIER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF, Permission.SUPPLIER)
   @ApiOperation({ summary: 'Get supplier by ID' })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.suppliersService.findOne(id);
   }
 
   @Post(':id/assign-product')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({ summary: 'Assign product to supplier for auto reorder' })
   assignProduct(
     @Param('id', ParseIntPipe) id: number,

@@ -357,7 +357,7 @@ export class UsersService {
     const query = this.usersRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.profile', 'profile')
-      .where("user.permissions LIKE '%store_owner%'");
+      .where("user.permissions LIKE '%branch_owner%'");
 
     const searchText = text || name;
     if (searchText) {

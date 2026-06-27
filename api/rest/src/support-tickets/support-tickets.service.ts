@@ -31,7 +31,7 @@ function isStaff(user?: User): boolean {
   if (!user?.permissions) return false;
   return [
     Permission.SUPER_ADMIN,
-    Permission.STORE_OWNER,
+    Permission.BRANCH_OWNER,
     Permission.STAFF,
   ].some((role) => user.permissions.includes(role));
 }

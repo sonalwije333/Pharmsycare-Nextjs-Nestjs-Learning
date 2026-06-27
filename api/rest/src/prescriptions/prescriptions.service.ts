@@ -116,7 +116,7 @@ export class PrescriptionsService {
       if (shopId) {
         queryBuilder.andWhere('prescription.shop_id = :shopId', { shopId });
       }
-    } else if (permissions.includes(Permission.STORE_OWNER)) {
+    } else if (permissions.includes(Permission.BRANCH_OWNER)) {
       const accessibleShopIds = this.getAccessibleShopIds(user, shopId);
 
       if (accessibleShopIds.length === 0) {
@@ -444,7 +444,7 @@ export class PrescriptionsService {
       return { pending, approved, rejected, fulfilled, total };
     }
 
-    if (permissions.includes(Permission.STORE_OWNER)) {
+    if (permissions.includes(Permission.BRANCH_OWNER)) {
       const shopIds = this.getAccessibleShopIds(user, shopId);
 
       if (shopIds.length === 0) {
@@ -506,7 +506,7 @@ export class PrescriptionsService {
       return true;
     }
 
-    if (permissions.includes(Permission.STORE_OWNER)) {
+    if (permissions.includes(Permission.BRANCH_OWNER)) {
       const shopIds = this.getAccessibleShopIds(user);
       return !prescription.shop_id || shopIds.includes(prescription.shop_id);
     }

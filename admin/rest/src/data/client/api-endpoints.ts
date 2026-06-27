@@ -130,4 +130,23 @@ export const API_ENDPOINTS = {
   SUPPORT_TICKETS_STATS: 'support-tickets/stats',
   SUPPORT_TICKET_REPLY: (id: number) => `support-tickets/${id}/reply`,
   SUPPORT_TICKET_STATUS: (id: number) => `support-tickets/${id}/status`,
+  SHELF_LOCATIONS: 'shelf-locations',
+  SHELF_LOCATIONS_LAYOUT: 'shelf-locations/layout',
+  SHELF_LOCATIONS_SEARCH: 'shelf-locations/search',
+  SHELF_LOCATION_LOCATE: (productId: number) =>
+    `shelf-locations/locate/${productId}`,
+  SHELF_LOCATION_ASSIGN: (id: number) =>
+    `shelf-locations/${id}/assign-product`,
+  SHELF_LOCATION_UNASSIGN: (productId: number) =>
+    `shelf-locations/assignments/${productId}`,
+  BRANCHES: 'branches',
+  BRANCHES_OVERVIEW: 'branches/overview',
+  BRANCHES_VENDORS: 'branches/vendors',
+  BRANCHES_AVAILABILITY: 'branches/availability',
+  BRANCHES_INVENTORY: 'branches/inventory',
+  BRANCHES_COORDINATION: 'branches/coordination',
+  BRANCHES_TRANSFERS: 'branches/transfers',
+  BRANCH_INVENTORY_UPSERT: (id: number) => `branches/${id}/inventory`,
+  BRANCH_INVENTORY_REMOVE: (id: number, productId: number) =>
+    `branches/${id}/inventory/${productId}`,
 };

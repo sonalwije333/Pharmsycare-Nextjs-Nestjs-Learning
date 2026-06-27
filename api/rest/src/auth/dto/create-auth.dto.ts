@@ -193,7 +193,7 @@ export class AuthResponse {
 
   @ApiProperty({
     description: 'User permissions',
-    example: ['customer', 'store_owner'],
+    example: ['customer', 'branch_owner'],
     type: [String]
   })
   permissions: string[];

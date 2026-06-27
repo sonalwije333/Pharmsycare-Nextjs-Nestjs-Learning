@@ -153,7 +153,7 @@ export interface NameAndValueType {
 }
 export enum Permission {
   SuperAdmin = 'super_admin',
-  StoreOwner = 'store_owner',
+  BranchOwner = 'branch_owner',
   Staff = 'staff',
   Supplier = 'supplier',
   Customer = 'customer',
@@ -233,6 +233,232 @@ export interface SupplierPerformance {
   total_spend: number;
   last_order_at: string | null;
   rating: number;
+}
+
+export interface ShelfLocation {
+  id: number;
+  code: string;
+  name: string;
+  zone: string;
+  aisle: string | null;
+  row_index: number;
+  column_index: number;
+  color: string | null;
+  description: string | null;
+  capacity: number | null;
+  is_active: boolean;
+  product_count?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ShelfLayoutZone {
+  zone: string;
+  shelves: ShelfLocation[];
+}
+
+export interface ShelfLayout {
+  zones: ShelfLayoutZone[];
+  total_shelves: number;
+  total_assigned_products: number;
+}
+
+export interface ProductLocation {
+  shelf_location_id: number;
+  code: string;
+  name: string;
+  zone: string;
+  aisle: string | null;
+  bin: string | null;
+  color: string | null;
+}
+
+export interface ProductLocationResult {
+  product_id: number;
+  name: string;
+  sku: string | null;
+  slug: string | null;
+  image: Attachment | null;
+  quantity: number;
+  in_stock: boolean;
+  location: ProductLocation | null;
+}
+
+export interface CreateShelfLocationInput {
+  code: string;
+  name: string;
+  zone?: string;
+  aisle?: string;
+  row_index?: number;
+  column_index?: number;
+  color?: string;
+  description?: string;
+  capacity?: number;
+  is_active?: boolean;
+}
+
+export interface AssignShelfProductInput {
+  product_id: number;
+  bin?: string;
+  note?: string;
+}
+
+export interface BranchVendor {
+  id: number;
+  name: string;
+  email: string;
+  is_active: boolean;
+}
+
+export interface Branch {
+  id: number;
+  code: string;
+  name: string;
+  city: string;
+  address: string | null;
+  phone: string | null;
+  email: string | null;
+  manager_name: string | null;
+  vendor_id: number | null;
+  vendor?: BranchVendor | null;
+  is_main: boolean;
+  is_active: boolean;
+  sku_count?: number;
+  total_units?: number;
+  low_stock_count?: number;
+  inventory?: BranchInventoryItem[];
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface BranchInventoryItem {
+  id: number;
+  branch_id: number;
+  product_id: number;
+  quantity: number;
+  reorder_level: number;
+  price: number | null;
+  product_name: string | null;
+  product_sku: string | null;
+  product_slug: string | null;
+  product_image: Attachment | null;
+}
+
+export interface BranchOverview {
+  total_branches: number;
+  active_branches: number;
+  total_skus: number;
+  total_stock_units: number;
+  low_stock_items: number;
+  out_of_stock_items: number;
+}
+
+export type BranchStockStatus =
+  | 'in_stock'
+  | 'low_stock'
+  | 'out_of_stock'
+  | 'not_stocked';
+
+export interface BranchStock {
+  branch_id: number;
+  code: string;
+  name: string;
+  city: string;
+  quantity: number;
+  reorder_level: number;
+  status: BranchStockStatus;
+}
+
+export interface BranchAvailabilityResult {
+  product_id: number;
+  name: string;
+  sku: string | null;
+  image: Attachment | null;
+  total_quantity: number;
+  available_branch_count: number;
+  branches: BranchStock[];
+}
+
+export interface CentralizedInventoryRow {
+  product_id: number;
+  name: string;
+  sku: string | null;
+  image: Attachment | null;
+  total_quantity: number;
+  quantities: Record<number, number>;
+}
+
+export interface CentralizedInventory {
+  branches: Array<Pick<Branch, 'id' | 'code' | 'name' | 'city'>>;
+  data: CentralizedInventoryRow[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+export interface BranchLowStock {
+  branch_id: number;
+  branch_name: string;
+  product_id: number;
+  product_name: string | null;
+  quantity: number;
+  reorder_level: number;
+}
+
+export interface BranchTransferSuggestion {
+  product_id: number;
+  product_name: string | null;
+  from_branch_id: number;
+  from_branch_name: string;
+  to_branch_id: number;
+  to_branch_name: string;
+  suggested_quantity: number;
+}
+
+export interface BranchCoordination {
+  low_stock: BranchLowStock[];
+  suggestions: BranchTransferSuggestion[];
+}
+
+export interface BranchTransfer {
+  id: number;
+  product_id: number;
+  product_name: string | null;
+  from_branch_id: number;
+  from_branch_name: string | null;
+  to_branch_id: number;
+  to_branch_name: string | null;
+  quantity: number;
+  note: string | null;
+  created_at: string;
+}
+
+export interface CreateBranchInput {
+  code: string;
+  name: string;
+  city?: string;
+  address?: string;
+  phone?: string;
+  email?: string;
+  manager_name?: string;
+  vendor_id?: number;
+  is_main?: boolean;
+  is_active?: boolean;
+}
+
+export interface UpsertBranchInventoryInput {
+  product_id: number;
+  quantity: number;
+  reorder_level?: number;
+  price?: number;
+}
+
+export interface CreateBranchTransferInput {
+  product_id: number;
+  from_branch_id: number;
+  to_branch_id: number;
+  quantity: number;
+  note?: string;
 }
 
 export enum ProcurementStatus {

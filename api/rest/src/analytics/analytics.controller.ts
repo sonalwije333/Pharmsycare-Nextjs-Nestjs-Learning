@@ -27,7 +27,7 @@ export class AnalyticsController {
   constructor(private readonly analyticsService: AnalyticsService) {}
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get analytics overview',
     description:
@@ -52,7 +52,7 @@ export class CategoryWiseProductController {
   constructor(private readonly analyticsService: AnalyticsService) {}
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get category wise products',
     description:
@@ -77,7 +77,7 @@ export class LowStockProductsController {
   constructor(private readonly analyticsService: AnalyticsService) {}
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get low stock products',
     description:
@@ -102,7 +102,7 @@ export class TopRateProductController {
   constructor(private readonly analyticsService: AnalyticsService) {}
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get top rated products',
     description:

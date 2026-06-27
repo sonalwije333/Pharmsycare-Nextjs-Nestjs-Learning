@@ -54,7 +54,7 @@ export class ManufacturersController {
   constructor(private readonly manufacturersService: ManufacturersService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Create a manufacturer',
     description: 'Create a new manufacturer (Admin or Store owner only)'
@@ -115,7 +115,7 @@ export class ManufacturersController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Update manufacturer',
     description: 'Update manufacturer by ID (Admin or Store owner only)'

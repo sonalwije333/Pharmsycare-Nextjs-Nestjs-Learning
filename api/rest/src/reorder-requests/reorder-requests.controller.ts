@@ -33,7 +33,7 @@ export class ReorderRequestsController {
   @Get()
   @Roles(
     Permission.SUPER_ADMIN,
-    Permission.STORE_OWNER,
+    Permission.BRANCH_OWNER,
     Permission.STAFF,
     Permission.SUPPLIER,
   )
@@ -45,7 +45,7 @@ export class ReorderRequestsController {
   @Get('stats')
   @Roles(
     Permission.SUPER_ADMIN,
-    Permission.STORE_OWNER,
+    Permission.BRANCH_OWNER,
     Permission.STAFF,
     Permission.SUPPLIER,
   )
@@ -55,14 +55,14 @@ export class ReorderRequestsController {
   }
 
   @Post('run-auto')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({ summary: 'Run automated low-stock reorder scan now' })
   runAuto() {
     return this.reorderService.runAutoReorder();
   }
 
   @Post(':id/notify')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.STAFF)
   @ApiOperation({ summary: 'Resend supplier reorder alert email/contact message' })
   notify(@Param('id', ParseIntPipe) id: number) {
     return this.reorderService.notifySupplier(id);
@@ -71,7 +71,7 @@ export class ReorderRequestsController {
   @Put(':id/status')
   @Roles(
     Permission.SUPER_ADMIN,
-    Permission.STORE_OWNER,
+    Permission.BRANCH_OWNER,
     Permission.STAFF,
     Permission.SUPPLIER,
   )

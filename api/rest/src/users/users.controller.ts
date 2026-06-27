@@ -50,7 +50,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Create a new user',
     description: 'Creates a new user with profile and addresses (Admin only)',
@@ -84,7 +84,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get user by ID',
     description: 'Retrieve detailed user information by ID',
@@ -101,7 +101,7 @@ export class UsersController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Update user',
     description: 'Update user information by ID',
@@ -208,7 +208,7 @@ export class UsersController {
   }
 
   @Post('add-staff')
-  @Roles(Permission.STORE_OWNER)
+  @Roles(Permission.BRANCH_OWNER)
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Add staff member',
@@ -233,7 +233,7 @@ export class ProfilesController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Create profile',
     description: 'Create a new user profile',
@@ -249,7 +249,7 @@ export class ProfilesController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER)
   @ApiOperation({
     summary: 'Update profile',
     description: 'Update user profile by ID',
@@ -339,7 +339,7 @@ export class MyStaffsController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @Roles(Permission.STORE_OWNER)
+  @Roles(Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get my staff',
     description:
@@ -362,7 +362,7 @@ export class AllStaffsController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get all staff',
     description: 'Retrieve paginated list of all staff members',
@@ -384,7 +384,7 @@ export class AllCustomerController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get all customers',
     description: 'Retrieve paginated list of all customers',

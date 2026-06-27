@@ -31,7 +31,7 @@ export class MessagesController {
   constructor(private readonly messagesService: MessagesService) {}
 
   @Post(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER, Permission.STAFF)
   @ApiOperation({
     summary: 'Create a new message',
     description: 'Send a message in a conversation'
@@ -55,7 +55,7 @@ export class MessagesController {
   }
 
   @Get(':param')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER, Permission.CUSTOMER, Permission.STAFF)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER, Permission.CUSTOMER, Permission.STAFF)
   @ApiOperation({
     summary: 'Get messages',
     description: 'Retrieve messages for a conversation'

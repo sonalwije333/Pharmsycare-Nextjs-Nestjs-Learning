@@ -49,7 +49,7 @@ export class AddressesController {
   constructor(private readonly addressesService: AddressesService) {}
 
   @Post()
-  @Roles(Permission.CUSTOMER, Permission.STORE_OWNER, Permission.SUPER_ADMIN)
+  @Roles(Permission.CUSTOMER, Permission.BRANCH_OWNER, Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Create a new address',
     description:
@@ -90,7 +90,7 @@ export class AddressesController {
   }
 
   @Get('my-addresses')
-  @Roles(Permission.CUSTOMER, Permission.STORE_OWNER)
+  @Roles(Permission.CUSTOMER, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get my addresses',
     description:
@@ -109,7 +109,7 @@ export class AddressesController {
   }
 
   @Get(':id')
-  @Roles(Permission.CUSTOMER, Permission.STORE_OWNER, Permission.SUPER_ADMIN)
+  @Roles(Permission.CUSTOMER, Permission.BRANCH_OWNER, Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Get address by ID',
     description: 'Retrieve address details by ID',
@@ -141,7 +141,7 @@ export class AddressesController {
   }
 
   @Put(':id')
-  @Roles(Permission.CUSTOMER, Permission.STORE_OWNER, Permission.SUPER_ADMIN)
+  @Roles(Permission.CUSTOMER, Permission.BRANCH_OWNER, Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Update address',
     description: 'Update address information by ID',
@@ -176,7 +176,7 @@ export class AddressesController {
   }
 
   @Delete(':id')
-  @Roles(Permission.CUSTOMER, Permission.STORE_OWNER, Permission.SUPER_ADMIN)
+  @Roles(Permission.CUSTOMER, Permission.BRANCH_OWNER, Permission.SUPER_ADMIN)
   @ApiOperation({
     summary: 'Delete address',
     description: 'Permanently delete an address by ID',
@@ -208,7 +208,7 @@ export class AddressesController {
   }
 
   @Post(':id/set-default')
-  @Roles(Permission.CUSTOMER, Permission.STORE_OWNER)
+  @Roles(Permission.CUSTOMER, Permission.BRANCH_OWNER)
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Set address as default',

@@ -67,7 +67,7 @@ export class StoreNoticesController {
   }
 
   @Get()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @ApiOperation({
     summary: 'Get all store notices',
     description: 'Retrieve paginated list of all store notices with filtering options'
@@ -117,7 +117,7 @@ export class StoreNoticesController {
   }
 
   @Get(':id')
-   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+   @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @ApiOperation({
     summary: 'Get store notice by ID',
     description: 'Retrieve a specific store notice by ID'
@@ -156,7 +156,7 @@ export class StoreNoticesController {
   }
 
   @Put(':id/mark-as-read')
-   @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER) 
+   @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER) 
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Mark store notice as read',

@@ -47,7 +47,7 @@ export class OwnershipTransferController {
   constructor(private ownershipTransferService: OwnershipTransferService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Create ownership transfer',
     description: 'Create a new ownership transfer request (Admin/Store owner only)'
@@ -81,7 +81,7 @@ export class OwnershipTransferController {
   }
 
   @Get(':param')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Get ownership transfer by ID or identifier',
     description: 'Retrieve a single ownership transfer by ID or transaction identifier'

@@ -49,7 +49,7 @@ export class AttributesController {
   constructor(private readonly attributesService: AttributesService) {}
 
   @Post()
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Create a new attribute',
     description: 'Creates a new attribute with values (Admin/Store Owner only)',
@@ -121,7 +121,7 @@ export class AttributesController {
   }
 
   @Put(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Update attribute',
     description: 'Update attribute information by ID (Admin/Store Owner only)',
@@ -143,7 +143,7 @@ export class AttributesController {
   }
 
   @Delete(':id')
-  @Roles(Permission.SUPER_ADMIN, Permission.STORE_OWNER)
+  @Roles(Permission.SUPER_ADMIN, Permission.BRANCH_OWNER)
   @ApiOperation({
     summary: 'Delete attribute',
     description:
