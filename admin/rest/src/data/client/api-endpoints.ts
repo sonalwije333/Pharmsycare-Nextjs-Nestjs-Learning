@@ -139,4 +139,14 @@ export const API_ENDPOINTS = {
     `shelf-locations/${id}/assign-product`,
   SHELF_LOCATION_UNASSIGN: (productId: number) =>
     `shelf-locations/assignments/${productId}`,
+  BRANCHES: 'branches',
+  BRANCHES_OVERVIEW: 'branches/overview',
+  BRANCHES_VENDORS: 'branches/vendors',
+  BRANCHES_AVAILABILITY: 'branches/availability',
+  BRANCHES_INVENTORY: 'branches/inventory',
+  BRANCHES_COORDINATION: 'branches/coordination',
+  BRANCHES_TRANSFERS: 'branches/transfers',
+  BRANCH_INVENTORY_UPSERT: (id: number) => `branches/${id}/inventory`,
+  BRANCH_INVENTORY_REMOVE: (id: number, productId: number) =>
+    `branches/${id}/inventory/${productId}`,
 };

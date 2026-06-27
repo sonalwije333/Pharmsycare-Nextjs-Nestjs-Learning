@@ -54,3 +54,4 @@ export { StockLevelIcon } from '@/components/icons/sidebar/stock-level';
 export { PerformanceIcon } from '@/components/icons/sidebar/performance';
 export { SupportIcon } from '@/components/icons/sidebar/support';
 export { ShelfIcon } from '@/components/icons/sidebar/shelf';
+export { BranchIcon } from '@/components/icons/sidebar/branch';

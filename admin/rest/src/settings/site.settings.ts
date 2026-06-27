@@ -144,6 +144,33 @@ export const siteSettings = {
             icon: 'MyShopIcon',
             permission: adminAndOwnerOnly,
           },
+          {
+            href: '',
+            label: 'Multi-Branch Integration',
+            icon: 'BranchIcon',
+            childMenu: [
+              {
+                href: Routes.branches,
+                label: 'Branches',
+                icon: 'BranchIcon',
+              },
+              {
+                href: Routes.branchAvailability,
+                label: 'Drug Availability',
+                icon: 'StockLevelIcon',
+              },
+              {
+                href: Routes.branchInventory,
+                label: 'Centralized Inventory',
+                icon: 'InventoryIcon',
+              },
+              {
+                href: Routes.branchCoordination,
+                label: 'Branch Coordination',
+                icon: 'ReorderIcon',
+              },
+            ],
+          },
         ],
       },
 
