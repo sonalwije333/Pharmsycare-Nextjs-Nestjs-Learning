@@ -56,6 +56,7 @@ import { GoodsReceivedNotesModule } from './goods-received-notes/goods-received-
 import { SupportTicketsModule } from './support-tickets/support-tickets.module';
 import { ShelfLocationsModule } from './shelf-locations/shelf-locations.module';
 import { BranchesModule } from './branches/branches.module';
+import { ReportingModule } from './reporting/reporting.module';
 
 @Module({
   imports: [
@@ -131,6 +132,7 @@ import { BranchesModule } from './branches/branches.module';
     SupportTicketsModule,
     ShelfLocationsModule,
     BranchesModule,
+    ReportingModule,
   ],
   controllers: [],
   providers: [],

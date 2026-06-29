@@ -4,8 +4,24 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToClass } from 'class-transformer';
 import { Repository } from 'typeorm';
 import { Review } from '../../../reviews/entities/review.entity';
+import { Product } from '../../../products/entities/product.entity';
+import { User } from '../../../users/entities/user.entity';
+import { Permission } from '../../../common/enums/enums';
 import reviewJSON from '@db/reviews.json';
 import productsJson from '../../../db/pickbazar/products.json';
+
+// Pharmacy-appropriate demo review comments used when the legacy reviews.json
+// has no entries matching the seeded medicine catalogue.
+const DEMO_REVIEW_COMMENTS = [
+  'Genuine product with sealed packaging and a good expiry date. Will order again.',
+  'Fast delivery and exactly as described. Helped with my symptoms.',
+  'Affordable and authentic. The pharmacist guidance was very helpful.',
+  'Quick checkout and on-time delivery. Very satisfied with the service.',
+  'Effective and reasonably priced. Thank you PharmSy-Care.',
+  'Product matched the description. Packaging could be slightly better.',
+  'Reliable medicine, delivered cold-chain safe. Highly recommended.',
+];
+const DEMO_REVIEW_RATINGS = [5, 4, 5, 3, 4, 5];
 
 // PharmSy-Care is a pharmacy: only keep reviews for Medicine products.
 const MEDICINE_PRODUCT_IDS = new Set<number>(
@@ -21,6 +37,10 @@ export class ReviewSeederService {
   constructor(
     @InjectRepository(Review)
     private readonly reviewRepository: Repository<Review>,
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   private getReviewsData(): Partial<Review>[] {
@@ -73,10 +93,71 @@ export class ReviewSeederService {
       }
 
       this.logger.log(`Reviews seeding completed (${createdCount} created)`);
+
+      // The legacy reviews.json references old catalogue ids; when nothing was
+      // imported, generate demo reviews for the seeded medicine products so the
+      // admin reviews list and shop product pages are populated.
+      const existing = await this.reviewRepository.count();
+      if (existing === 0) {
+        await this.generateDemoReviews();
+      }
     } catch (error) {
       this.logger.error('Error seeding reviews:', error);
       throw error;
     }
+  }
+
+  private async generateDemoReviews(): Promise<void> {
+    const products = await this.productRepository.find({
+      order: { id: 'ASC' },
+      take: 25,
+    });
+    if (!products.length) {
+      this.logger.warn('No products found; skipping demo review generation.');
+      return;
+    }
+
+    const customers = await this.userRepository
+      .createQueryBuilder('user')
+      .where('user.permissions LIKE :role', {
+        role: `%${Permission.CUSTOMER}%`,
+      })
+      .getMany();
+    const reviewerIds = customers.length
+      ? customers.map((customer) => customer.id)
+      : [2];
+
+    const reviews: Review[] = [];
+    let counter = 0;
+    products.forEach((product, productIndex) => {
+      // 1-2 reviews per product for variety.
+      const reviewsForProduct = (productIndex % 2) + 1;
+      for (let i = 0; i < reviewsForProduct; i++) {
+        const rating = DEMO_REVIEW_RATINGS[counter % DEMO_REVIEW_RATINGS.length];
+        const comment =
+          DEMO_REVIEW_COMMENTS[counter % DEMO_REVIEW_COMMENTS.length];
+        const createdAt = new Date();
+        createdAt.setDate(createdAt.getDate() - (counter % 60));
+        reviews.push(
+          this.reviewRepository.create({
+            rating,
+            comment,
+            user_id: reviewerIds[counter % reviewerIds.length],
+            product_id: product.id,
+            photos: [],
+            positive_feedbacks_count: (counter * 3) % 11,
+            negative_feedbacks_count: counter % 3,
+            abusive_reports_count: 0,
+            created_at: createdAt,
+            updated_at: createdAt,
+          }),
+        );
+        counter++;
+      }
+    });
+
+    await this.reviewRepository.save(reviews);
+    this.logger.log(`✅ Generated ${reviews.length} demo reviews for medicine products`);
   }
 
   async seedByProductId(productId: number): Promise<void> {

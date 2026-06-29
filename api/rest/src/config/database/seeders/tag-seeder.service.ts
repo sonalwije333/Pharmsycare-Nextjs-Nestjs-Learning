@@ -40,53 +40,47 @@ export class TagSeederService {
   }
 
   private getAdditionalTagsData(): Partial<Tag>[] {
+    // PharmSy-Care is a pharmacy: only medicine / healthcare related tags.
     return [
       {
-        name: 'Electronics',
-        details: 'Electronic products and gadgets',
-        icon: 'fa-microchip',
+        name: 'Pain Relief',
+        details: 'Analgesics and pain management medicines',
+        icon: 'fa-pills',
         language: 'en',
         translated_languages: ['en'],
       },
       {
-        name: 'Fashion',
-        details: 'Clothing and accessories',
-        icon: 'fa-tshirt',
+        name: 'Vitamins & Supplements',
+        details: 'Vitamins, minerals and dietary supplements',
+        icon: 'fa-capsules',
         language: 'en',
         translated_languages: ['en'],
       },
       {
-        name: 'Books',
-        details: 'Books and publications',
-        icon: 'fa-book',
+        name: 'Cold & Flu',
+        details: 'Cough, cold and flu relief products',
+        icon: 'fa-head-side-cough',
         language: 'en',
         translated_languages: ['en'],
       },
       {
-        name: 'Home & Garden',
-        details: 'Home decor and garden supplies',
-        icon: 'fa-home',
+        name: 'First Aid',
+        details: 'First aid and wound care essentials',
+        icon: 'fa-kit-medical',
         language: 'en',
         translated_languages: ['en'],
       },
       {
-        name: 'Sports',
-        details: 'Sports equipment and apparel',
-        icon: 'fa-futbol',
+        name: 'Skincare',
+        details: 'Dermatological and skincare products',
+        icon: 'fa-hand-sparkles',
         language: 'en',
         translated_languages: ['en'],
       },
       {
-        name: 'Toys',
-        details: 'Toys and games for all ages',
-        icon: 'fa-puzzle-piece',
-        language: 'en',
-        translated_languages: ['en'],
-      },
-      {
-        name: 'Automotive',
-        details: 'Car parts and accessories',
-        icon: 'fa-car',
+        name: 'Personal Care',
+        details: 'Personal hygiene and wellness products',
+        icon: 'fa-soap',
         language: 'en',
         translated_languages: ['en'],
       },
@@ -98,6 +92,34 @@ export class TagSeederService {
         translated_languages: ['en'],
       },
     ];
+  }
+
+  // Legacy generic e-commerce tags that are not relevant to a pharmacy.
+  // Removed from the database so the Tags module only shows medicine / pharmacy tags.
+  private static readonly NON_PHARMACY_TAGS = [
+    'Electronics',
+    'Fashion',
+    'Books',
+    'Home & Garden',
+    'Sports',
+    'Toys',
+    'Automotive',
+  ];
+
+  private async removeNonPharmacyTags(): Promise<void> {
+    for (const name of TagSeederService.NON_PHARMACY_TAGS) {
+      const existing = await this.tagRepository.findOne({ where: { name } });
+      if (existing) {
+        try {
+          await this.tagRepository.delete({ id: existing.id });
+          this.logger.log(`Removed non-pharmacy tag: ${name}`);
+        } catch (error) {
+          this.logger.warn(
+            `Could not remove tag "${name}" (it may be linked to products): ${error.message}`,
+          );
+        }
+      }
+    }
   }
 
   async seed(): Promise<void> {
@@ -145,6 +167,9 @@ export class TagSeederService {
         }
       }
       
+      // Remove any previously seeded non-pharmacy tags.
+      await this.removeNonPharmacyTags();
+
       this.logger.log('Tags seeding completed');
     } catch (error) {
       this.logger.error('Error seeding tags:', error);
