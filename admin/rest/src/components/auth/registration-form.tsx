@@ -24,6 +24,16 @@ type FormValues = {
   password: string;
   permission: Permission;
 };
+
+// Roles selectable on the registration screen (Super Admin is intentionally
+// excluded and can only be assigned from the backend / seeders).
+const selectableRoles: { value: Permission; label: string }[] = [
+  { value: Permission.BranchOwner, label: 'form:text-store-owner' },
+  { value: Permission.Staff, label: 'form:text-staff' },
+  { value: Permission.Supplier, label: 'form:text-supplier' },
+  { value: Permission.Customer, label: 'form:text-customer' },
+];
+
 const registrationFormSchema = yup.object().shape({
   name: yup.string().required('form:error-name-required'),
   email: yup
@@ -31,7 +41,11 @@ const registrationFormSchema = yup.object().shape({
     .email('form:error-email-format')
     .required('form:error-email-required'),
   password: yup.string().required('form:error-password-required'),
-  permission: yup.string().default('branch_owner').oneOf(['branch_owner']),
+  permission: yup
+    .string()
+    .default(Permission.BranchOwner)
+    .oneOf(selectableRoles.map((role) => role.value))
+    .required('form:error-role-required'),
 });
 const RegistrationForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -117,6 +131,30 @@ const RegistrationForm = () => {
           variant="outline"
           className="mb-4"
         />
+        <div className="mb-4">
+          <label
+            htmlFor="permission"
+            className="block text-sm font-semibold leading-none mb-3 text-body-dark"
+          >
+            {t('form:input-label-permission')}
+          </label>
+          <select
+            id="permission"
+            {...register('permission')}
+            className="px-4 h-12 flex items-center w-full rounded appearance-none transition duration-300 ease-in-out text-heading text-sm focus:outline-none focus:ring-0 border border-border-base focus:border-accent bg-light"
+          >
+            {selectableRoles.map((role) => (
+              <option key={role.value} value={role.value}>
+                {t(role.label)}
+              </option>
+            ))}
+          </select>
+          {errors?.permission?.message ? (
+            <p className="my-2 text-xs text-red-500 text-start">
+              {t(errors?.permission?.message!)}
+            </p>
+          ) : null}
+        </div>
         <Button className="w-full" loading={loading} disabled={loading}>
           {t('form:text-register')}
         </Button>

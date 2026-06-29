@@ -14,6 +14,26 @@ import orderExportJson from '@db/order-export.json';
 export class OrderSeederService {
   private readonly logger = new Logger(OrderSeederService.name);
 
+  // Day offsets (from "now") used to spread demo orders across the current year.
+  // Tuned so every dashboard tab has data: a few today, several this week/month,
+  // and the rest distributed across earlier months of the year.
+  private static readonly ORDER_DAY_OFFSETS = [
+    0, 0, 1, 3, 6, 10, 15, 22, 30, 40, 55, 70, 85, 100, 115, 130, 145, 160, 170,
+    178,
+  ];
+
+  // Returns a date `index`-th order should be placed at, keeping the original
+  // time-of-day variety while moving everything into the current year.
+  private static recentOrderDate(index: number): Date {
+    const offsets = OrderSeederService.ORDER_DAY_OFFSETS;
+    const dayOffset = offsets[index % offsets.length];
+    const date = new Date();
+    date.setDate(date.getDate() - dayOffset);
+    // Vary the hour/minute a little so same-day orders are not identical.
+    date.setHours(9 + (index % 9), (index * 7) % 60, 0, 0);
+    return date;
+  }
+
   constructor(
     @InjectRepository(Order)
     private orderRepository: Repository<Order>,
@@ -40,7 +60,7 @@ export class OrderSeederService {
       await this.seedOrderStatuses();
 
       // Map and seed orders
-      const orders = ordersJson.map((item) => {
+      const orders = ordersJson.map((item, index) => {
         const order = new Order();
 
         order.id = item.id;
@@ -57,10 +77,14 @@ export class OrderSeederService {
         order.altered_payment_gateway = item.altered_payment_gateway;
         order.delivery_fee = item.delivery_fee || 0;
         order.delivery_time = item.delivery_time;
-        // order.order_status = item.order_status;
-        // order.payment_status = item.payment_status;
-        order.created_at = new Date(item.created_at);
-        order.updated_at = new Date(item.created_at);
+        // Persist order/payment status so dashboards (order-status widgets) populate.
+        order.order_status = item.order_status as Order['order_status'];
+        order.payment_status = item.payment_status as Order['payment_status'];
+        // Remap demo dates onto the current year so time-based dashboard widgets
+        // (Today / Weekly / Monthly / Yearly + Sale History) reflect real data.
+        const placedAt = OrderSeederService.recentOrderDate(index);
+        order.created_at = placedAt;
+        order.updated_at = placedAt;
 
         // Handle parent-child relationships
         if (item.parent_id) {
@@ -173,9 +197,9 @@ export class OrderSeederService {
       this.logger.log('🗑️ Clearing orders...');
 
       // Delete in correct order to avoid foreign key constraints
-      await this.orderFilesRepository.delete({});
-      await this.orderRepository.delete({});
-      await this.orderStatusRepository.delete({});
+      await this.orderFilesRepository.createQueryBuilder().delete().execute();
+      await this.orderRepository.createQueryBuilder().delete().execute();
+      await this.orderStatusRepository.createQueryBuilder().delete().execute();
 
       this.logger.log(`✅ Cleared orders, order files, and order statuses`);
     } catch (error) {
@@ -206,7 +230,7 @@ export class OrderSeederService {
       (item) => item.customer_id === customerId,
     );
 
-    const orders = filteredOrders.map((item) => {
+    const orders = filteredOrders.map((item, index) => {
       const order = new Order();
 
       order.id = item.id;
@@ -222,10 +246,11 @@ export class OrderSeederService {
       // order.payment_gateway = item.payment_gateway;
       order.delivery_fee = item.delivery_fee || 0;
       order.delivery_time = item.delivery_time;
-      // order.order_status = item.order_status;
-      // order.payment_status = item.payment_status;
-      order.created_at = new Date(item.created_at);
-      order.updated_at = new Date(item.created_at);
+      order.order_status = item.order_status as Order['order_status'];
+      order.payment_status = item.payment_status as Order['payment_status'];
+      const placedAt = OrderSeederService.recentOrderDate(index);
+      order.created_at = placedAt;
+      order.updated_at = placedAt;
 
       if (item.parent_id) {
         order.parent_order = { id: item.parent_id } as Order;
@@ -261,7 +286,7 @@ export class OrderSeederService {
       (item) => item.order_status === statusSlug,
     );
 
-    const orders = filteredOrders.map((item) => {
+    const orders = filteredOrders.map((item, index) => {
       const order = new Order();
 
       order.id = item.id;
@@ -277,10 +302,11 @@ export class OrderSeederService {
       // order.payment_gateway = item.payment_gateway;
       order.delivery_fee = item.delivery_fee || 0;
       order.delivery_time = item.delivery_time;
-      // order.order_status = item.order_status;
-      // order.payment_status = item.payment_status;
-      order.created_at = new Date(item.created_at);
-      order.updated_at = new Date(item.created_at);
+      order.order_status = item.order_status as Order['order_status'];
+      order.payment_status = item.payment_status as Order['payment_status'];
+      const placedAt = OrderSeederService.recentOrderDate(index);
+      order.created_at = placedAt;
+      order.updated_at = placedAt;
 
       if (item.parent_id) {
         order.parent_order = { id: item.parent_id } as Order;

@@ -33,6 +33,7 @@ import { TermsAndConditionsSeederService } from './terms-and-conditions-seeder.s
 import { TypeSeederService } from './type-seeder.service';
 import { WishlistSeederService } from './wishlist-seeder.service';
 import { WithdrawSeederService } from './withdraw-seeder.service';
+import { PharmacySeederService } from './pharmacy-seeder.service';
 
 
 async function bootstrap() {
@@ -79,6 +80,7 @@ async function bootstrap() {
     const typeSeeder = appContext.get(TypeSeederService);
     const wishlistSeeder = appContext.get(WishlistSeederService);
     const withdrawSeeder = appContext.get(WithdrawSeederService);
+    const pharmacySeeder = appContext.get(PharmacySeederService);
 
     console.log('\n' + '='.repeat(60));
     console.log('🌱 MARVEL DATABASE SEEDER');
@@ -180,6 +182,9 @@ async function bootstrap() {
       } else if (subCommand === '--withdraws') {
         await withdrawSeeder.clear();
         logger.log('✅ Withdraws cleared successfully');
+      } else if (subCommand === '--pharmacy') {
+        await pharmacySeeder.clear();
+        logger.log('✅ Pharmacy modules cleared successfully');
       } else if (subCommand === '--questions-product' && specificValue) {
         await questionSeeder.clearByProductId(parseInt(specificValue, 10));
         logger.log(`✅ Questions for product ${specificValue} cleared successfully`);
@@ -234,6 +239,7 @@ async function bootstrap() {
         await typeSeeder.clear();
         await wishlistSeeder.clear();
         await withdrawSeeder.clear();
+        await pharmacySeeder.clear();
         logger.log('✅ All data cleared successfully');
       }
     } else if (command === '--users') {
@@ -587,6 +593,9 @@ async function bootstrap() {
       } else {
         await typeSeeder.seed();
       }
+    } else if (command === '--pharmacy') {
+      logger.log('💊 Running pharmacy seeder only (suppliers, branches, shelves, procurement, prescriptions)...');
+      await pharmacySeeder.seed();
     } else if (command === '--seed-specific') {
       if (subCommand === 'analytics') {
         logger.log('📊 Seeding analytics data only...');
@@ -856,7 +865,8 @@ async function bootstrap() {
       await tagSeeder.seed();                  // Tags
       await taxSeeder.seed();                  // Taxes
       await termsAndConditionsSeeder.seed();   // Terms and conditions
-      await wishlistSeeder.seed();             // Wishlists 
+      await wishlistSeeder.seed();             // Wishlists
+      await pharmacySeeder.seed();             // Pharmacy modules (after products/shops/users)
     }
 
     await appContext.close();
