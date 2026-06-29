@@ -1,6 +1,12 @@
 export const API_ENDPOINTS = {
   ATTACHMENTS: 'attachments',
   ANALYTICS: 'analytics',
+  REPORTING_FINANCIAL: 'reporting/financial',
+  REPORTING_REVENUE: 'reporting/revenue',
+  REPORTING_PAYMENTS: 'reporting/payments',
+  REPORTING_SALARIES: 'reporting/salaries',
+  REPORTING_STOCK: 'reporting/stock',
+  REPORTING_SALES_PERFORMANCE: 'reporting/sales-performance',
   ATTRIBUTES: 'attributes',
   ATTRIBUTE_VALUES: 'attribute-values',
   ORDER_STATUS: 'order-status',
