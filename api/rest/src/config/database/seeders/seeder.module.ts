@@ -132,6 +132,20 @@ import { Withdraw } from '../../../withdraws/entities/withdraw.entity';
 import { WithdrawSeederService } from './withdraw-seeder.service';
 import { WithdrawsService } from '../../../withdraws/withdraws.service';
 
+// Pharmacy specific modules (suppliers, branches, shelves, procurement, prescriptions)
+import { Supplier } from '../../../suppliers/entities/supplier.entity';
+import { ProductSupplier } from '../../../suppliers/entities/product-supplier.entity';
+import { Branch } from '../../../branches/entities/branch.entity';
+import { BranchInventory } from '../../../branches/entities/branch-inventory.entity';
+import { ShelfLocation } from '../../../shelf-locations/entities/shelf-location.entity';
+import { ProductShelfLocation } from '../../../shelf-locations/entities/product-shelf-location.entity';
+import { ReorderRequest } from '../../../reorder-requests/entities/reorder-request.entity';
+import { GoodsReceivedNote } from '../../../goods-received-notes/entities/goods-received-note.entity';
+import { GrnItem } from '../../../goods-received-notes/entities/goods-received-note-item.entity';
+import { ProcurementRecord } from '../../../procurement-history/entities/procurement-record.entity';
+import { Prescription } from '../../../prescriptions/prescription.entity';
+import { PharmacySeederService } from './pharmacy-seeder.service';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -196,6 +210,18 @@ import { WithdrawsService } from '../../../withdraws/withdraws.service';
       TermsAndConditions,
       Wishlist,
       Withdraw, // Add Withdraw entity
+      // Pharmacy specific entities
+      Supplier,
+      ProductSupplier,
+      Branch,
+      BranchInventory,
+      ShelfLocation,
+      ProductShelfLocation,
+      ReorderRequest,
+      GoodsReceivedNote,
+      GrnItem,
+      ProcurementRecord,
+      Prescription,
     ]),
   ],
   providers: [
@@ -259,6 +285,7 @@ import { WithdrawsService } from '../../../withdraws/withdraws.service';
     WishlistSeederService,
     WithdrawSeederService, // Add WithdrawSeederService
     WithdrawsService, // Add WithdrawsService
+    PharmacySeederService,
   ],
   exports: [
     UserSeederService,
@@ -309,6 +336,7 @@ import { WithdrawsService } from '../../../withdraws/withdraws.service';
     WishlistSeederService,
     WithdrawSeederService, // Export WithdrawSeederService
     WithdrawsService,
+    PharmacySeederService,
   ],
 })
 export class SeederModule {}
